@@ -1,4 +1,6 @@
 using System.Net;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace OddDotNet.Aspire.Tests.Tests;
 
@@ -28,4 +30,24 @@ public class IntegrationTest1
     //     // Assert
     //     Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     // }
+
+    [Fact]
+    public async Task DoTheThing()
+    {
+        var webBuilder = WebApplication.CreateBuilder();
+        webBuilder.Services.AddGrpc();
+        var webApp = webBuilder.Build();
+        webApp.Urls.Add("http://localhost:4317");
+        webApp.MapGrpcService<LogsService>();
+        await webApp.StartAsync();
+        var appHost = await DistributedApplicationTestingBuilder.CreateAsync<Projects.OddDotNet_Aspire_AppHost>();
+        
+        foreach (var resource in appHost.Resources)
+        {
+            var builder = appHost.CreateResourceBuilder(resource);
+        }
+        await using var app = await appHost.BuildAsync();
+        
+        await app.StartAsync();
+    }
 }

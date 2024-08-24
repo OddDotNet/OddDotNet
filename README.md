@@ -88,3 +88,10 @@ public async Task ExampleWithDistributedApplicationTestBuilder()
     Assert.NotNull(span);
 }
 ```
+
+## Tools and Setup
+This repository makes use of `git submodule`s to clone down the proto files from GitHub, located
+[here](https://github.com/open-telemetry/opentelemetry-proto).
+
+When cloning down the repo, you'll need to `git clone --recurse-submodules` to pull in the proto
+file git repo.
