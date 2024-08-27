@@ -7,7 +7,6 @@ public class LogsService : OpenTelemetry.Proto.Collector.Logs.V1.LogsService.Log
 {
     public override Task<ExportLogsServiceResponse> Export(ExportLogsServiceRequest request, ServerCallContext context)
     {
-        Console.WriteLine("***** Received a log");
         return base.Export(request, context);
     }
 }
