@@ -90,8 +90,12 @@ public async Task ExampleWithDistributedApplicationTestBuilder()
 ```
 
 ## Tools and Setup
+### Git Submodules
 This repository makes use of `git submodule`s to clone down the proto files from GitHub, located
 [here](https://github.com/open-telemetry/opentelemetry-proto).
 
 When cloning down the repo, you'll need to `git clone --recurse-submodules` to pull in the proto
 file git repo.
+
+### .NET Aspire
+This project makes use of .NET Aspire. Follow the instruction located [here](https://learn.microsoft.com/en-us/dotnet/aspire/fundamentals/setup-tooling?tabs=linux&pivots=dotnet-cli)
