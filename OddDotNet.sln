@@ -1,0 +1,64 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+#
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{11FAD83F-B4E2-4402-B03D-0B31FCC0EB50}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{56C010C7-F4B3-488F-BF2F-9CF9C274BD00}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OddDotNet", "src\OddDotNet\OddDotNet.csproj", "{5B3292A5-30B6-41BC-81BC-56C6CB3CB910}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OddDotNet.Aspire.Tests", "tests\OddDotNet.Aspire.Tests\OddDotNet.Aspire.Tests.csproj", "{1FD2DE0A-145F-4FB5-B6CE-3C09BD15F8CE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OddDotNet.Aspire.AppHost", "tests\OddDotNet.Aspire.AppHost\OddDotNet.Aspire.AppHost.csproj", "{5A63CA12-E35B-468C-B19D-6F3B57D7AC5C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OddDotNet.Aspire.ServiceDefaults", "tests\OddDotNet.Aspire.ServiceDefaults\OddDotNet.Aspire.ServiceDefaults.csproj", "{8FAE4ECB-D2A6-4B72-BCC8-664ACDA25FCF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OddDotNet.WebApi.One", "tests\OddDotNet.WebApi.One\OddDotNet.WebApi.One.csproj", "{66911EC0-4124-42A0-8221-CAB039444DC6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OddDotNet.WebApi.Two", "tests\OddDotNet.WebApi.Two\OddDotNet.WebApi.Two.csproj", "{E41F16E9-2F8A-47D5-A473-110D36BCCBCE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5B3292A5-30B6-41BC-81BC-56C6CB3CB910}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B3292A5-30B6-41BC-81BC-56C6CB3CB910}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B3292A5-30B6-41BC-81BC-56C6CB3CB910}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B3292A5-30B6-41BC-81BC-56C6CB3CB910}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FD2DE0A-145F-4FB5-B6CE-3C09BD15F8CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FD2DE0A-145F-4FB5-B6CE-3C09BD15F8CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FD2DE0A-145F-4FB5-B6CE-3C09BD15F8CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FD2DE0A-145F-4FB5-B6CE-3C09BD15F8CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A63CA12-E35B-468C-B19D-6F3B57D7AC5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A63CA12-E35B-468C-B19D-6F3B57D7AC5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A63CA12-E35B-468C-B19D-6F3B57D7AC5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A63CA12-E35B-468C-B19D-6F3B57D7AC5C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FAE4ECB-D2A6-4B72-BCC8-664ACDA25FCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FAE4ECB-D2A6-4B72-BCC8-664ACDA25FCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FAE4ECB-D2A6-4B72-BCC8-664ACDA25FCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FAE4ECB-D2A6-4B72-BCC8-664ACDA25FCF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66911EC0-4124-42A0-8221-CAB039444DC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66911EC0-4124-42A0-8221-CAB039444DC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66911EC0-4124-42A0-8221-CAB039444DC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66911EC0-4124-42A0-8221-CAB039444DC6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E41F16E9-2F8A-47D5-A473-110D36BCCBCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E41F16E9-2F8A-47D5-A473-110D36BCCBCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E41F16E9-2F8A-47D5-A473-110D36BCCBCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E41F16E9-2F8A-47D5-A473-110D36BCCBCE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5B3292A5-30B6-41BC-81BC-56C6CB3CB910} = {56C010C7-F4B3-488F-BF2F-9CF9C274BD00}
+		{1FD2DE0A-145F-4FB5-B6CE-3C09BD15F8CE} = {11FAD83F-B4E2-4402-B03D-0B31FCC0EB50}
+		{5A63CA12-E35B-468C-B19D-6F3B57D7AC5C} = {11FAD83F-B4E2-4402-B03D-0B31FCC0EB50}
+		{8FAE4ECB-D2A6-4B72-BCC8-664ACDA25FCF} = {11FAD83F-B4E2-4402-B03D-0B31FCC0EB50}
+		{66911EC0-4124-42A0-8221-CAB039444DC6} = {11FAD83F-B4E2-4402-B03D-0B31FCC0EB50}
+		{E41F16E9-2F8A-47D5-A473-110D36BCCBCE} = {11FAD83F-B4E2-4402-B03D-0B31FCC0EB50}
+	EndGlobalSection
+EndGlobal

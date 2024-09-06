@@ -1,0 +1,65 @@
+@startjson ExportTraceServiceRequest
+{
+    "ResourceSpans (repeated)": {
+        "Resource": {
+            "Attributes (repeated)": "KeyValue",
+            "DroppedAttributesCount": "uint"
+        },
+        "SchemaUrl": "string",
+        "ScopeSpans (repeated)": {
+            "Spans (repeated)": {
+                "Name": "string",
+                "Attributes (repeated)": "KeyValue",
+                "Events (repeated)": {
+                    "Name": "string",
+                    "Attributes (repeated)": "KeyValue",
+                    "DroppedAttributesCount": "uint",
+                    "TimeUnixNano": "ulong"
+                },
+                "Flags": "uint",
+                "Kind": {
+                    "0": "Unspecified",
+                    "1": "Internal",
+                    "2": "Server",
+                    "3": "Client",
+                    "4": "Producer",
+                    "5": "Consumer"
+                },
+                "Links (repeated)": {
+                    "SpanId": "ByteString",
+                    "Attributes (repeated)": "KeyValue",
+                    "Flags": "uint",
+                    "TraceId": "ByteString",
+                    "TraceState": "string",
+                    "DroppedAttributesCount": "uint"
+                },
+                "Status": {
+                    "Code": {
+                        "0": "Unset",
+                        "1": "OK",
+                        "2": "Error"
+                    },
+                    "Message": "string"
+                },
+                "SpanId": "ByteString",
+                "TraceId": "ByteString",
+                "TraceState": "string",
+                "DroppedAttributesCount": "uint",
+                "DroppedEventsCount": "uint",
+                "DroppedLinksCount": "uint",
+                "ParentSpanId": "ByteString",
+                "EndTimeUnixNano": "ulong",
+                "StartTimeUnixNano": "ulong"
+            },
+            "Scope": {
+                "Name": "string",
+                "Attributes (repeated)": "KeyValue",
+                "Version": "string",
+                "DroppedAttributesCount": "uint"
+            },
+            "SchemaUrl": "string"
+        }
+    }
+    
+}
+@endjson

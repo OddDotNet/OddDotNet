@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Aspire.Hosting.Testing" Version="8.2.0" />
+      <PackageReference Include="Grpc.AspNetCore" Version="2.65.0" />
+      <PackageReference Include="Grpc.Tools" Version="2.66.0">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
+    </ItemGroup>
+    <ItemGroup>
+        <Protobuf Include="../../opentelemetry-proto/opentelemetry/proto/common/v1/common.proto" GrpcServices="Server" ProtoRoot="../../opentelemetry-proto/" />
+        <Protobuf Include="../../opentelemetry-proto/opentelemetry/proto/resource/v1/resource.proto" GrpcServices="Server" ProtoRoot="../../opentelemetry-proto/" />
+        <Protobuf Include="../../opentelemetry-proto/opentelemetry/proto/logs/v1/logs.proto" GrpcServices="Server" ProtoRoot="../../opentelemetry-proto/" />
+        <Protobuf Include="../../opentelemetry-proto/opentelemetry/proto/metrics/v1/metrics.proto" GrpcServices="Server" ProtoRoot="../../opentelemetry-proto/" />
+        <Protobuf Include="../../opentelemetry-proto/opentelemetry/proto/trace/v1/trace.proto" GrpcServices="Server" ProtoRoot="../../opentelemetry-proto/" />
+        <Protobuf Include="../../opentelemetry-proto/opentelemetry/proto/collector/logs/v1/logs_service.proto" GrpcServices="Server" ProtoRoot="../../opentelemetry-proto/" />
+        <Protobuf Include="../../opentelemetry-proto/opentelemetry/proto/collector/metrics/v1/metrics_service.proto" GrpcServices="Server" ProtoRoot="../../opentelemetry-proto/" />
+        <Protobuf Include="../../opentelemetry-proto/opentelemetry/proto/collector/trace/v1/trace_service.proto" GrpcServices="Server" ProtoRoot="../../opentelemetry-proto/" />
+    </ItemGroup>
+</Project>
