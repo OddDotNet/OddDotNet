@@ -17,7 +17,9 @@ public static class DistributedApplicationTestingBuilderExtensions
 
             resourceBuilder.WithEnvironment("OTEL_EXPORTER_OTLP_ENDPOINT", "http://localhost:4317");
         }
-
+        
+        builder.Services.AddSingleton<IOpenTelemetryTestHarness, OpenTelemetryTestHarness>();
         builder.Services.AddHostedService<OpenTelemetryBackgroundService>();
+        
     }
 }
