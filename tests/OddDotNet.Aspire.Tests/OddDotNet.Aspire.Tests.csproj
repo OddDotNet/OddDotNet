@@ -28,7 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\OddDotNet\OddDotNet.csproj" />
     <ProjectReference Include="..\OddDotNet.Aspire.AppHost\OddDotNet.Aspire.AppHost.csproj" />
   </ItemGroup>
 

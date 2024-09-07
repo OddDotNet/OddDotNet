@@ -13,7 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\OddDotNet\OddDotNet.csproj" />
     <ProjectReference Include="..\OddDotNet.Aspire.ServiceDefaults\OddDotNet.Aspire.ServiceDefaults.csproj" />
   </ItemGroup>
 
