@@ -18,9 +18,10 @@ public class TracesService : TraceService.TraceServiceBase
     public override Task<ExportTraceServiceResponse> Export(ExportTraceServiceRequest request, ServerCallContext context)
     {
         _logger.LogInformation("Received a trace");
+        _testHarness.ExportTraceServiceRequests.Add(request);
+        
         foreach (var span in request.ResourceSpans)
         {
-            
             foreach (var scopeSpan in span.ScopeSpans)
             {
                 foreach (var whatever in scopeSpan.Spans)

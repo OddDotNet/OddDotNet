@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.DependencyInjection;
+using OpenTelemetry.Proto.Collector.Trace.V1;
 using OpenTelemetry.Proto.Logs.V1;
 using OpenTelemetry.Proto.Metrics.V1;
 using OpenTelemetry.Proto.Trace.V1;
@@ -14,11 +15,13 @@ public class OpenTelemetryTestHarness : IOpenTelemetryTestHarness
     public IAsyncTelemetryList<Span> Traces { get; }
     public IAsyncTelemetryList<LogRecord> Logs { get; }
     public IAsyncTelemetryList<Metric> Metrics { get; }
+    public IAsyncTelemetryList<ExportTraceServiceRequest> ExportTraceServiceRequests { get; }
 
     // private readonly WebApplication _app;
 
     public OpenTelemetryTestHarness()
     {
+        ExportTraceServiceRequests = new AsyncExportTraceServiceRequestTelemetryList();
         Traces = new AsyncTracesTelemetryList();
         Logs = new AsyncLogsTelemetryList();
         Metrics = new AsyncMetricsTelemetryList();
