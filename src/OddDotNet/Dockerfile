@@ -6,10 +6,9 @@ EXPOSE 4317
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["src/OddDotNet/OddDotNet.csproj", "src/OddDotNet/"]
-RUN dotnet restore "src/OddDotNet/OddDotNet.csproj"
+COPY ["OddDotNet.csproj", "."]
+RUN dotnet restore "OddDotNet.csproj"
 COPY . .
-WORKDIR "/src/src/OddDotNet"
 RUN dotnet build "OddDotNet.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish

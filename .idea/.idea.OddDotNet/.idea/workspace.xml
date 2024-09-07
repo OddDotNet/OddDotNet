@@ -28,42 +28,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="590e0736-972d-4004-bda4-03acc022a537" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.dockerignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/OddDotNet/Dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/OddDotNet/Program.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/OddDotNet/Properties/launchSettings.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/OddDotNet/Protos/greet.proto" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/OddDotNet/Services/GreeterService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/OddDotNet/Services/LogsService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/OddDotNet/Services/MetricsService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/OddDotNet/Services/TraceService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/OddDotNet/appsettings.Development.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/OddDotNet/appsettings.json" afterDir="false" />
+    <list default="true" id="590e0736-972d-4004-bda4-03acc022a537" name="Changes" comment="Updating submodules, step 1.">
+      <change afterPath="$PROJECT_DIR$/src/OddDotNet/OpenTelemetry" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gitmodules" beforeDir="false" afterPath="$PROJECT_DIR$/.gitmodules" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.OddDotNet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.OddDotNet/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OddDotNet.sln" beforeDir="false" afterPath="$PROJECT_DIR$/OddDotNet.sln" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/opentelemetry-proto" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/OddDotNet/.idea/.idea.OddDotNet/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/OddDotNet/AsyncLogsTelemetryList.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/OddDotNet/AsyncMetricsTelemetryList.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/OddDotNet/AsyncTracesTelemetryList.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/OddDotNet/DistributedApplicationTestingBuilderExtensions.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/OddDotNet/FilterDelegate.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/OddDotNet/IAsyncTelemetryList.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/OddDotNet/IOpenTelemetryTestHarness.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/OddDotNet/LogsService.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/OddDotNet/MetricsService.cs" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/OddDotNet/OddDotNet.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/OddDotNet/OddDotNet.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/OddDotNet/OddException.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/OddDotNet/OpenTelemetryBackgroundService.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/OddDotNet/OpenTelemetryTestHarness.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/OddDotNet/TracesService.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/OddDotNet.Aspire.AppHost/OddDotNet.Aspire.AppHost.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/tests/OddDotNet.Aspire.AppHost/OddDotNet.Aspire.AppHost.csproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/OddDotNet.Aspire.AppHost/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/OddDotNet.Aspire.AppHost/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/OddDotNet.Aspire.Tests/OddDotNet.Aspire.Tests.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/tests/OddDotNet.Aspire.Tests/OddDotNet.Aspire.Tests.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/OddDotNet.Aspire.Tests/OpenTelemetryTestingHarness_Tests.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/OddDotNet.WebApi.Two/OddDotNet.WebApi.Two.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/tests/OddDotNet.WebApi.Two/OddDotNet.WebApi.Two.csproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -140,7 +110,7 @@
     ]
   }
 }]]></component>
-  <component name="RunManager" selected="Aspire Host.OddDotNetOld.Aspire.AppHost: https">
+  <component name="RunManager" selected=".NET Launch Settings Profile.OddDotNet: https">
     <configuration name="OddDotNetOld.Aspire.AppHost: http" type="AspireHostConfiguration" factoryName="Aspire Host" activateToolWindowBeforeRun="false">
       <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/tests/OddDotNetOld.Aspire.AppHost/OddDotNetOld.Aspire.AppHost.csproj" />
       <option name="PROJECT_TFM" value="" />
@@ -398,6 +368,15 @@
       <workItem from="1725215326921" duration="25584000" />
       <workItem from="1725567034557" duration="6551000" />
     </task>
+    <task id="LOCAL-00001" summary="Updating submodules, step 1.">
+      <option name="closed" value="true" />
+      <created>1725667747665</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1725667747665</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -419,7 +398,8 @@
   <component name="VcsManagerConfiguration">
     <option name="LOCAL_CHANGES_DETAILS_PREVIEW_SHOWN" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <option name="LAST_COMMIT_MESSAGE" value="" />
+    <MESSAGE value="Updating submodules, step 1." />
+    <option name="LAST_COMMIT_MESSAGE" value="Updating submodules, step 1." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
