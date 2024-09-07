@@ -17,6 +17,11 @@ public class AsyncLogsTelemetryList : IAsyncTelemetryList<LogRecord>
         return await _channel.Reader.WaitToReadAsync(cancellationToken).ConfigureAwait(false);
     }
 
+    public Task<LogRecord> FirstAsync(FilterDelegate<LogRecord> filter, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
     public bool Add(LogRecord element)
     {
         return _channel.Writer.TryWrite(element);

@@ -17,6 +17,11 @@ public class AsyncTracesTelemetryList : IAsyncTelemetryList<Span>
         return await _channel.Reader.WaitToReadAsync(cancellationToken).ConfigureAwait(false);
     }
 
+    public Task<Span> FirstAsync(FilterDelegate<Span> filter, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
     public bool Add(Span element)
     {
         return _channel.Writer.TryWrite(element);
