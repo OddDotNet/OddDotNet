@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+message SpanQueryRequest {
+  repeated Where whereFilters = 1;
+}
+
+message Where {
+  oneof Filter {
+    WhereAttributeStringEqualFilter attributeStringEqual = 1;
+    WhereAttributeIntEqualFilter attributeIntEqual = 2;
+  }
+}
+
+message WhereAttributeStringEqualFilter {
+  string attribute = 1;
+  string compare = 2;
+}
+
+message WhereAttributeIntEqualFilter {
+  string attribute = 1;
+  int32 compare = 2;
+}
