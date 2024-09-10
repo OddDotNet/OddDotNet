@@ -28,13 +28,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="590e0736-972d-4004-bda4-03acc022a537" name="Changes" comment="Added the SpanQueryRequest proto file.">
-      <change afterPath="$PROJECT_DIR$/src/OddDotNet/Protos/span_query_response.proto" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/OddDotNet/Protos/span_query_service.proto" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/OddDotNet/Services/SpanQueryService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.OddDotNet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.OddDotNet/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/OddDotNet/OddDotNet.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/OddDotNet/OddDotNet.csproj" afterDir="false" />
-    </list>
+    <list default="true" id="590e0736-972d-4004-bda4-03acc022a537" name="Changes" comment="Adding proto files for span query service." />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -388,7 +382,15 @@
       <option name="project" value="LOCAL" />
       <updated>1725925580093</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Adding proto files for span query service.">
+      <option name="closed" value="true" />
+      <created>1725986737069</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1725986737069</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -412,7 +414,8 @@
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
     <MESSAGE value="Updating submodules, step 1." />
     <MESSAGE value="Added the SpanQueryRequest proto file." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added the SpanQueryRequest proto file." />
+    <MESSAGE value="Adding proto files for span query service." />
+    <option name="LAST_COMMIT_MESSAGE" value="Adding proto files for span query service." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
