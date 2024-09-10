@@ -9,7 +9,7 @@
 
     <!-- Internal proto definitions -->
     <ItemGroup>
-        <Protobuf Include="Protos/**/*.proto" GrpcServices="Server"/>
+        <Protobuf Include="Protos/**/*.proto" GrpcServices="Server" ProtoRoot="Protos/"/>
     </ItemGroup>
 
     <!-- OpenTelemetry proto definitions -->
