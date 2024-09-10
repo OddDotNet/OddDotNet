@@ -28,7 +28,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="590e0736-972d-4004-bda4-03acc022a537" name="Changes" comment="Adding proto files for span query service." />
+    <list default="true" id="590e0736-972d-4004-bda4-03acc022a537" name="Changes" comment="Added interfaces for the signal list and channel manager.">
+      <change afterPath="$PROJECT_DIR$/src/OddDotNet/IQueryRequest.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/OddDotNet/SpanQueryRequest.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/OddDotNet/SpanSignalList.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.OddDotNet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.OddDotNet/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/OddDotNet/ISignalList.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/OddDotNet/ISignalList.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/OddDotNet/Protos/span_query_request.proto" beforeDir="false" afterPath="$PROJECT_DIR$/src/OddDotNet/Protos/span_query_request.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/OddDotNet/Protos/span_query_response.proto" beforeDir="false" afterPath="$PROJECT_DIR$/src/OddDotNet/Protos/span_query_response.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/OddDotNet/Services/SpanQueryService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/OddDotNet/Services/SpanQueryService.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -61,15 +70,22 @@
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/cb7f9510b0d945619025879eeb66eec576068/44/8fc5f687/IMessage.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/cb7f9510b0d945619025879eeb66eec576068/55/44b1b494/IMessage`1.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/e4fc9df04d6240989834bdda6da6697c6c518/5f/d5ccb1da/IBufferMessage.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/e4fc9df04d6240989834bdda6da6697c6c518/69/200d9607/IMessage.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/e4fc9df04d6240989834bdda6da6697c6c518/94/41d16dae/ByteString.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/e4fc9df04d6240989834bdda6da6697c6c518/ed/a939e917/IMessage`1.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/4de93b30a31bcb556d6d8c8d5272c67a1770594b6fd09fde823aa46416df4d/DistributedApplicationTestingBuilder.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/75a913e9a7f21ec51df825066a2374e58efe6284a9f27a94ad93a275eb2d98/WebApplicationBuilder.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/985329671e48c2e56bdc46bb1a3a46c63ffe392bbbdddac6e39f11581c8379/IMemoryCache.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/9f9ab9482b996125b922d48af2e5b191fb054281d8243462eb38c554befbf44/DistributedApplication.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/dc9525ffcfd413abdb3896f244a66d39d542ca989c53465dabf1aaab9ce2f67/HttpProtocol.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock:///Users/tylerkenna/Projects/OddDotNet/src/OddDotNet/DistributedApplicationTestingBuilderExtensions.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Users/tylerkenna/Projects/OddDotNet/src/OddDotNet/LogsService.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Users/tylerkenna/Projects/OddDotNet/src/OddDotNet/OpenTelemetryBackgroundService.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Users/tylerkenna/Projects/OddDotNet/src/OddDotNet/TracesService.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Users/tylerkenna/Projects/OddDotNet/tests/OddDotNet.Aspire.AppHost/Program.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Users/tylerkenna/Projects/OddDotNet/src/OddDotNet/Program.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Users/tylerkenna/Projects/OddDotNet/src/OddDotNet/Services/LogsService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Users/tylerkenna/Projects/OddDotNet/src/OddDotNet/Services/LogsService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Users/tylerkenna/Projects/OddDotNet/src/OddDotNet/Services/TraceService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Users/tylerkenna/Projects/OddDotNet/src/OddDotNet/Services/TraceService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/OddDotNet/obj/Debug/net8.0/Protos/SpanQueryRequest.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/OddDotNet/obj/Debug/net8.0/Protos/SpanQueryService.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="false" />
   <component name="ProjectColorInfo">{
@@ -390,7 +406,15 @@
       <option name="project" value="LOCAL" />
       <updated>1725986737069</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Added interfaces for the signal list and channel manager.">
+      <option name="closed" value="true" />
+      <created>1725986968731</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1725986968731</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -415,7 +439,8 @@
     <MESSAGE value="Updating submodules, step 1." />
     <MESSAGE value="Added the SpanQueryRequest proto file." />
     <MESSAGE value="Adding proto files for span query service." />
-    <option name="LAST_COMMIT_MESSAGE" value="Adding proto files for span query service." />
+    <MESSAGE value="Added interfaces for the signal list and channel manager." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added interfaces for the signal list and channel manager." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

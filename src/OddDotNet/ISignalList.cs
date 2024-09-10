@@ -1,6 +1,7 @@
 namespace OddDotNet;
 
-public interface ISignalList<in TSignal> where TSignal : class
+public interface ISignalList<TSignal> where TSignal : class
 {
     void Add(TSignal signal);
+    List<TSignal> Query(IQueryRequest<TSignal> request);
 }
