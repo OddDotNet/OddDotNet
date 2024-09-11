@@ -20,10 +20,7 @@ public class SpanSignalList : ISignalList<Span>
     {
         lock (Lock)
         {
-            DateTimeOffset currentTime = _timeProvider.GetUtcNow();
-            
-            // Remove all expired spans before doing anything else.
-            Spans.RemoveAll(expirable => expirable.ExpireAt < currentTime);
+            PruneExpiredSpans();
             
             // Add the new span with 30 second expire
             // TODO make this configurable
@@ -46,6 +43,8 @@ public class SpanSignalList : ISignalList<Span>
         Channel<Span> channel = _channels.AddChannel();
         lock (Lock)
         {
+            PruneExpiredSpans();
+            
             foreach (var expirableSpan in Spans)
             {
                 channel.Writer.TryWrite(expirableSpan.Signal);
@@ -66,6 +65,12 @@ public class SpanSignalList : ISignalList<Span>
         }
 
         return matchingSpans;
+    }
+
+    private void PruneExpiredSpans()
+    {
+        DateTimeOffset currentTime = _timeProvider.GetUtcNow();
+        Spans.RemoveAll(expirable => expirable.ExpireAt < currentTime);
     }
 
     private static bool ShouldInclude(SpanQueryRequest spanQueryRequest, Span span)

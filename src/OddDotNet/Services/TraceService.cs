@@ -96,9 +96,12 @@ public class TraceService : OpenTelemetry.Proto.Collector.Trace.V1.TraceService.
                     {
                         spanToAdd.Scope.Resource.Attributes.Add(kvp.Key, kvp.Value);
                     }
+                    
+                    _spans.Add(spanToAdd);
                 }
             }
         }
-        return base.Export(request, context);
+
+        return Task.FromResult(new ExportTraceServiceResponse());
     }
 }

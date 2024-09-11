@@ -28,9 +28,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="590e0736-972d-4004-bda4-03acc022a537" name="Changes" comment="Couple updates to Span. Started the mapping for incoming traces.">
+    <list default="true" id="590e0736-972d-4004-bda4-03acc022a537" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.OddDotNet/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.OddDotNet/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.OddDotNet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.OddDotNet/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/OddDotNet/Services/TraceService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/OddDotNet/Services/TraceService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/OddDotNet/SpanSignalList.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/OddDotNet/SpanSignalList.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,6 +88,7 @@
     <setting file="mock:///Users/tylerkenna/Projects/OddDotNet/src/OddDotNet/Services/TraceService.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Users/tylerkenna/Projects/OddDotNet/src/OddDotNet/Services/TraceService.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Users/tylerkenna/Projects/OddDotNet/src/OddDotNet/Services/TraceService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Users/tylerkenna/Projects/OddDotNet/src/OddDotNet/Services/TraceService.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Users/tylerkenna/Projects/OddDotNet/src/OddDotNet/Span.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Users/tylerkenna/Projects/OddDotNet/src/OddDotNet/SpanSignalList.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/OddDotNet/obj/Debug/net8.0/Protos/SpanQueryRequest.cs" root0="SKIP_HIGHLIGHTING" />
@@ -110,13 +113,13 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "a84a7c5b-34cd-4d48-af30-044b51c2098f.executor": "Debug",
     "f0bab869-d6ca-4f02-8f20-2b21d3148f37.executor": "Debug",
-    "git-widget-placeholder": "amiscall/feature/web-api-create-span",
+    "git-widget-placeholder": "#8 on amiscall/feature/web-api-create-span",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings",
     "vue.rearranger.settings.migration": "true"
   },
   "keyToStringList": {
@@ -386,6 +389,7 @@
       <workItem from="1724966063951" duration="13751000" />
       <workItem from="1725215326921" duration="25584000" />
       <workItem from="1725567034557" duration="6551000" />
+      <workItem from="1726084984227" duration="2829000" />
     </task>
     <task id="LOCAL-00001" summary="Updating submodules, step 1.">
       <option name="closed" value="true" />
@@ -443,7 +447,15 @@
       <option name="project" value="LOCAL" />
       <updated>1726023303731</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Finished mapping of ExportTraceServiceRequest to Span.">
+      <option name="closed" value="true" />
+      <created>1726084459367</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1726084459367</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -472,7 +484,8 @@
     <MESSAGE value="More updates to the span query service." />
     <MESSAGE value="Working on the SpanQueryService, SpanSignalList, and SpanChannelManager." />
     <MESSAGE value="Couple updates to Span. Started the mapping for incoming traces." />
-    <option name="LAST_COMMIT_MESSAGE" value="Couple updates to Span. Started the mapping for incoming traces." />
+    <MESSAGE value="Finished mapping of ExportTraceServiceRequest to Span." />
+    <option name="LAST_COMMIT_MESSAGE" value="Finished mapping of ExportTraceServiceRequest to Span." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
