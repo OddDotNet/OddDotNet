@@ -5,8 +5,76 @@ namespace OddDotNet.Services;
 
 public class TraceService : OpenTelemetry.Proto.Collector.Trace.V1.TraceService.TraceServiceBase
 {
+    private readonly ISignalList<Span> _spans;
+
+    public TraceService(ISignalList<Span> spans)
+    {
+        _spans = spans;
+    }
+
     public override Task<ExportTraceServiceResponse> Export(ExportTraceServiceRequest request, ServerCallContext context)
     {
+        foreach (var resource in request.ResourceSpans)
+        {
+            foreach (var instrumentationScope in resource.ScopeSpans)
+            {
+                foreach (var span in instrumentationScope.Spans)
+                {
+                    Span spanToAdd = new Span()
+                    {
+                        Scope = new Scope()
+                        {
+                            Name = instrumentationScope.Scope.Name,
+                            Resource = new Resource()
+                            {
+                                SchemaUrl = resource.SchemaUrl
+                            },
+                            Version = instrumentationScope.Scope.Version,
+                            SchemaUrl = instrumentationScope.SchemaUrl
+                        },
+                        Name = span.Name,
+                        Flags = span.Flags,
+                        Kind = (SpanKind)span.Kind, // TODO make sure this actually works, not sure on syntax
+                        Status = new SpanStatus()
+                        {
+                            Code = (SpanStatusCode)span.Status.Code,
+                            Message = span.Status.Message
+                        },
+                        SpanId = span.SpanId.ToByteArray(),
+                        TraceId = span.TraceId.ToByteArray(),
+                        TraceState = span.TraceState,
+                        ParentSpanId = span.ParentSpanId.ToByteArray(),
+                        EndTimeUnixNano = span.EndTimeUnixNano,
+                        StartTimeUnixNano = span.StartTimeUnixNano
+                    };
+
+                    foreach (var kvp in span.Attributes)
+                    {
+                        spanToAdd.Attributes.Add(kvp.Key, kvp.Value);
+                    }
+
+                    foreach (var spanEvent in span.Events)
+                    {
+                        SpanEvent spanEventToAdd = new SpanEvent()
+                        {
+                            Name = spanEvent.Name,
+                            TimeUnixNano = spanEvent.TimeUnixNano
+                        };
+
+                        foreach (var kvp in spanEvent.Attributes)
+                        {
+                            spanEventToAdd.Attributes.Add(kvp.Key, kvp.Value);
+                        }
+                        
+                        spanToAdd.Events.Add(spanEventToAdd);
+                    }
+                    
+                    // TODO Span.Links, including Span.Link.Attributes
+                    // TODO Scope.Attributes
+                    // TODO Resource.Attributes
+                }
+            }
+        }
         return base.Export(request, context);
     }
 }

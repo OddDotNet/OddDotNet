@@ -4,11 +4,11 @@ public record Span
 {
     public required Scope Scope { get; init; }
     public required string Name { get; init; }
-    public Dictionary<string, object> Attributes { get; } = new();
-    public List<SpanEvent> Events { get; } = new();
+    public Dictionary<string, object> Attributes { get; } = [];
+    public List<SpanEvent> Events { get; } = [];
     public required uint Flags { get; init; }
     public required SpanKind Kind { get; init; }
-    public List<SpanLink> Links { get; } = new();
+    public List<SpanLink> Links { get; } = [];
     public required SpanStatus Status { get; init; }
     public required byte[] SpanId { get; init; }
     public required byte[] TraceId { get; init; }
@@ -34,7 +34,7 @@ public enum SpanStatusCode
 public record SpanLink
 {
     public required byte[] SpanId { get; init; }
-    public Dictionary<string, object> Attributes { get; } = new();
+    public Dictionary<string, object> Attributes { get; } = [];
     public required uint Flags { get; init; }
     public required byte[] TraceId { get; init; } = [];
     public required string TraceState { get; init; }
@@ -53,14 +53,14 @@ public enum SpanKind
 public record SpanEvent
 {
     public required string Name { get; init; }
-    public Dictionary<string, object> Attributes { get; } = new();
-    public required uint TimeUnixNano { get; init; }
+    public Dictionary<string, object> Attributes { get; } = [];
+    public required ulong TimeUnixNano { get; init; }
 }
 
 public record Scope
 {
     public required string Name { get; init; }
-    public Dictionary<string, object> Attributes { get; } = new();
+    public Dictionary<string, object> Attributes { get; } = [];
     public string? Version { get; init; }
     public string? SchemaUrl { get; init; }
     public required Resource Resource { get; init; }
@@ -68,6 +68,6 @@ public record Scope
 
 public record Resource
 {
-    public required Dictionary<string, object> Attributes { get; init; }
+    public Dictionary<string, object> Attributes { get; } = [];
     public string? SchemaUrl { get; init; }
 }
