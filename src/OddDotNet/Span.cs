@@ -1,27 +1,27 @@
 namespace OddDotNet;
 
-public class Span
+public record Span
 {
-    public required Scope Scope { get; set; }
-    public required string Name { get; set; }
-    public required Dictionary<string, object> Attributes { get; set; }
-    public List<SpanEvent>? Events { get; set; }
-    public uint Flags { get; set; }
-    public SpanKind Kind { get; set; } = SpanKind.Internal;
-    public List<SpanLink>? Links { get; set; }
-    public SpanStatus Status { get; set; } = new SpanStatus { Code = SpanStatusCode.Unset };
-    public required byte[] SpanId { get; set; }
-    public required byte[] TraceId { get; set; }
-    public required string TraceState { get; set; }
-    public byte[]? ParentSpanId { get; set; }
-    public ulong StartTimeUnixNano { get; set; }
-    public ulong EndTimeUnixNano { get; set; }
+    public required Scope Scope { get; init; }
+    public required string Name { get; init; }
+    public Dictionary<string, object> Attributes { get; } = new();
+    public List<SpanEvent> Events { get; } = new();
+    public required uint Flags { get; init; }
+    public required SpanKind Kind { get; init; }
+    public List<SpanLink> Links { get; } = new();
+    public required SpanStatus Status { get; init; }
+    public required byte[] SpanId { get; init; }
+    public required byte[] TraceId { get; init; }
+    public required string TraceState { get; init; }
+    public byte[] ParentSpanId { get; init; } = [];
+    public required ulong StartTimeUnixNano { get; init; }
+    public required ulong EndTimeUnixNano { get; init; }
 }
 
-public class SpanStatus
+public record SpanStatus
 {
-    public SpanStatusCode Code { get; set; }
-    public string? Message { get; set; }
+    public required SpanStatusCode Code { get; init; }
+    public string? Message { get; init; }
 }
 
 public enum SpanStatusCode
@@ -31,13 +31,13 @@ public enum SpanStatusCode
     Error = 2
 }
 
-public class SpanLink
+public record SpanLink
 {
-    public required byte[] SpanId { get; set; }
-    public Dictionary<string, object>? Attributes { get; set; }
-    public uint Flags { get; set; }
-    public byte[]? TraceId { get; set; }
-    public required string TraceState { get; set; }
+    public required byte[] SpanId { get; init; }
+    public Dictionary<string, object> Attributes { get; } = new();
+    public required uint Flags { get; init; }
+    public required byte[] TraceId { get; init; } = [];
+    public required string TraceState { get; init; }
 }
 
 public enum SpanKind
@@ -50,24 +50,24 @@ public enum SpanKind
     Consumer = 5
 }
 
-public class SpanEvent
+public record SpanEvent
 {
-    public required string Name { get; set; }
-    public required Dictionary<string, object> Attributes { get; set; }
-    public uint TimeUnixNano { get; set; }
+    public required string Name { get; init; }
+    public Dictionary<string, object> Attributes { get; } = new();
+    public required uint TimeUnixNano { get; init; }
 }
 
-public class Scope
+public record Scope
 {
-    public string? Name { get; set; }
-    public Dictionary<string, object>? Attributes { get; set; }
-    public string? Version { get; set; }
-    public string? SchemaUrl { get; set; }
-    public required Resource Resource { get; set; }
+    public required string Name { get; init; }
+    public Dictionary<string, object> Attributes { get; } = new();
+    public string? Version { get; init; }
+    public string? SchemaUrl { get; init; }
+    public required Resource Resource { get; init; }
 }
 
-public class Resource
+public record Resource
 {
-    public required Dictionary<string, object> Attributes { get; set; }
-    public string? SchemaUrl { get; set; }
+    public required Dictionary<string, object> Attributes { get; init; }
+    public string? SchemaUrl { get; init; }
 }
