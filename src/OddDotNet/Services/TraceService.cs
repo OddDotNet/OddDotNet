@@ -69,9 +69,33 @@ public class TraceService : OpenTelemetry.Proto.Collector.Trace.V1.TraceService.
                         spanToAdd.Events.Add(spanEventToAdd);
                     }
                     
-                    // TODO Span.Links, including Span.Link.Attributes
-                    // TODO Scope.Attributes
-                    // TODO Resource.Attributes
+                    foreach (var link in span.Links)
+                    {
+                        SpanLink linkToAdd = new SpanLink()
+                        {
+                            SpanId = link.SpanId.ToByteArray(),
+                            Flags = link.Flags,
+                            TraceId = link.TraceId.ToByteArray(),
+                            TraceState = link.TraceState
+                        };
+                        
+                        foreach (var kvp in link.Attributes)
+                        {
+                            linkToAdd.Attributes.Add(kvp.Key, kvp.Value);
+                        }
+                        
+                        spanToAdd.Links.Add(linkToAdd);
+                    }
+                    
+                    foreach (var kvp in instrumentationScope.Scope.Attributes)
+                    {
+                        spanToAdd.Scope.Attributes.Add(kvp.Key, kvp.Value);
+                    }
+
+                    foreach (var kvp in resource.Resource.Attributes)
+                    {
+                        spanToAdd.Scope.Resource.Attributes.Add(kvp.Key, kvp.Value);
+                    }
                 }
             }
         }

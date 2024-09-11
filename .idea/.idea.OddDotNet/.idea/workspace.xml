@@ -28,10 +28,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="590e0736-972d-4004-bda4-03acc022a537" name="Changes" comment="Working on the SpanQueryService, SpanSignalList, and SpanChannelManager.">
+    <list default="true" id="590e0736-972d-4004-bda4-03acc022a537" name="Changes" comment="Couple updates to Span. Started the mapping for incoming traces.">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.OddDotNet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.OddDotNet/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/OddDotNet/Services/TraceService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/OddDotNet/Services/TraceService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/OddDotNet/Span.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/OddDotNet/Span.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,6 +85,8 @@
     <setting file="mock:///Users/tylerkenna/Projects/OddDotNet/src/OddDotNet/Services/TraceService.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Users/tylerkenna/Projects/OddDotNet/src/OddDotNet/Services/TraceService.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Users/tylerkenna/Projects/OddDotNet/src/OddDotNet/Services/TraceService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Users/tylerkenna/Projects/OddDotNet/src/OddDotNet/Services/TraceService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Users/tylerkenna/Projects/OddDotNet/src/OddDotNet/Span.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Users/tylerkenna/Projects/OddDotNet/src/OddDotNet/SpanSignalList.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/OddDotNet/obj/Debug/net8.0/Protos/SpanQueryRequest.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/OddDotNet/obj/Debug/net8.0/Protos/SpanQueryService.cs" root0="SKIP_HIGHLIGHTING" />
@@ -434,7 +435,15 @@
       <option name="project" value="LOCAL" />
       <updated>1726021123214</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Couple updates to Span. Started the mapping for incoming traces.">
+      <option name="closed" value="true" />
+      <created>1726023303731</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1726023303731</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -462,7 +471,8 @@
     <MESSAGE value="Added interfaces for the signal list and channel manager." />
     <MESSAGE value="More updates to the span query service." />
     <MESSAGE value="Working on the SpanQueryService, SpanSignalList, and SpanChannelManager." />
-    <option name="LAST_COMMIT_MESSAGE" value="Working on the SpanQueryService, SpanSignalList, and SpanChannelManager." />
+    <MESSAGE value="Couple updates to Span. Started the mapping for incoming traces." />
+    <option name="LAST_COMMIT_MESSAGE" value="Couple updates to Span. Started the mapping for incoming traces." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
