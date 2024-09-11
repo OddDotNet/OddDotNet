@@ -1,3 +1,5 @@
+using Google.Protobuf;
+using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using OpenTelemetry.Proto.Collector.Trace.V1;
 using OpenTelemetry.Proto.Trace.V1;
@@ -23,7 +25,7 @@ public class TraceService : OpenTelemetry.Proto.Collector.Trace.V1.TraceService.
                 {
                     Span spanToAdd = new Span()
                     {
-                        Scope = new Scope()
+                        InstrumentationScope = new InstrumentationScope()
                         {
                             Name = instrumentationScope.Scope.Name,
                             Resource = new Resource()
@@ -41,19 +43,23 @@ public class TraceService : OpenTelemetry.Proto.Collector.Trace.V1.TraceService.
                             Code = (SpanStatusCode)span.Status.Code,
                             Message = span.Status.Message
                         },
-                        SpanId = span.SpanId.ToByteArray(),
-                        TraceId = span.TraceId.ToByteArray(),
+                        SpanId = span.SpanId,
+                        TraceId = span.TraceId,
                         TraceState = span.TraceState,
-                        ParentSpanId = span.ParentSpanId.ToByteArray(),
+                        ParentSpanId = span.ParentSpanId,
                         EndTimeUnixNano = span.EndTimeUnixNano,
                         StartTimeUnixNano = span.StartTimeUnixNano
                     };
-
+                    
                     foreach (var kvp in span.Attributes)
                     {
-                        spanToAdd.Attributes.Add(kvp.Key, kvp.Value);
+                        Any any = new Any
+                        {
+                            Value = kvp.Value.ToByteString()
+                        };
+                        spanToAdd.Attributes.Add(kvp.Key, any);
                     }
-
+                    
                     foreach (var spanEvent in span.Events)
                     {
                         SpanEvent spanEventToAdd = new SpanEvent()
@@ -61,10 +67,14 @@ public class TraceService : OpenTelemetry.Proto.Collector.Trace.V1.TraceService.
                             Name = spanEvent.Name,
                             TimeUnixNano = spanEvent.TimeUnixNano
                         };
-
+                    
                         foreach (var kvp in spanEvent.Attributes)
                         {
-                            spanEventToAdd.Attributes.Add(kvp.Key, kvp.Value);
+                            Any any = new Any
+                            {
+                                Value = kvp.Value.ToByteString()
+                            };
+                            spanEventToAdd.Attributes.Add(kvp.Key, any);
                         }
                         
                         spanToAdd.Events.Add(spanEventToAdd);
@@ -74,15 +84,19 @@ public class TraceService : OpenTelemetry.Proto.Collector.Trace.V1.TraceService.
                     {
                         SpanLink linkToAdd = new SpanLink()
                         {
-                            SpanId = link.SpanId.ToByteArray(),
+                            SpanId = link.SpanId,
                             Flags = link.Flags,
-                            TraceId = link.TraceId.ToByteArray(),
+                            TraceId = link.TraceId,
                             TraceState = link.TraceState
                         };
                         
                         foreach (var kvp in link.Attributes)
                         {
-                            linkToAdd.Attributes.Add(kvp.Key, kvp.Value);
+                            Any any = new Any
+                            {
+                                Value = kvp.Value.ToByteString()
+                            };
+                            linkToAdd.Attributes.Add(kvp.Key, any);
                         }
                         
                         spanToAdd.Links.Add(linkToAdd);
@@ -90,12 +104,20 @@ public class TraceService : OpenTelemetry.Proto.Collector.Trace.V1.TraceService.
                     
                     foreach (var kvp in instrumentationScope.Scope.Attributes)
                     {
-                        spanToAdd.Scope.Attributes.Add(kvp.Key, kvp.Value);
+                        Any any = new Any
+                        {
+                            Value = kvp.Value.ToByteString()
+                        };
+                        spanToAdd.InstrumentationScope.Attributes.Add(kvp.Key, any);
                     }
-
+                    
                     foreach (var kvp in resource.Resource.Attributes)
                     {
-                        spanToAdd.Scope.Resource.Attributes.Add(kvp.Key, kvp.Value);
+                        Any any = new Any
+                        {
+                            Value = kvp.Value.ToByteString()
+                        };
+                        spanToAdd.InstrumentationScope.Resource.Attributes.Add(kvp.Key, any);
                     }
                     
                     _spans.Add(spanToAdd);

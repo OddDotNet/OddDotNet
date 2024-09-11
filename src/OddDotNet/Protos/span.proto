@@ -1,0 +1,69 @@
+syntax = "proto3";
+
+import "google/protobuf/any.proto";
+
+option csharp_namespace = "OddDotNet";
+
+message Span {
+  InstrumentationScope instrumentationScope = 1;
+  string name = 2;
+  map<string, google.protobuf.Any> attributes = 3;
+  repeated SpanEvent events = 4;
+  uint32 flags = 5;
+  SpanKind Kind = 6;
+  repeated SpanLink links = 7;
+  SpanStatus status = 8;
+  bytes spanId = 9;
+  bytes traceId = 10;
+  string traceState = 11;
+  bytes parentSpanId = 12;
+  uint64 startTimeUnixNano = 13;
+  uint64 endTimeUnixNano = 14;
+}
+
+message InstrumentationScope {
+  string name = 1;
+  map<string, google.protobuf.Any> attributes = 2;
+  string version = 3;
+  string schemaUrl = 4;
+  Resource resource = 5;
+}
+
+message Resource {
+  map<string, google.protobuf.Any> attributes = 1;
+  string schemaUrl = 2;
+}
+
+message SpanEvent {
+  string name = 1;
+  map<string, google.protobuf.Any> attributes = 2;
+  uint64 timeUnixNano = 3;
+}
+
+enum SpanKind {
+  UNSPECIFIED = 0;
+  INTERNAL = 1;
+  SERVER = 2;
+  CLIENT = 3;
+  PRODUCER = 4;
+  CONSUMER = 5;
+}
+
+message SpanLink {
+  bytes spanId = 1;
+  map<string, google.protobuf.Any> attributes = 2;
+  uint32 flags = 3;
+  bytes traceId = 4;
+  string traceState = 5;
+}
+
+message SpanStatus {
+  SpanStatusCode code = 1;
+  optional string message = 2;
+}
+
+enum SpanStatusCode {
+  UNSET = 0;
+  OK = 1;
+  ERROR = 2;
+}

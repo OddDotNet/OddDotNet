@@ -4,12 +4,10 @@ namespace OddDotNet.Services;
 
 public class SpanQueryService : OddDotNet.SpanQueryService.SpanQueryServiceBase
 {
-    private readonly IChannelManager<Span> _channels;
     private readonly ISignalList<Span> _spans;
 
-    public SpanQueryService(IChannelManager<Span> channels, ISignalList<Span> spans)
+    public SpanQueryService(ISignalList<Span> spans)
     {
-        _channels = channels;
         _spans = spans;
     }
 
@@ -17,7 +15,10 @@ public class SpanQueryService : OddDotNet.SpanQueryService.SpanQueryServiceBase
     {
         var result = await _spans.QueryAsync(request, context.CancellationToken);
         
-        // TODO what does this response look like?
-        return new SpanQueryResponse();
+        var response = new SpanQueryResponse();
+        
+        response.Spans.AddRange(result);
+
+        return response;
     }
 }

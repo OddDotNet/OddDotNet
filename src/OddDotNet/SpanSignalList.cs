@@ -106,7 +106,7 @@ public class SpanSignalList : ISignalList<Span>
         
         if (span.Attributes.TryGetValue(filter.Attribute, out var attribute))
         {
-            string value = attribute as string ?? throw new InvalidCastException($"Attribute {filter.Attribute} is not a string");
+            string value = attribute.ToString();
             matched = value.Equals(filter.Compare);
         }
         
