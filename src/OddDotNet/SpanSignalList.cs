@@ -53,13 +53,13 @@ public class SpanSignalList : ISignalList<Span>
         
         SpanQueryRequest spanRequest = request as SpanQueryRequest ?? throw new InvalidCastException(nameof(request));
         List<Span> matchingSpans = [];
+        int takeCount = GetTakeCount(spanRequest);
 
-        while (!cts.IsCancellationRequested)
+        while (matchingSpans.Count < takeCount && !cts.IsCancellationRequested)
         {
             await channel.Reader.WaitToReadAsync(cts.Token);
             Span span = await channel.Reader.ReadAsync(cts.Token);
             
-            // TODO We need to include a count property on the query as well. If you want the first instance, Count = 1.
             if (ShouldInclude(spanRequest, span))
                 matchingSpans.Add(span);
         }
@@ -72,6 +72,15 @@ public class SpanSignalList : ISignalList<Span>
         DateTimeOffset currentTime = _timeProvider.GetUtcNow();
         Spans.RemoveAll(expirable => expirable.ExpireAt < currentTime);
     }
+
+    private int GetTakeCount(SpanQueryRequest spanQueryRequest) => spanQueryRequest.Take.TakeTypeCase switch
+    {
+        Take.TakeTypeOneofCase.TakeFirst => 1,
+        Take.TakeTypeOneofCase.TakeAll => int.MaxValue,
+        Take.TakeTypeOneofCase.TakeExact => spanQueryRequest.Take.TakeExact.Count,
+        Take.TakeTypeOneofCase.None => throw new Exception("Take type invalid"), // TODO change to better exception,
+        _ => throw new Exception("Take type invalid") // TODO change to better exception
+    };
 
     private static bool ShouldInclude(SpanQueryRequest spanQueryRequest, Span span)
     {

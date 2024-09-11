@@ -1,5 +1,6 @@
 using Grpc.Core;
 using OpenTelemetry.Proto.Collector.Trace.V1;
+using OpenTelemetry.Proto.Trace.V1;
 
 namespace OddDotNet.Services;
 

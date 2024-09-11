@@ -4,6 +4,7 @@ option csharp_namespace = "OddDotNet";
 
 message SpanQueryRequest {
   repeated Where whereFilters = 1;
+  Take take = 2;
 }
 
 message Where {
@@ -11,6 +12,26 @@ message Where {
     WhereAttributeStringEqualFilter attributeStringEqual = 1;
     WhereAttributeIntEqualFilter attributeIntEqual = 2;
   }
+}
+
+message Take {
+  oneof TakeType {
+    TakeFirst takeFirst = 1;
+    TakeAll takeAll = 2;
+    TakeExact takeExact = 3;
+  }
+}
+
+message TakeFirst {
+  
+}
+
+message TakeAll {
+  
+}
+
+message TakeExact {
+  int32 count = 1;
 }
 
 message WhereAttributeStringEqualFilter {
