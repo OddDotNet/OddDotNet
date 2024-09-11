@@ -28,15 +28,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="590e0736-972d-4004-bda4-03acc022a537" name="Changes" comment="Added interfaces for the signal list and channel manager.">
-      <change afterPath="$PROJECT_DIR$/src/OddDotNet/IQueryRequest.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/OddDotNet/SpanQueryRequest.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/OddDotNet/SpanSignalList.cs" afterDir="false" />
+    <list default="true" id="590e0736-972d-4004-bda4-03acc022a537" name="Changes" comment="More updates to the span query service.">
+      <change afterPath="$PROJECT_DIR$/src/OddDotNet/Expirable.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/OddDotNet/SpanChannelManager.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.OddDotNet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.OddDotNet/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/OddDotNet/IChannelManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/OddDotNet/IChannelManager.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/OddDotNet/ISignalList.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/OddDotNet/ISignalList.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/OddDotNet/Protos/span_query_request.proto" beforeDir="false" afterPath="$PROJECT_DIR$/src/OddDotNet/Protos/span_query_request.proto" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/OddDotNet/Protos/span_query_response.proto" beforeDir="false" afterPath="$PROJECT_DIR$/src/OddDotNet/Protos/span_query_response.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/OddDotNet/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/OddDotNet/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/OddDotNet/Protos/greet.proto" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/OddDotNet/Services/GreeterService.cs" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/OddDotNet/Services/SpanQueryService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/OddDotNet/Services/SpanQueryService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/OddDotNet/SpanSignalList.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/OddDotNet/SpanSignalList.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -79,9 +81,11 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/985329671e48c2e56bdc46bb1a3a46c63ffe392bbbdddac6e39f11581c8379/IMemoryCache.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/9f9ab9482b996125b922d48af2e5b191fb054281d8243462eb38c554befbf44/DistributedApplication.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/dc9525ffcfd413abdb3896f244a66d39d542ca989c53465dabf1aaab9ce2f67/HttpProtocol.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock:///Users/tylerkenna/Projects/OddDotNet/src/OddDotNet/ISignalList.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Users/tylerkenna/Projects/OddDotNet/src/OddDotNet/Program.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Users/tylerkenna/Projects/OddDotNet/src/OddDotNet/Services/LogsService.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Users/tylerkenna/Projects/OddDotNet/src/OddDotNet/Services/LogsService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Users/tylerkenna/Projects/OddDotNet/src/OddDotNet/Services/SpanQueryService.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Users/tylerkenna/Projects/OddDotNet/src/OddDotNet/Services/TraceService.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Users/tylerkenna/Projects/OddDotNet/src/OddDotNet/Services/TraceService.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/OddDotNet/obj/Debug/net8.0/Protos/SpanQueryRequest.cs" root0="SKIP_HIGHLIGHTING" />
@@ -97,30 +101,31 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;.NET Launch Settings Profile.OddDotNet.Aspire.AppHost: https.executor&quot;: &quot;Run&quot;,
-    &quot;.NET Launch Settings Profile.OddDotNetOld.WebApi.Three: http.executor&quot;: &quot;Debug&quot;,
-    &quot;.NET Launch Settings Profile.OddDotNetOld.WebApi.Two: http.executor&quot;: &quot;Run&quot;,
-    &quot;Aspire Host.OddDotNetOld.Aspire.AppHost: https.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;a84a7c5b-34cd-4d48-af30-044b51c2098f.executor&quot;: &quot;Debug&quot;,
-    &quot;f0bab869-d6ca-4f02-8f20-2b21d3148f37.executor&quot;: &quot;Debug&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;amiscall/feature/web-api-create-span&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    ".NET Launch Settings Profile.OddDotNet.Aspire.AppHost: https.executor": "Run",
+    ".NET Launch Settings Profile.OddDotNetOld.WebApi.Three: http.executor": "Debug",
+    ".NET Launch Settings Profile.OddDotNetOld.WebApi.Two: http.executor": "Run",
+    "Aspire Host.OddDotNetOld.Aspire.AppHost: https.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "a84a7c5b-34cd-4d48-af30-044b51c2098f.executor": "Debug",
+    "f0bab869-d6ca-4f02-8f20-2b21d3148f37.executor": "Debug",
+    "git-widget-placeholder": "amiscall/feature/web-api-create-span",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File&quot;: [
-      &quot;C#&quot;
+  "keyToStringList": {
+    "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
+      "C#",
+      "JSON"
     ]
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected=".NET Launch Settings Profile.OddDotNet: https">
     <configuration name="OddDotNetOld.Aspire.AppHost: http" type="AspireHostConfiguration" factoryName="Aspire Host" activateToolWindowBeforeRun="false">
       <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/tests/OddDotNetOld.Aspire.AppHost/OddDotNetOld.Aspire.AppHost.csproj" />
@@ -414,7 +419,15 @@
       <option name="project" value="LOCAL" />
       <updated>1725986968731</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="More updates to the span query service.">
+      <option name="closed" value="true" />
+      <created>1725995351065</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1725995351065</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -440,7 +453,8 @@
     <MESSAGE value="Added the SpanQueryRequest proto file." />
     <MESSAGE value="Adding proto files for span query service." />
     <MESSAGE value="Added interfaces for the signal list and channel manager." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added interfaces for the signal list and channel manager." />
+    <MESSAGE value="More updates to the span query service." />
+    <option name="LAST_COMMIT_MESSAGE" value="More updates to the span query service." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

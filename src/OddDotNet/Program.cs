@@ -11,6 +11,7 @@ var app = builder.Build();
 app.MapGrpcService<LogsService>();
 app.MapGrpcService<MetricsService>();
 app.MapGrpcService<TraceService>();
+app.MapGrpcService<SpanQueryService>();
 app.MapGet("/",
     () =>
         "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");

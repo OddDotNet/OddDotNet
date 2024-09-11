@@ -1,6 +1,9 @@
+using System.Threading.Channels;
+
 namespace OddDotNet;
 
-public interface IChannelManager<in TSignal> where TSignal : class
+public interface IChannelManager<TSignal> where TSignal : class
 {
-    void Notify(TSignal signal);
+    void NotifyChannels(TSignal signal);
+    Channel<TSignal> AddChannel();
 }

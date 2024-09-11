@@ -13,9 +13,11 @@ public class SpanQueryService : OddDotNet.SpanQueryService.SpanQueryServiceBase
         _spans = spans;
     }
 
-    public override Task<SpanQueryResponse> Query(SpanQueryRequest request, ServerCallContext context)
+    public override async Task<SpanQueryResponse> Query(SpanQueryRequest request, ServerCallContext context)
     {
-        var result = _spans.Query(request);
-        return base.Query(request, context);
+        var result = await _spans.QueryAsync(request, context.CancellationToken);
+        
+        // TODO what does this response look like?
+        return new SpanQueryResponse();
     }
 }
