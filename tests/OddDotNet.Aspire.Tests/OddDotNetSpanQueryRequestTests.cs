@@ -39,16 +39,24 @@ public class OddDotNetSpanQueryRequestTests
             var channel = GrpcChannel.ForAddress(oddEndPoint.Url);
             var clientSpanQueryService = new SpanQueryService.SpanQueryServiceClient(channel);
             
-             var whereFilter = new Where
+            var take = new Take
+            {
+                TakeExact = new TakeExact()
+                {
+                    Count = 1
+                }
+            }; 
+            
+            var whereFilter = new Where
              {
-                 AttributeStringEqual =
+                 AttributeStringEqual = new WhereAttributeStringEqualFilter()
                  {
                      Attribute = "http.route",
                      Compare = "/weatherforecast"
                  }
              };
             
-            var spanQueryRequest = new SpanQueryRequest { WhereFilters = { whereFilter }};
+            var spanQueryRequest = new SpanQueryRequest { Take = take, WhereFilters = { whereFilter }};
             var reply = await clientSpanQueryService.QueryAsync(spanQueryRequest);
             // Act
 

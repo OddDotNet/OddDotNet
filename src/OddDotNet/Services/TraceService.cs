@@ -37,11 +37,11 @@ public class TraceService : OpenTelemetry.Proto.Collector.Trace.V1.TraceService.
                         },
                         Name = span.Name,
                         Flags = span.Flags,
-                        Kind = (SpanKind)span.Kind, // TODO make sure this actually works, not sure on syntax
-                        Status = new SpanStatus()
+                        Kind = (SpanKind)span.Kind, // TODO: make sure this actually works, not sure on syntax
+                        Status = new SpanStatus() // TODO: determine if there's a better way we want to handle span status being null
                         {
-                            Code = (SpanStatusCode)span.Status.Code,
-                            Message = span.Status.Message
+                            Code = span.Status is not null ? (SpanStatusCode)span.Status.Code : SpanStatusCode.Unset,
+                            Message = span.Status is not null ? span.Status.Message : string.Empty
                         },
                         SpanId = span.SpanId,
                         TraceId = span.TraceId,
@@ -53,10 +53,7 @@ public class TraceService : OpenTelemetry.Proto.Collector.Trace.V1.TraceService.
                     
                     foreach (var kvp in span.Attributes)
                     {
-                        Any any = new Any
-                        {
-                            Value = kvp.Value.ToByteString()
-                        };
+                        Any any = Any.Pack(kvp.Value);
                         spanToAdd.Attributes.Add(kvp.Key, any);
                     }
                     

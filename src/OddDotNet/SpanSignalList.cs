@@ -1,5 +1,6 @@
+using System.Globalization;
 using System.Threading.Channels;
-using Google.Protobuf;
+using OpenTelemetry.Proto.Common.V1;
 
 namespace OddDotNet;
 
@@ -64,7 +65,17 @@ public class SpanSignalList : ISignalList<Span>
             if (ShouldInclude(spanRequest, span))
                 matchingSpans.Add(span);
         }
-
+        
+        // TODO: Is the value of the attributes right?
+        // I know it's a AnyValue type, but I think we should be getting the String, Int, ect value.
+        // Like is done down below in ProcessWhereAttributeStringEqualFilter()
+        // OR
+        // Does something digest and convert this?
+        // Example of what looks wrong to me:
+        // "span.kind": {
+        //     "type_url": "type.googleapis.com/opentelemetry.proto.common.v1.AnyValue",
+        //     "value": "CgZzZXJ2ZXI="
+        // },
         return matchingSpans;
     }
 
@@ -105,16 +116,23 @@ public class SpanSignalList : ISignalList<Span>
     private static bool ProcessWhereAttributeStringEqualFilter(WhereAttributeStringEqualFilter filter, Span span)
     {
         bool matched = false;
+
+        if (!span.Attributes.TryGetValue(filter.Attribute, out var attribute)) 
+            return matched;
         
-        if (span.Attributes.TryGetValue(filter.Attribute, out var attribute))
+        var anyValue = attribute.Unpack<AnyValue>();
+        string value = anyValue switch
         {
-            var blah = attribute.Value.ToString();
+            _ when anyValue.HasStringValue => anyValue.StringValue,
+            _ when anyValue.HasIntValue => anyValue.IntValue.ToString(),
+            _ when anyValue.HasDoubleValue => anyValue.DoubleValue.ToString(CultureInfo.CurrentCulture),
+            _ when anyValue.HasBoolValue => anyValue.BoolValue.ToString(),
+            _ when anyValue.HasBytesValue => anyValue.BytesValue.ToStringUtf8(),
+            _ => throw new ArgumentOutOfRangeException(nameof(anyValue))
+        };
             
-            string value = attribute.Value.ToStringUtf8();
-            
-            matched = string.Equals(value, filter.Compare, StringComparison.Ordinal);
-        }
-        
+        matched = string.Equals(value, filter.Compare, StringComparison.Ordinal);
+
         return matched;
     }
 
