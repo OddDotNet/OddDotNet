@@ -28,16 +28,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="590e0736-972d-4004-bda4-03acc022a537" name="Changes" comment="Added Take to the span query.">
-      <change afterPath="$PROJECT_DIR$/src/OddDotNet/Protos/span.proto" afterDir="false" />
+    <list default="true" id="590e0736-972d-4004-bda4-03acc022a537" name="Changes" comment="Moved OddSpan to proto file. Updated mappings.">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.OddDotNet/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.OddDotNet/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/OddDotNet/OddDotNet.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/OddDotNet/OddDotNet.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/OddDotNet/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/OddDotNet/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/OddDotNet/Protos/span_query_response.proto" beforeDir="false" afterPath="$PROJECT_DIR$/src/OddDotNet/Protos/span_query_response.proto" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/OddDotNet/Services/SpanQueryService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/OddDotNet/Services/SpanQueryService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/OddDotNet/Services/TraceService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/OddDotNet/Services/TraceService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/OddDotNet/Span.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/OddDotNet/SpanChannelManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/OddDotNet/SpanChannelManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/OddDotNet/Protos/span_query_request.proto" beforeDir="false" afterPath="$PROJECT_DIR$/src/OddDotNet/Protos/span_query_request.proto" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/OddDotNet/SpanSignalList.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/OddDotNet/SpanSignalList.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -82,8 +75,14 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/985329671e48c2e56bdc46bb1a3a46c63ffe392bbbdddac6e39f11581c8379/IMemoryCache.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/9f9ab9482b996125b922d48af2e5b191fb054281d8243462eb38c554befbf44/DistributedApplication.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/dc9525ffcfd413abdb3896f244a66d39d542ca989c53465dabf1aaab9ce2f67/HttpProtocol.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock:///Users/tylerkenna/Projects/OddDotNet/src/OddDotNet/Program.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Users/tylerkenna/Projects/OddDotNet/src/OddDotNet/Services/SpanQueryService.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Users/tylerkenna/Projects/OddDotNet/src/OddDotNet/Services/TraceService.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Users/tylerkenna/Projects/OddDotNet/src/OddDotNet/Services/TraceService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Users/tylerkenna/Projects/OddDotNet/src/OddDotNet/Services/TraceService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Users/tylerkenna/Projects/OddDotNet/src/OddDotNet/Services/TraceService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Users/tylerkenna/Projects/OddDotNet/src/OddDotNet/SpanChannelManager.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Users/tylerkenna/Projects/OddDotNet/src/OddDotNet/SpanSignalList.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Users/tylerkenna/Projects/OddDotNet/src/OddDotNet/SpanSignalList.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Users/tylerkenna/Projects/OddDotNet/src/OddDotNet/SpanSignalList.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
@@ -104,12 +103,13 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     ".NET Launch Settings Profile.OddDotNet.Aspire.AppHost: https.executor": "Run",
-    ".NET Launch Settings Profile.OddDotNet: http.executor": "Debug",
+    ".NET Launch Settings Profile.OddDotNet: http.executor": "Run",
     ".NET Launch Settings Profile.OddDotNetOld.WebApi.Three: http.executor": "Debug",
     ".NET Launch Settings Profile.OddDotNetOld.WebApi.Two: http.executor": "Run",
     "Aspire Host.OddDotNet.Aspire.AppHost: https.executor": "Run",
     "Aspire Host.OddDotNetOld.Aspire.AppHost: https.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "XThreadsFramesViewSplitterKey": "0.32794458",
     "a84a7c5b-34cd-4d48-af30-044b51c2098f.executor": "Debug",
     "f0bab869-d6ca-4f02-8f20-2b21d3148f37.executor": "Debug",
     "git-widget-placeholder": "#8 on amiscall/feature/web-api-create-span",
@@ -396,7 +396,7 @@
       <workItem from="1724966063951" duration="13751000" />
       <workItem from="1725215326921" duration="25584000" />
       <workItem from="1725567034557" duration="6551000" />
-      <workItem from="1726084984227" duration="12023000" />
+      <workItem from="1726084984227" duration="20738000" />
     </task>
     <task id="LOCAL-00001" summary="Updating submodules, step 1.">
       <option name="closed" value="true" />
@@ -478,7 +478,15 @@
       <option name="project" value="LOCAL" />
       <updated>1726091068796</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Moved OddSpan to proto file. Updated mappings.">
+      <option name="closed" value="true" />
+      <created>1726098078152</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1726098078152</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -510,7 +518,8 @@
     <MESSAGE value="Finished mapping of ExportTraceServiceRequest to Span." />
     <MESSAGE value="Refactored SpanSignalList and completed TraceService mapping." />
     <MESSAGE value="Added Take to the span query." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added Take to the span query." />
+    <MESSAGE value="Moved OddSpan to proto file. Updated mappings." />
+    <option name="LAST_COMMIT_MESSAGE" value="Moved OddSpan to proto file. Updated mappings." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -526,6 +535,97 @@
           <line>39</line>
           <properties documentPath="$PROJECT_DIR$/tests/OddDotNetOld.Aspire.Tests/OpenTelemetryTestingHarness_Tests.cs" containingFunctionPresentation="Method 'ReturnTrueWhenAnyTraceReceived'" />
           <option name="timeStamp" value="37" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/src/OddDotNet/SpanSignalList.cs</url>
+          <line>122</line>
+          <properties documentPath="$PROJECT_DIR$/src/OddDotNet/SpanSignalList.cs" containingFunctionPresentation="Method 'ProcessWhereAttributeExistsFilter'">
+            <startOffsets>
+              <option value="4348" />
+            </startOffsets>
+            <endOffsets>
+              <option value="4401" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="54" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/src/OddDotNet/SpanSignalList.cs</url>
+          <line>90</line>
+          <properties documentPath="$PROJECT_DIR$/src/OddDotNet/SpanSignalList.cs" containingFunctionPresentation="Method 'ShouldInclude'">
+            <startOffsets>
+              <option value="3216" />
+            </startOffsets>
+            <endOffsets>
+              <option value="3229" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="55" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/src/OddDotNet/SpanSignalList.cs</url>
+          <line>93</line>
+          <properties documentPath="$PROJECT_DIR$/src/OddDotNet/SpanSignalList.cs" containingFunctionPresentation="Method 'ShouldInclude'">
+            <startOffsets>
+              <option value="3249" />
+            </startOffsets>
+            <endOffsets>
+              <option value="3261" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="56" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/src/OddDotNet/SpanSignalList.cs</url>
+          <line>60</line>
+          <properties documentPath="$PROJECT_DIR$/src/OddDotNet/SpanSignalList.cs" containingFunctionPresentation="Method 'QueryAsync'">
+            <startOffsets>
+              <option value="2002" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2050" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="57" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/src/OddDotNet/SpanSignalList.cs</url>
+          <line>61</line>
+          <properties documentPath="$PROJECT_DIR$/src/OddDotNet/SpanSignalList.cs" containingFunctionPresentation="Method 'QueryAsync'">
+            <startOffsets>
+              <option value="2063" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2117" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="58" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/src/OddDotNet/SpanSignalList.cs</url>
+          <line>64</line>
+          <properties documentPath="$PROJECT_DIR$/src/OddDotNet/SpanSignalList.cs" containingFunctionPresentation="Method 'QueryAsync'">
+            <startOffsets>
+              <option value="2197" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2221" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="59" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/src/OddDotNet/SpanSignalList.cs</url>
+          <line>67</line>
+          <properties documentPath="$PROJECT_DIR$/src/OddDotNet/SpanSignalList.cs" containingFunctionPresentation="Method 'QueryAsync'">
+            <startOffsets>
+              <option value="2241" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2262" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="60" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

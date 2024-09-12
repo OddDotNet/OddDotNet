@@ -11,6 +11,7 @@ message Where {
   oneof Filter {
     WhereAttributeStringEqualFilter attributeStringEqual = 1;
     WhereAttributeIntEqualFilter attributeIntEqual = 2;
+    WhereAttributeExistsFilter attributeExists = 3;
   }
 }
 
@@ -42,4 +43,8 @@ message WhereAttributeStringEqualFilter {
 message WhereAttributeIntEqualFilter {
   string attribute = 1;
   int32 compare = 2;
+}
+
+message WhereAttributeExistsFilter {
+  string attribute = 1;
 }

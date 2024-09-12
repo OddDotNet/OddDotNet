@@ -1,4 +1,5 @@
 using System.Threading.Channels;
+using Google.Protobuf;
 
 namespace OddDotNet;
 
@@ -37,7 +38,7 @@ public class SpanSignalList : ISignalList<Span>
         var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
         
         // TODO Make this configurable
-        cts.CancelAfter(TimeSpan.FromSeconds(30));
+        cts.CancelAfter(TimeSpan.FromSeconds(300));
         
         // Create the channel and populate it with the current contents of the span list
         Channel<Span> channel = _channels.AddChannel();
@@ -86,17 +87,18 @@ public class SpanSignalList : ISignalList<Span>
     {
         foreach (Where whereFilter in spanQueryRequest.WhereFilters)
         {
-            if (!ProcessWhereFilter(whereFilter, span))
+            if (!SpanMatchesWhereFilter(whereFilter, span))
                 return false;
         }
 
         return true;
     }
 
-    private static bool ProcessWhereFilter(Where filter, Span span) => filter.FilterCase switch
+    private static bool SpanMatchesWhereFilter(Where filter, Span span) => filter.FilterCase switch
     {
         Where.FilterOneofCase.AttributeStringEqual => ProcessWhereAttributeStringEqualFilter(
             filter.AttributeStringEqual, span),
+        Where.FilterOneofCase.AttributeExists => ProcessWhereAttributeExistsFilter(filter.AttributeExists, span),
         _ => throw new NotImplementedException("Something went wrong"),
     };
 
@@ -106,10 +108,18 @@ public class SpanSignalList : ISignalList<Span>
         
         if (span.Attributes.TryGetValue(filter.Attribute, out var attribute))
         {
-            string value = attribute.ToString();
-            matched = value.Equals(filter.Compare);
+            var blah = attribute.Value.ToString();
+            
+            string value = attribute.Value.ToStringUtf8();
+            
+            matched = string.Equals(value, filter.Compare, StringComparison.Ordinal);
         }
         
         return matched;
+    }
+
+    private static bool ProcessWhereAttributeExistsFilter(WhereAttributeExistsFilter filter, Span span)
+    {
+        return span.Attributes.ContainsKey(filter.Attribute);
     }
 }
