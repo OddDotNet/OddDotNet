@@ -14,7 +14,8 @@ public class OddDotNetSpanQueryRequestTests
         {
             // Arrange
             var builder = await DistributedApplicationTestingBuilder.CreateAsync<Projects.OddDotNet_Aspire_AppHost>();
-            ContainerResource oddProject = builder.Resources.OfType<ContainerResource>().First(r => r.Name == "odd");
+            // ContainerResource oddProject = builder.Resources.OfType<ContainerResource>().First(r => r.Name == "odd");
+            ProjectResource oddProject = builder.Resources.OfType<ProjectResource>().First(r => r.Name == "odd");
             ProjectResource oneProject = builder.Resources.OfType<ProjectResource>().First(r => r.Name == "one");
             
             await using var appHost = await builder.BuildAsync();
@@ -51,16 +52,18 @@ public class OddDotNetSpanQueryRequestTests
              {
                  AttributeStringEqual = new WhereAttributeStringEqualFilter()
                  {
-                     Attribute = "http.route",
-                     Compare = "/weatherforecast"
+                     Attribute = "span.kind",
+                     Compare = "server"
                  }
              };
             
             var spanQueryRequest = new SpanQueryRequest { Take = take, WhereFilters = { whereFilter }};
-            var reply = await clientSpanQueryService.QueryAsync(spanQueryRequest);
+            
             // Act
-
+            var reply = await clientSpanQueryService.QueryAsync(spanQueryRequest);
             // Assert
+            
+            Assert.NotEmpty(reply.Spans);
         }
     }
 }
