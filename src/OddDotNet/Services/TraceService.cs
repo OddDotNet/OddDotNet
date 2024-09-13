@@ -1,8 +1,8 @@
 using Google.Protobuf;
-using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using OpenTelemetry.Proto.Collector.Trace.V1;
-using OpenTelemetry.Proto.Trace.V1;
+using OpenTelemetry.Proto.Common.V1;
+using OtelAnyValue = OpenTelemetry.Proto.Common.V1.AnyValue;
 
 namespace OddDotNet.Services;
 
@@ -53,8 +53,8 @@ public class TraceService : OpenTelemetry.Proto.Collector.Trace.V1.TraceService.
                     
                     foreach (var kvp in span.Attributes)
                     {
-                        Any any = Any.Pack(kvp.Value);
-                        spanToAdd.Attributes.Add(kvp.Key, any);
+                        AnyValue value = GetAnyValue(kvp.Value);
+                        spanToAdd.Attributes.Add(kvp.Key, value);
                     }
                     
                     foreach (var spanEvent in span.Events)
@@ -67,11 +67,8 @@ public class TraceService : OpenTelemetry.Proto.Collector.Trace.V1.TraceService.
                     
                         foreach (var kvp in spanEvent.Attributes)
                         {
-                            Any any = new Any
-                            {
-                                Value = kvp.Value.ToByteString()
-                            };
-                            spanEventToAdd.Attributes.Add(kvp.Key, any);
+                            AnyValue value = GetAnyValue(kvp.Value);
+                            spanEventToAdd.Attributes.Add(kvp.Key, value);
                         }
                         
                         spanToAdd.Events.Add(spanEventToAdd);
@@ -89,11 +86,8 @@ public class TraceService : OpenTelemetry.Proto.Collector.Trace.V1.TraceService.
                         
                         foreach (var kvp in link.Attributes)
                         {
-                            Any any = new Any
-                            {
-                                Value = kvp.Value.ToByteString()
-                            };
-                            linkToAdd.Attributes.Add(kvp.Key, any);
+                            AnyValue value = GetAnyValue(kvp.Value);
+                            linkToAdd.Attributes.Add(kvp.Key, value);
                         }
                         
                         spanToAdd.Links.Add(linkToAdd);
@@ -101,20 +95,14 @@ public class TraceService : OpenTelemetry.Proto.Collector.Trace.V1.TraceService.
                     
                     foreach (var kvp in instrumentationScope.Scope.Attributes)
                     {
-                        Any any = new Any
-                        {
-                            Value = kvp.Value.ToByteString()
-                        };
-                        spanToAdd.InstrumentationScope.Attributes.Add(kvp.Key, any);
+                        AnyValue value = GetAnyValue(kvp.Value);
+                        spanToAdd.InstrumentationScope.Attributes.Add(kvp.Key, value);
                     }
                     
                     foreach (var kvp in resource.Resource.Attributes)
                     {
-                        Any any = new Any
-                        {
-                            Value = kvp.Value.ToByteString()
-                        };
-                        spanToAdd.InstrumentationScope.Resource.Attributes.Add(kvp.Key, any);
+                        AnyValue value = GetAnyValue(kvp.Value);
+                        spanToAdd.InstrumentationScope.Resource.Attributes.Add(kvp.Key, value);
                     }
                     
                     _spans.Add(spanToAdd);
@@ -124,4 +112,11 @@ public class TraceService : OpenTelemetry.Proto.Collector.Trace.V1.TraceService.
 
         return Task.FromResult(new ExportTraceServiceResponse());
     }
+
+    private static AnyValue GetAnyValue(OtelAnyValue otelValue) => otelValue.ValueCase switch
+    {
+        OtelAnyValue.ValueOneofCase.StringValue => new AnyValue() { StringValue = otelValue.StringValue },
+        OtelAnyValue.ValueOneofCase.IntValue => new AnyValue() { IntValue = otelValue.IntValue },
+        _ => throw new NotImplementedException("OTEL type not yet implemented")
+    };
 }

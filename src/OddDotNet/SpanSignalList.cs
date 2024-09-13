@@ -120,8 +120,7 @@ public class SpanSignalList : ISignalList<Span>
         if (!span.Attributes.TryGetValue(filter.Attribute, out var attribute)) 
             return matched;
         
-        var anyValue = attribute.Unpack<AnyValue>();
-        string? value = anyValue.HasStringValue ? anyValue.StringValue : null;
+        string? value = attribute.HasStringValue ? attribute.StringValue : null;
             
         matched = string.Equals(value, filter.Compare, StringComparison.Ordinal);
 
