@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using OddDotNet.Aspire.ServiceDefaults;
 using OddDotNet.WebApi.One;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,18 +8,15 @@ builder.Services.AddDbContext<WeatherForecastDbContext>(opt => opt.UseInMemoryDa
 builder.Services.AddHealthChecks()
     .AddDbContextCheck<WeatherForecastDbContext>();
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<WeatherForecastDbContextInitializer>();
-
-builder.AddServiceDefaults("OddDotNet.WebApi.One");
+builder.AddServiceDefaults();
 
 var app = builder.Build();
+
 app.MapDefaultEndpoints();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
