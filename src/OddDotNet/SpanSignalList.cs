@@ -96,13 +96,7 @@ public class SpanSignalList : ISignalList<Span>
 
     private static bool ShouldInclude(SpanQueryRequest spanQueryRequest, Span span)
     {
-        foreach (Where whereFilter in spanQueryRequest.WhereFilters)
-        {
-            if (!SpanMatchesWhereFilter(whereFilter, span))
-                return false;
-        }
-
-        return true;
+        return spanQueryRequest.WhereFilters.Count == 0 || spanQueryRequest.WhereFilters.All(whereFilter => SpanMatchesWhereFilter(whereFilter, span));
     }
 
     private static bool SpanMatchesWhereFilter(Where filter, Span span) => filter.FilterCase switch
