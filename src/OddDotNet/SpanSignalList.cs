@@ -121,15 +121,7 @@ public class SpanSignalList : ISignalList<Span>
             return matched;
         
         var anyValue = attribute.Unpack<AnyValue>();
-        string value = anyValue switch
-        {
-            _ when anyValue.HasStringValue => anyValue.StringValue,
-            _ when anyValue.HasIntValue => anyValue.IntValue.ToString(),
-            _ when anyValue.HasDoubleValue => anyValue.DoubleValue.ToString(CultureInfo.CurrentCulture),
-            _ when anyValue.HasBoolValue => anyValue.BoolValue.ToString(),
-            _ when anyValue.HasBytesValue => anyValue.BytesValue.ToStringUtf8(),
-            _ => throw new ArgumentOutOfRangeException(nameof(anyValue))
-        };
+        string? value = anyValue.HasStringValue ? anyValue.StringValue : null;
             
         matched = string.Equals(value, filter.Compare, StringComparison.Ordinal);
 
