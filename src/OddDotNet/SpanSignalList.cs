@@ -37,45 +37,43 @@ public class SpanSignalList : ISignalList<Span>
     public async Task<List<Span>> QueryAsync(IQueryRequest<Span> request, CancellationToken cancellationToken = default)
     {
         var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        SpanQueryRequest spanRequest = request as SpanQueryRequest ?? throw new InvalidCastException(nameof(request));
+        List<Span> matchingSpans = [];
+        Channel<Span> channel = _channels.AddChannel();
         
         // TODO Make this configurable
         cts.CancelAfter(TimeSpan.FromSeconds(300));
-        
-        // Create the channel and populate it with the current contents of the span list
-        Channel<Span> channel = _channels.AddChannel();
-        lock (Lock)
+
+        try
         {
-            PruneExpiredSpans();
+// Create the channel and populate it with the current contents of the span list
             
-            foreach (var expirableSpan in Spans)
+            lock (Lock)
             {
-                channel.Writer.TryWrite(expirableSpan.Signal);
+                PruneExpiredSpans();
+
+                foreach (var expirableSpan in Spans)
+                {
+                    channel.Writer.TryWrite(expirableSpan.Signal);
+                }
+            }
+
+            int takeCount = GetTakeCount(spanRequest);
+
+            while (matchingSpans.Count < takeCount && !cts.IsCancellationRequested)
+            {
+                await channel.Reader.WaitToReadAsync(cts.Token);
+                Span span = await channel.Reader.ReadAsync(cts.Token);
+
+                if (ShouldInclude(spanRequest, span))
+                    matchingSpans.Add(span);
             }
         }
-        
-        SpanQueryRequest spanRequest = request as SpanQueryRequest ?? throw new InvalidCastException(nameof(request));
-        List<Span> matchingSpans = [];
-        int takeCount = GetTakeCount(spanRequest);
-
-        while (matchingSpans.Count < takeCount && !cts.IsCancellationRequested)
+        finally
         {
-            await channel.Reader.WaitToReadAsync(cts.Token);
-            Span span = await channel.Reader.ReadAsync(cts.Token);
-            
-            if (ShouldInclude(spanRequest, span))
-                matchingSpans.Add(span);
+            _channels.RemoveChannel(channel);
         }
         
-        // TODO: Is the value of the attributes right?
-        // I know it's a AnyValue type, but I think we should be getting the String, Int, ect value.
-        // Like is done down below in ProcessWhereAttributeStringEqualFilter()
-        // OR
-        // Does something digest and convert this?
-        // Example of what looks wrong to me:
-        // "span.kind": {
-        //     "type_url": "type.googleapis.com/opentelemetry.proto.common.v1.AnyValue",
-        //     "value": "CgZzZXJ2ZXI="
-        // },
         return matchingSpans;
     }
 

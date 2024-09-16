@@ -11,10 +11,11 @@ public class SpanChannelManager : IChannelManager<Span>
     {
         lock (Lock)
         {
-            foreach (Channel<Span> channel in Channels)
-            {
-                channel.Writer.TryWrite(signal);
-            }
+            // Remove any channels from the list that have been completed
+            Channels.RemoveAll(x => x.Reader.Completion.IsCompleted);
+            
+            // Write signal to remaining channels
+            Channels.ForEach(x => x.Writer.TryWrite(signal));
         }
     }
 
@@ -28,9 +29,18 @@ public class SpanChannelManager : IChannelManager<Span>
             });
         lock (Lock)
         {
+            
             Channels.Add(channel);
         }
 
         return channel;
+    }
+
+    public bool RemoveChannel(Channel<Span> channel)
+    {
+        lock (Lock)
+        {
+            return Channels.Remove(channel);
+        }
     }
 }
