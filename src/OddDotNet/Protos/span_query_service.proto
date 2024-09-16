@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+option csharp_namespace = "OddDotNet";
+
+import "span_query_request.proto";
+import "span_query_response.proto";
+
+service SpanQueryService {
+  rpc Query(SpanQueryRequest) returns (SpanQueryResponse);
+}

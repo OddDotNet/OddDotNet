@@ -18,4 +18,5 @@ RUN dotnet publish "OddDotNet.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+ENV ASPNETCORE_URLS=http://+:4317
 ENTRYPOINT ["dotnet", "OddDotNet.dll"]

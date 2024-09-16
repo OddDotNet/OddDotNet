@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+option csharp_namespace = "OddDotNet";
+
+message SpanQueryRequest {
+  repeated Where whereFilters = 1;
+  Take take = 2;
+}
+
+message Where {
+  oneof Filter {
+    WhereAttributeStringEqualFilter attributeStringEqual = 1;
+    WhereAttributeIntEqualFilter attributeIntEqual = 2;
+    WhereAttributeExistsFilter attributeExists = 3;
+  }
+}
+
+message Take {
+  oneof TakeType {
+    TakeFirst takeFirst = 1;
+    TakeAll takeAll = 2;
+    TakeExact takeExact = 3;
+  }
+}
+
+message TakeFirst {
+  
+}
+
+message TakeAll {
+  
+}
+
+message TakeExact {
+  int32 count = 1;
+}
+
+message WhereAttributeStringEqualFilter {
+  string attribute = 1;
+  string compare = 2;
+}
+
+message WhereAttributeIntEqualFilter {
+  string attribute = 1;
+  int32 compare = 2;
+}
+
+message WhereAttributeExistsFilter {
+  string attribute = 1;
+}
