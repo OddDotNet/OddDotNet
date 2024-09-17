@@ -1,6 +1,4 @@
-using System.Globalization;
 using System.Threading.Channels;
-using OpenTelemetry.Proto.Common.V1;
 
 namespace OddDotNet;
 
@@ -42,12 +40,11 @@ public class SpanSignalList : ISignalList<Span>
         Channel<Span> channel = _channels.AddChannel();
         
         // TODO Make this configurable
-        cts.CancelAfter(TimeSpan.FromSeconds(300));
+        cts.CancelAfter(TimeSpan.FromSeconds(30));
 
         try
         {
-// Create the channel and populate it with the current contents of the span list
-            
+            // Create the channel and populate it with the current contents of the span list
             lock (Lock)
             {
                 PruneExpiredSpans();
@@ -101,22 +98,25 @@ public class SpanSignalList : ISignalList<Span>
     {
         Where.FilterOneofCase.AttributeStringEqual => ProcessWhereAttributeStringEqualFilter(
             filter.AttributeStringEqual, span),
+        Where.FilterOneofCase.AttributeIntEqual => ProcessWhereAttributeIntEqualFilter(filter.AttributeIntEqual, span),
         Where.FilterOneofCase.AttributeExists => ProcessWhereAttributeExistsFilter(filter.AttributeExists, span),
         _ => throw new NotImplementedException("Something went wrong"),
     };
 
     private static bool ProcessWhereAttributeStringEqualFilter(WhereAttributeStringEqualFilter filter, Span span)
     {
-        bool matched = false;
-
         if (!span.Attributes.TryGetValue(filter.Attribute, out var attribute)) 
-            return matched;
-        
-        string? value = attribute.HasStringValue ? attribute.StringValue : null;
+            return false;
             
-        matched = string.Equals(value, filter.Compare, StringComparison.Ordinal);
+        return attribute.HasStringValue && string.Equals(attribute.StringValue, filter.Compare, StringComparison.Ordinal);
+    }
 
-        return matched;
+    private static bool ProcessWhereAttributeIntEqualFilter(WhereAttributeIntEqualFilter filter, Span span)
+    {
+        if (!span.Attributes.TryGetValue(filter.Attribute, out var attribute))
+            return false;
+
+        return attribute.HasIntValue && filter.Compare == attribute.IntValue;
     }
 
     private static bool ProcessWhereAttributeExistsFilter(WhereAttributeExistsFilter filter, Span span)

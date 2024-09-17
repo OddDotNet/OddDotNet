@@ -1,5 +1,3 @@
-using Google.Protobuf.Collections;
-using Grpc.Health.V1;
 using Grpc.Net.Client;
 using Microsoft.Extensions.DependencyInjection;
 

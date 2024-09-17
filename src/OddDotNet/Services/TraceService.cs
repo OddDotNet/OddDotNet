@@ -1,7 +1,5 @@
-using Google.Protobuf;
 using Grpc.Core;
 using OpenTelemetry.Proto.Collector.Trace.V1;
-using OpenTelemetry.Proto.Common.V1;
 using OtelAnyValue = OpenTelemetry.Proto.Common.V1.AnyValue;
 
 namespace OddDotNet.Services;

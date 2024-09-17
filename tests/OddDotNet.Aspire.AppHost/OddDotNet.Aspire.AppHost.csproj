@@ -15,8 +15,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\OddDotNet\OddDotNet.csproj" />
-    <ProjectReference Include="..\OddDotNet.WebApi.One\OddDotNet.WebApi.One.csproj" />
-    <ProjectReference Include="..\OddDotNet.WebApi.Two\OddDotNet.WebApi.Two.csproj" />
   </ItemGroup>
 
 </Project>
