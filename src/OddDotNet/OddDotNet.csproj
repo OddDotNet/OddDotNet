@@ -14,7 +14,7 @@
 
     <!-- OpenTelemetry proto definitions -->
     <ItemGroup>
-        <Protobuf Include="OpenTelemetry/**/*.proto" GrpcServices="Server" ProtoRoot="OpenTelemetry/"/>
+        <Protobuf Include="OpenTelemetry/**/*.proto" GrpcServices="Both" ProtoRoot="OpenTelemetry/"/>
     </ItemGroup>
 
     <ItemGroup>

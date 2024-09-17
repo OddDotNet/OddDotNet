@@ -1,6 +1,0 @@
-@OddDotNet.WebApi.One_HostAddress = http://localhost:5018
-
-GET {{OddDotNet.WebApi.One_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
