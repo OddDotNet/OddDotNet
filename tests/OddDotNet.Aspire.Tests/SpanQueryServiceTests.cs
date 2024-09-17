@@ -1,11 +1,6 @@
 using Grpc.Net.Client;
 using Microsoft.Extensions.DependencyInjection;
 using OpenTelemetry.Proto.Collector.Trace.V1;
-using OpenTelemetry.Proto.Common.V1;
-using OpenTelemetry.Proto.Trace.V1;
-using OtelResource = OpenTelemetry.Proto.Resource.V1.Resource;
-using OtelSpan = OpenTelemetry.Proto.Trace.V1.Span;
-using OtelAnyValue = OpenTelemetry.Proto.Common.V1.AnyValue;
 
 namespace OddDotNet.Aspire.Tests;
 

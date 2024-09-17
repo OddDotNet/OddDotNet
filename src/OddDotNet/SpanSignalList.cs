@@ -1,6 +1,4 @@
-using System.Globalization;
 using System.Threading.Channels;
-using OpenTelemetry.Proto.Common.V1;
 
 namespace OddDotNet;
 
