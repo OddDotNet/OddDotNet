@@ -16,27 +16,7 @@ public class SpanQueryServiceTests
         [Fact]
         public async Task ReturnSpanWithMatchingAttributeWhenAttributeExists()
         {
-            OtelAnyValue attributeValue = new OtelAnyValue()
-            {
-                StringValue = "test"
-            };
-            KeyValue attribute = new KeyValue()
-            {
-                Key = "test",
-                Value = attributeValue
-            };
-            OtelSpan span = new OtelSpan();
-            span.Attributes.Add(attribute);
-            ScopeSpans scopeSpan = new ScopeSpans();
-            scopeSpan.Spans.Add(span);
-            
-            OtelResource resource = new OtelResource();
-            resource.DroppedAttributesCount = 0;
-            ResourceSpans resourceSpan = new ResourceSpans();
-            resourceSpan.Resource = resource;
-            resourceSpan.ScopeSpans.Add(scopeSpan);
-            ExportTraceServiceRequest request = new ExportTraceServiceRequest();
-            request.ResourceSpans.Add(resourceSpan);
+            var request = TestHelpers.CreateExportTraceServiceRequest();
 
             var builder = await DistributedApplicationTestingBuilder.CreateAsync<Projects.OddDotNet_Aspire_AppHost>();
             await using var app = await builder.BuildAsync();
@@ -67,7 +47,7 @@ public class SpanQueryServiceTests
             {
                 AttributeExists = new WhereAttributeExistsFilter()
                 {
-                    Attribute = "test",
+                    Attribute = request.ResourceSpans[0].ScopeSpans[0].Spans[0].Attributes[0].Key,
                 }
             };
             
@@ -76,6 +56,7 @@ public class SpanQueryServiceTests
             var response = await spanQueryServiceClient.QueryAsync(spanQueryRequest);
             
             Assert.NotEmpty(response.Spans);
+            Assert.Equal(request.ResourceSpans[0].ScopeSpans[0].Spans[0].SpanId, response.Spans[0].SpanId);
         }
     }
 }
