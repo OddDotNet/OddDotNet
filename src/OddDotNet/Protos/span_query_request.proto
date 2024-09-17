@@ -42,7 +42,7 @@ message WhereAttributeStringEqualFilter {
 
 message WhereAttributeIntEqualFilter {
   string attribute = 1;
-  int32 compare = 2;
+  int64 compare = 2;
 }
 
 message WhereAttributeExistsFilter {

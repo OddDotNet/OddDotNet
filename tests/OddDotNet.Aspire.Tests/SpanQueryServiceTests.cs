@@ -111,4 +111,57 @@ public class SpanQueryServiceTests
             Assert.Equal(spanToFind.SpanId, response.Spans[0].SpanId);
         }
     }
+
+    public class WhereAttributeIntEqualShould
+    {
+        [Fact]
+        public async Task ReturnSpanWithMatchingAttributeWhenAttributeIsEqual()
+        {
+            var request = TestHelpers.CreateExportTraceServiceRequest();
+            var intAttribute = TestHelpers.CreateKeyValue("test.int", 123);
+            request.ResourceSpans[0].ScopeSpans[0].Spans[0].Attributes.Add(intAttribute);
+
+            var builder = await DistributedApplicationTestingBuilder.CreateAsync<Projects.OddDotNet_Aspire_AppHost>();
+            await using var app = await builder.BuildAsync();
+            
+            var resourceNotificationService = app.Services.GetRequiredService<ResourceNotificationService>();
+            await app.StartAsync();
+
+            await resourceNotificationService.WaitForResourceAsync("odd").WaitAsync(TimeSpan.FromSeconds(30));
+
+            var endpoint = app.GetEndpoint("odd", "http");
+            var traceServiceChannel = GrpcChannel.ForAddress(endpoint.AbsoluteUri);
+            TraceService.TraceServiceClient traceServiceClient = new TraceService.TraceServiceClient(traceServiceChannel);
+
+            await traceServiceClient.ExportAsync(request);
+            
+            var spanQueryChannel = GrpcChannel.ForAddress(endpoint.AbsoluteUri);
+            SpanQueryService.SpanQueryServiceClient spanQueryServiceClient = new SpanQueryService.SpanQueryServiceClient(spanQueryChannel);
+            
+            var take = new Take
+            {
+                TakeExact = new TakeExact()
+                {
+                    Count = 1
+                }
+            };
+
+            var spanToFind = request.ResourceSpans[0].ScopeSpans[0].Spans[0];
+            var whereFilter = new Where
+            {
+                AttributeIntEqual = new WhereAttributeIntEqualFilter()
+                {
+                    Attribute = intAttribute.Key,
+                    Compare = intAttribute.Value.IntValue
+                }
+            };
+            
+            var spanQueryRequest = new SpanQueryRequest { Take = take, WhereFilters = { whereFilter }};
+            
+            var response = await spanQueryServiceClient.QueryAsync(spanQueryRequest);
+            
+            Assert.NotEmpty(response.Spans);
+            Assert.Equal(spanToFind.SpanId, response.Spans[0].SpanId);
+        }
+    }
 }
