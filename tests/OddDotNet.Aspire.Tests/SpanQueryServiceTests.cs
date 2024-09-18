@@ -118,6 +118,47 @@ public class SpanQueryServiceTests : IAsyncLifetime
         }
     }
 
+    public class TakeAllShould : SpanQueryServiceTests
+    {
+        [Fact]
+        public async Task ReturnAllSpansWithinTimeframe()
+        {
+            var request = TestHelpers.CreateExportTraceServiceRequest();
+            
+            var take = new Take
+            {
+                TakeAll = new TakeAll()
+                {
+                    Duration = new TakeDuration()
+                    {
+                        SecondsValue = 3 // Wait for any spans within 3 seconds of query
+                    }
+                }
+            };
+            
+            var spanQueryRequest = new SpanQueryRequest { Take = take};
+            
+            // Start the query waiting for 3 seconds, and send spans at 500, 1000, 1500 ms
+            var responseTask = _spanQueryServiceClient.QueryAsync(spanQueryRequest);
+            var exportFirst = ExportDelayedTrace(request, TimeSpan.FromMilliseconds(500));
+            var exportSecond = ExportDelayedTrace(request, TimeSpan.FromMilliseconds(1000));
+            var exportThird = ExportDelayedTrace(request, TimeSpan.FromMilliseconds(1500));
+
+            await Task.WhenAll(responseTask.ResponseAsync, exportFirst, exportSecond, exportThird);
+
+            var response = await responseTask;
+            
+            Assert.NotEmpty(response.Spans);
+            Assert.Equal(3, response.Spans.Count); // Verify 3 spans we're returned
+        }
+    }
+
+    private async Task ExportDelayedTrace(ExportTraceServiceRequest request, TimeSpan delay)
+    {
+        await Task.Delay(delay);
+        _traceServiceClient.ExportAsync(request);
+    }
+
     public async Task InitializeAsync()
     {
         var builder = await DistributedApplicationTestingBuilder.CreateAsync<Projects.OddDotNet_Aspire_AppHost>();
@@ -128,7 +169,7 @@ public class SpanQueryServiceTests : IAsyncLifetime
 
         await resourceNotificationService.WaitForResourceAsync("odd").WaitAsync(TimeSpan.FromSeconds(30));
 
-        var endpoint = _app.GetEndpoint("odd", "http");
+        var endpoint = _app.GetEndpoint("odd", "http");//new Uri("http://localhost:4317");//_app.GetEndpoint("odd", "http"));
         var traceServiceChannel = GrpcChannel.ForAddress(endpoint.AbsoluteUri);
         _traceServiceClient = new TraceService.TraceServiceClient(traceServiceChannel);
             
