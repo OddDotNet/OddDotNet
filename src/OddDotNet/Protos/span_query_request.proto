@@ -5,6 +5,7 @@ option csharp_namespace = "OddDotNet";
 message SpanQueryRequest {
   repeated Where whereFilters = 1;
   Take take = 2;
+  optional Duration duration = 3;
 }
 
 message Where {
@@ -23,13 +24,9 @@ message Take {
   }
 }
 
-message TakeFirst {
-  
-}
+message TakeFirst {}
 
-message TakeAll {
-  
-}
+message TakeAll {}
 
 message TakeExact {
   int32 count = 1;
@@ -47,4 +44,12 @@ message WhereAttributeIntEqualFilter {
 
 message WhereAttributeExistsFilter {
   string attribute = 1;
+}
+
+message Duration {
+  oneof value {
+    uint64 secondsValue = 1;
+    uint64 millisecondsValue = 2;
+    uint64 minutesValue = 3;
+  }
 }

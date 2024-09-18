@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Threading.Channels;
 
 namespace OddDotNet;
@@ -6,14 +7,16 @@ public class SpanSignalList : ISignalList<Span>
 {
     private readonly IChannelManager<Span> _channels;
     private readonly TimeProvider _timeProvider;
+    private readonly ILogger<SpanSignalList> _logger;
 
     private static readonly List<Expirable<Span>> Spans = [];
 
     private static readonly object Lock = new();
-    public SpanSignalList(IChannelManager<Span> channels, TimeProvider timeProvider)
+    public SpanSignalList(IChannelManager<Span> channels, TimeProvider timeProvider, ILogger<SpanSignalList> logger)
     {
         _channels = channels;
         _timeProvider = timeProvider;
+        _logger = logger;
     }
 
     public void Add(Span signal)
@@ -32,15 +35,13 @@ public class SpanSignalList : ISignalList<Span>
         }
     }
 
-    public async Task<List<Span>> QueryAsync(IQueryRequest<Span> request, CancellationToken cancellationToken = default)
+    public async IAsyncEnumerable<Span> QueryAsync(IQueryRequest<Span> request, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
         SpanQueryRequest spanRequest = request as SpanQueryRequest ?? throw new InvalidCastException(nameof(request));
-        List<Span> matchingSpans = [];
-        Channel<Span> channel = _channels.AddChannel();
+        using var timeout = GetQueryTimeout(spanRequest);
+        using var cts = CancellationTokenSource.CreateLinkedTokenSource(timeout.Token, cancellationToken);
         
-        // TODO Make this configurable
-        cts.CancelAfter(TimeSpan.FromSeconds(30));
+        Channel<Span> channel = _channels.AddChannel();
 
         try
         {
@@ -56,22 +57,55 @@ public class SpanSignalList : ISignalList<Span>
             }
 
             int takeCount = GetTakeCount(spanRequest);
+            int currentCount = 0;
 
-            while (matchingSpans.Count < takeCount && !cts.IsCancellationRequested)
+            while (currentCount < takeCount && !cts.IsCancellationRequested)
             {
-                await channel.Reader.WaitToReadAsync(cts.Token);
-                Span span = await channel.Reader.ReadAsync(cts.Token);
+                Span? span = null;
+                try
+                {
+                    await channel.Reader.WaitToReadAsync(cts.Token);
+                    span = await channel.Reader.ReadAsync(cts.Token);
+                }
+                catch (OperationCanceledException ex)
+                {
+                    _logger.LogWarning(ex, "The query operation was cancelled");
+                    break;
+                }
+                
 
                 if (ShouldInclude(spanRequest, span))
-                    matchingSpans.Add(span);
+                {
+                    yield return span;
+                    currentCount++;
+                }
+                    
             }
         }
         finally
         {
             _channels.RemoveChannel(channel);
+            channel.Writer.TryComplete();
         }
+    }
+
+    private static CancellationTokenSource GetQueryTimeout(SpanQueryRequest spanRequest)
+    {
+        var defaultTimeout = new CancellationTokenSource(TimeSpan.FromMilliseconds(int.MaxValue));
         
-        return matchingSpans;
+        return spanRequest.Duration is null ? 
+            defaultTimeout : 
+            spanRequest.Duration?.ValueCase switch
+        {
+            Duration.ValueOneofCase.MillisecondsValue => new CancellationTokenSource(
+                TimeSpan.FromMilliseconds(spanRequest.Duration.MillisecondsValue)),
+            Duration.ValueOneofCase.SecondsValue => new CancellationTokenSource(
+                TimeSpan.FromSeconds(spanRequest.Duration.SecondsValue)),
+            Duration.ValueOneofCase.MinutesValue => new CancellationTokenSource(
+                TimeSpan.FromMinutes(spanRequest.Duration.MinutesValue)),
+            Duration.ValueOneofCase.None => defaultTimeout,
+            _ => defaultTimeout
+        };
     }
 
     private void PruneExpiredSpans()
@@ -80,7 +114,7 @@ public class SpanSignalList : ISignalList<Span>
         Spans.RemoveAll(expirable => expirable.ExpireAt < currentTime);
     }
 
-    private int GetTakeCount(SpanQueryRequest spanQueryRequest) => spanQueryRequest.Take.TakeTypeCase switch
+    private static int GetTakeCount(SpanQueryRequest spanQueryRequest) => spanQueryRequest.Take.TakeTypeCase switch
     {
         Take.TakeTypeOneofCase.TakeFirst => 1,
         Take.TakeTypeOneofCase.TakeAll => int.MaxValue,

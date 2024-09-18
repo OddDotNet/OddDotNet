@@ -13,11 +13,9 @@ public class SpanQueryService : OddDotNet.SpanQueryService.SpanQueryServiceBase
 
     public override async Task<SpanQueryResponse> Query(SpanQueryRequest request, ServerCallContext context)
     {
-        var result = await _spans.QueryAsync(request, context.CancellationToken);
-        
         var response = new SpanQueryResponse();
-        
-        response.Spans.AddRange(result);
+        await foreach (Span span in _spans.QueryAsync(request).WithCancellation(context.CancellationToken).ConfigureAwait(false))
+            response.Spans.Add(span);
 
         return response;
     }
