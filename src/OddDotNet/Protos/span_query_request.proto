@@ -28,7 +28,7 @@ message TakeFirst {
 }
 
 message TakeAll {
-  
+  TakeDuration duration = 1;
 }
 
 message TakeExact {
@@ -47,4 +47,12 @@ message WhereAttributeIntEqualFilter {
 
 message WhereAttributeExistsFilter {
   string attribute = 1;
+}
+
+message TakeDuration {
+  oneof value {
+    uint64 secondsValue = 1;
+    uint64 millisecondsValue = 2;
+    uint64 minutesValue = 3;
+  }
 }
