@@ -38,12 +38,7 @@ public class SpanSignalList : ISignalList<Span>
     public async IAsyncEnumerable<Span> QueryAsync(IQueryRequest<Span> request, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         SpanQueryRequest spanRequest = request as SpanQueryRequest ?? throw new InvalidCastException(nameof(request));
-        using var timeout = spanRequest.Take.TakeTypeCase switch
-        {
-            Take.TakeTypeOneofCase.TakeAll => new CancellationTokenSource(
-                TimeSpan.FromSeconds(spanRequest.Take.TakeAll.Duration.SecondsValue)),
-            _ => new CancellationTokenSource(TimeSpan.FromMilliseconds(Int32.MaxValue))
-        };
+        using var timeout = GetQueryTimeout(spanRequest);
         using var cts = CancellationTokenSource.CreateLinkedTokenSource(timeout.Token, cancellationToken);
         
         Channel<Span> channel = _channels.AddChannel();
@@ -72,13 +67,14 @@ public class SpanSignalList : ISignalList<Span>
                     await channel.Reader.WaitToReadAsync(cts.Token);
                     span = await channel.Reader.ReadAsync(cts.Token);
                 }
-                catch (OperationCanceledException e)
+                catch (OperationCanceledException ex)
                 {
-                    // do nothing eh
+                    _logger.LogWarning(ex, "The query operation was cancelled");
+                    break;
                 }
                 
 
-                if (span is not null && ShouldInclude(spanRequest, span))
+                if (ShouldInclude(spanRequest, span))
                 {
                     yield return span;
                     currentCount++;
@@ -93,13 +89,32 @@ public class SpanSignalList : ISignalList<Span>
         }
     }
 
+    private static CancellationTokenSource GetQueryTimeout(SpanQueryRequest spanRequest)
+    {
+        var defaultTimeout = new CancellationTokenSource(TimeSpan.FromMilliseconds(int.MaxValue));
+        
+        return spanRequest.Duration is null ? 
+            defaultTimeout : 
+            spanRequest.Duration?.ValueCase switch
+        {
+            Duration.ValueOneofCase.MillisecondsValue => new CancellationTokenSource(
+                TimeSpan.FromMilliseconds(spanRequest.Duration.MillisecondsValue)),
+            Duration.ValueOneofCase.SecondsValue => new CancellationTokenSource(
+                TimeSpan.FromSeconds(spanRequest.Duration.SecondsValue)),
+            Duration.ValueOneofCase.MinutesValue => new CancellationTokenSource(
+                TimeSpan.FromMinutes(spanRequest.Duration.MinutesValue)),
+            Duration.ValueOneofCase.None => defaultTimeout,
+            _ => defaultTimeout
+        };
+    }
+
     private void PruneExpiredSpans()
     {
         DateTimeOffset currentTime = _timeProvider.GetUtcNow();
         Spans.RemoveAll(expirable => expirable.ExpireAt < currentTime);
     }
 
-    private int GetTakeCount(SpanQueryRequest spanQueryRequest) => spanQueryRequest.Take.TakeTypeCase switch
+    private static int GetTakeCount(SpanQueryRequest spanQueryRequest) => spanQueryRequest.Take.TakeTypeCase switch
     {
         Take.TakeTypeOneofCase.TakeFirst => 1,
         Take.TakeTypeOneofCase.TakeAll => int.MaxValue,

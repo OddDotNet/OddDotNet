@@ -120,36 +120,47 @@ public class SpanQueryServiceTests : IAsyncLifetime
 
     public class TakeAllShould : SpanQueryServiceTests
     {
-        [Fact]
-        public async Task ReturnAllSpansWithinTimeframe()
+        // 3 traces are exported at 500, 1000, and 2000 ms. 
+        [Theory]
+        [InlineData(3, Duration.ValueOneofCase.SecondsValue, 3)] // Should return all traces
+        [InlineData(1200, Duration.ValueOneofCase.MillisecondsValue, 2)] // Times out before 3rd trace is received
+        [InlineData(1, Duration.ValueOneofCase.MinutesValue, 3)] // should return all traces
+        public async Task ReturnAllSpansWithinTimeframe(uint takeDuration, Duration.ValueOneofCase takeDurationValue, int expectedCount)
         {
             var request = TestHelpers.CreateExportTraceServiceRequest();
+            var duration = new Duration();
+            switch (takeDurationValue)
+            {
+                case Duration.ValueOneofCase.SecondsValue:
+                    duration.SecondsValue = takeDuration;
+                    break;
+                case Duration.ValueOneofCase.MillisecondsValue:
+                    duration.MillisecondsValue = takeDuration;
+                    break;
+                case Duration.ValueOneofCase.MinutesValue:
+                    duration.MinutesValue = takeDuration;
+                    break;
+            }
             
             var take = new Take
             {
                 TakeAll = new TakeAll()
-                {
-                    Duration = new TakeDuration()
-                    {
-                        SecondsValue = 3 // Wait for any spans within 3 seconds of query
-                    }
-                }
             };
             
-            var spanQueryRequest = new SpanQueryRequest { Take = take};
+            var spanQueryRequest = new SpanQueryRequest { Take = take, Duration = duration};
             
-            // Start the query waiting for 3 seconds, and send spans at 500, 1000, 1500 ms
+            // Start the query waiting for 3 seconds, and send spans at 500, 1000, 2000 ms
             var responseTask = _spanQueryServiceClient.QueryAsync(spanQueryRequest);
             var exportFirst = ExportDelayedTrace(request, TimeSpan.FromMilliseconds(500));
             var exportSecond = ExportDelayedTrace(request, TimeSpan.FromMilliseconds(1000));
-            var exportThird = ExportDelayedTrace(request, TimeSpan.FromMilliseconds(1500));
+            var exportThird = ExportDelayedTrace(request, TimeSpan.FromMilliseconds(2000));
 
             await Task.WhenAll(responseTask.ResponseAsync, exportFirst, exportSecond, exportThird);
 
             var response = await responseTask;
             
             Assert.NotEmpty(response.Spans);
-            Assert.Equal(3, response.Spans.Count); // Verify 3 spans we're returned
+            Assert.Equal(expectedCount, response.Spans.Count); 
         }
     }
 
@@ -159,6 +170,10 @@ public class SpanQueryServiceTests : IAsyncLifetime
         _traceServiceClient.ExportAsync(request);
     }
 
+    /// <summary>
+    /// Builds and starts the AppHost project, which has a single OddDotNet project defined within.
+    /// Once started, configures the clients for exporting and querying.
+    /// </summary>
     public async Task InitializeAsync()
     {
         var builder = await DistributedApplicationTestingBuilder.CreateAsync<Projects.OddDotNet_Aspire_AppHost>();
@@ -169,7 +184,7 @@ public class SpanQueryServiceTests : IAsyncLifetime
 
         await resourceNotificationService.WaitForResourceAsync("odd").WaitAsync(TimeSpan.FromSeconds(30));
 
-        var endpoint = _app.GetEndpoint("odd", "http");//new Uri("http://localhost:4317");//_app.GetEndpoint("odd", "http"));
+        var endpoint = _app.GetEndpoint("odd", "http");
         var traceServiceChannel = GrpcChannel.ForAddress(endpoint.AbsoluteUri);
         _traceServiceClient = new TraceService.TraceServiceClient(traceServiceChannel);
             
