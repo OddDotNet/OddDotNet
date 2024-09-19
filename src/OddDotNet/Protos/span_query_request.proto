@@ -13,6 +13,7 @@ message Where {
     WhereAttributeStringEqualFilter attributeStringEqual = 1;
     WhereAttributeIntEqualFilter attributeIntEqual = 2;
     WhereAttributeExistsFilter attributeExists = 3;
+    WhereSpanPropertyFilter spanProperty = 4;
   }
 }
 
@@ -46,10 +47,43 @@ message WhereAttributeExistsFilter {
   string attribute = 1;
 }
 
+message WhereSpanPropertyFilter {
+  oneof property {
+    SpanNameProperty spanName = 1;
+    SpanIdProperty spanId = 2;
+  }
+}
+
 message Duration {
   oneof value {
     uint64 secondsValue = 1;
     uint64 millisecondsValue = 2;
     uint64 minutesValue = 3;
   }
+}
+
+message SpanNameProperty {
+  StringCompareType compareAs = 1;
+  optional string compare = 2;
+}
+
+message SpanIdProperty {
+  ByteStringCompareType compareAs = 1;
+  bytes compare = 2;
+}
+
+enum ByteStringCompareType {
+  BYTE_STRING_COMPARE_TYPE_NONE = 0;
+  BYTE_STRING_COMPARE_TYPE_EQUALS = 1;
+  BYTE_STRING_COMPARE_TYPE_NOT_EQUALS = 2;
+}
+
+enum StringCompareType {
+  STRING_COMPARE_TYPE_NONE = 0;
+  STRING_COMPARE_TYPE_EQUALS = 1;
+  STRING_COMPARE_TYPE_NOT_EQUALS = 2;
+  STRING_COMPARE_TYPE_CONTAINS = 3;
+  STRING_COMPARE_TYPE_NOT_CONTAINS = 4;
+  STRING_COMPARE_TYPE_IS_EMPTY = 5;
+  STRING_COMPARE_TYPE_IS_NOT_EMPTY = 6;
 }

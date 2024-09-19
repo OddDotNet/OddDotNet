@@ -1,5 +1,6 @@
 using System.Runtime.CompilerServices;
 using System.Threading.Channels;
+using Google.Protobuf;
 
 namespace OddDotNet;
 
@@ -134,6 +135,7 @@ public class SpanSignalList : ISignalList<Span>
             filter.AttributeStringEqual, span),
         Where.FilterOneofCase.AttributeIntEqual => ProcessWhereAttributeIntEqualFilter(filter.AttributeIntEqual, span),
         Where.FilterOneofCase.AttributeExists => ProcessWhereAttributeExistsFilter(filter.AttributeExists, span),
+        Where.FilterOneofCase.SpanProperty => ProcessSpanPropertyFilter(filter.SpanProperty, span),
         _ => throw new NotImplementedException("Something went wrong"),
     };
 
@@ -156,5 +158,38 @@ public class SpanSignalList : ISignalList<Span>
     private static bool ProcessWhereAttributeExistsFilter(WhereAttributeExistsFilter filter, Span span)
     {
         return span.Attributes.ContainsKey(filter.Attribute);
+    }
+
+    private static bool ProcessSpanPropertyFilter(WhereSpanPropertyFilter filter, Span span)
+    {
+        return filter.PropertyCase switch
+        {
+            WhereSpanPropertyFilter.PropertyOneofCase.SpanName => StringFilter(span.Name, filter.SpanName.Compare, filter.SpanName.CompareAs),
+            WhereSpanPropertyFilter.PropertyOneofCase.SpanId => ByteStringFilter(span.SpanId, filter.SpanId.Compare, filter.SpanId.CompareAs)
+        };
+    }
+
+    private static bool StringFilter(string value, string compare, StringCompareType compareType)
+    {
+        return compareType switch
+        {
+            StringCompareType.Equals => value.Equals(compare, StringComparison.Ordinal),
+            StringCompareType.NotEquals => !value.Equals(compare, StringComparison.Ordinal),
+            StringCompareType.Contains => value.Contains(compare),
+            StringCompareType.NotContains => !value.Contains(compare),
+            StringCompareType.IsEmpty => string.IsNullOrEmpty(value),
+            StringCompareType.IsNotEmpty => !string.IsNullOrEmpty(value),
+            StringCompareType.None => throw new NotImplementedException("Something went wrong"), // TODO update this exception
+            _ => throw new NotImplementedException("Something went wrong"),
+        };
+    }
+
+    private static bool ByteStringFilter(ByteString value, ByteString compare, ByteStringCompareType compareType)
+    {
+        return compareType switch
+        {
+            ByteStringCompareType.Equals => value.Equals(compare),
+            ByteStringCompareType.NotEquals => !value.Equals(compare),
+        };
     }
 }
