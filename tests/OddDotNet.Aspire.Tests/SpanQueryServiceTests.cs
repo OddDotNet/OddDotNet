@@ -16,6 +16,86 @@ public class SpanQueryServiceTests : IAsyncLifetime
 
     public class WhereSpanPropertyShould : SpanQueryServiceTests
     {
+        [Theory]
+        [InlineData(1L, 1L, UInt64CompareAsType.Equals, WhereSpanPropertyFilter.PropertyOneofCase.StartTimeUnixNano, true)]
+        [InlineData(0L, 1L, UInt64CompareAsType.Equals, WhereSpanPropertyFilter.PropertyOneofCase.StartTimeUnixNano, false)]
+        [InlineData(0L, 1L, UInt64CompareAsType.NotEquals, WhereSpanPropertyFilter.PropertyOneofCase.StartTimeUnixNano, true)]
+        [InlineData(1L, 1L, UInt64CompareAsType.NotEquals, WhereSpanPropertyFilter.PropertyOneofCase.StartTimeUnixNano, false)]
+        [InlineData(1L, 1L, UInt64CompareAsType.GreaterThanEquals, WhereSpanPropertyFilter.PropertyOneofCase.StartTimeUnixNano, true)]
+        [InlineData(1L, 2L, UInt64CompareAsType.GreaterThanEquals, WhereSpanPropertyFilter.PropertyOneofCase.StartTimeUnixNano, true)]
+        [InlineData(2L, 1L, UInt64CompareAsType.GreaterThanEquals, WhereSpanPropertyFilter.PropertyOneofCase.StartTimeUnixNano, false)]
+        [InlineData(1L, 2L, UInt64CompareAsType.GreaterThan, WhereSpanPropertyFilter.PropertyOneofCase.StartTimeUnixNano, true)]
+        [InlineData(1L, 1L, UInt64CompareAsType.GreaterThan, WhereSpanPropertyFilter.PropertyOneofCase.StartTimeUnixNano, false)]
+        [InlineData(1L, 1L, UInt64CompareAsType.LessThanEquals, WhereSpanPropertyFilter.PropertyOneofCase.StartTimeUnixNano, true)]
+        [InlineData(2L, 1L, UInt64CompareAsType.LessThanEquals, WhereSpanPropertyFilter.PropertyOneofCase.StartTimeUnixNano, true)]
+        [InlineData(1L, 2L, UInt64CompareAsType.LessThanEquals, WhereSpanPropertyFilter.PropertyOneofCase.StartTimeUnixNano, false)]
+        [InlineData(2L, 1L, UInt64CompareAsType.LessThan, WhereSpanPropertyFilter.PropertyOneofCase.StartTimeUnixNano, true)]
+        [InlineData(1L, 1L, UInt64CompareAsType.LessThan, WhereSpanPropertyFilter.PropertyOneofCase.StartTimeUnixNano, false)]
+        [InlineData(1L, 1L, UInt64CompareAsType.Equals, WhereSpanPropertyFilter.PropertyOneofCase.EndTimeUnixNano, true)]
+        [InlineData(0L, 1L, UInt64CompareAsType.Equals, WhereSpanPropertyFilter.PropertyOneofCase.EndTimeUnixNano, false)]
+        [InlineData(0L, 1L, UInt64CompareAsType.NotEquals, WhereSpanPropertyFilter.PropertyOneofCase.EndTimeUnixNano, true)]
+        [InlineData(1L, 1L, UInt64CompareAsType.NotEquals, WhereSpanPropertyFilter.PropertyOneofCase.EndTimeUnixNano, false)]
+        [InlineData(1L, 1L, UInt64CompareAsType.GreaterThanEquals, WhereSpanPropertyFilter.PropertyOneofCase.EndTimeUnixNano, true)]
+        [InlineData(1L, 2L, UInt64CompareAsType.GreaterThanEquals, WhereSpanPropertyFilter.PropertyOneofCase.EndTimeUnixNano, true)]
+        [InlineData(2L, 1L, UInt64CompareAsType.GreaterThanEquals, WhereSpanPropertyFilter.PropertyOneofCase.EndTimeUnixNano, false)]
+        [InlineData(1L, 2L, UInt64CompareAsType.GreaterThan, WhereSpanPropertyFilter.PropertyOneofCase.EndTimeUnixNano, true)]
+        [InlineData(1L, 1L, UInt64CompareAsType.GreaterThan, WhereSpanPropertyFilter.PropertyOneofCase.EndTimeUnixNano, false)]
+        [InlineData(1L, 1L, UInt64CompareAsType.LessThanEquals, WhereSpanPropertyFilter.PropertyOneofCase.EndTimeUnixNano, true)]
+        [InlineData(2L, 1L, UInt64CompareAsType.LessThanEquals, WhereSpanPropertyFilter.PropertyOneofCase.EndTimeUnixNano, true)]
+        [InlineData(1L, 2L, UInt64CompareAsType.LessThanEquals, WhereSpanPropertyFilter.PropertyOneofCase.EndTimeUnixNano, false)]
+        [InlineData(2L, 1L, UInt64CompareAsType.LessThan, WhereSpanPropertyFilter.PropertyOneofCase.EndTimeUnixNano, true)]
+        [InlineData(1L, 1L, UInt64CompareAsType.LessThan, WhereSpanPropertyFilter.PropertyOneofCase.EndTimeUnixNano, false)]
+        public async Task ReturnSpansWithMatchingUInt64Property(ulong expected, ulong actual,
+            UInt64CompareAsType compareAs, WhereSpanPropertyFilter.PropertyOneofCase propertyToCheck,
+            bool shouldBeIncluded)
+        {
+            // Arrange
+            var request = TestHelpers.CreateExportTraceServiceRequest();
+            var spanToFind = request.ResourceSpans[0].ScopeSpans[0].Spans[0];
+            var uInt64Property = new UInt64Property
+            {
+                CompareAs = compareAs,
+                Compare = expected
+            };
+            var whereSpanPropertyFilter = new WhereSpanPropertyFilter();
+
+            switch (propertyToCheck)
+            {
+                case WhereSpanPropertyFilter.PropertyOneofCase.StartTimeUnixNano:
+                    spanToFind.StartTimeUnixNano = actual;
+                    whereSpanPropertyFilter.StartTimeUnixNano = uInt64Property;
+                    break;
+            }
+            
+            // Send the trace
+            await _traceServiceClient.ExportAsync(request);
+            
+            //Act
+            var take = new Take()
+            {
+                TakeFirst = new TakeFirst()
+            };
+
+            var duration = new Duration()
+            {
+                SecondsValue = 1
+            };
+
+            var whereFilter = new WhereSpanFilter()
+            {
+                SpanProperty = whereSpanPropertyFilter
+            };
+            
+            var spanQueryRequest = new SpanQueryRequest() { Take = take, Filters = { whereFilter }, Duration = duration };
+
+            var response = await _spanQueryServiceClient.QueryAsync(spanQueryRequest);
+
+            // Assert
+            Assert.Equal(shouldBeIncluded, response.Spans.Count > 0);
+            if (shouldBeIncluded)
+                Assert.True(response.Spans[0].SpanId == spanToFind.SpanId);
+        }
+        
         [Fact]
         public async Task ReturnSpansWithMatchingStartTimeUnixNanoProperty()
         {
@@ -187,57 +267,6 @@ public class SpanQueryServiceTests : IAsyncLifetime
         }
 
         [Theory]
-        [InlineData("test", "test", StringCompareAsType.Equals, true)]
-        [InlineData("other", "test", StringCompareAsType.Equals, false)]
-        [InlineData("test", "test", StringCompareAsType.NotEquals, false)]
-        [InlineData("other", "test", StringCompareAsType.NotEquals, true)]
-        [InlineData("te", "test", StringCompareAsType.Contains, true)]
-        [InlineData("other", "test", StringCompareAsType.Contains, false)]
-        [InlineData("test", "test", StringCompareAsType.NotContains, false)]
-        [InlineData("other", "test", StringCompareAsType.NotContains, true)]
-        [InlineData("", "", StringCompareAsType.IsEmpty, true)]
-        [InlineData("", "test", StringCompareAsType.IsEmpty, false)]
-        [InlineData("", "", StringCompareAsType.IsNotEmpty, false)]
-        [InlineData("", "test", StringCompareAsType.IsNotEmpty, true)]
-        public async Task ReturnSpansWithMatchingNameStringFilter(string expected, string actual, StringCompareAsType compareAs, bool shouldBeIncluded)
-        {
-            var request = TestHelpers.CreateExportTraceServiceRequest();
-            var spanToFind = request.ResourceSpans[0].ScopeSpans[0].Spans[0];
-            spanToFind.Name = actual;
-            await _traceServiceClient.ExportAsync(request);
-            
-            var take = new Take()
-            {
-                TakeFirst = new TakeFirst()
-            };
-
-            var duration = new Duration()
-            {
-                SecondsValue = 1
-            };
-
-            var whereFilter = new WhereSpanFilter()
-            {
-                SpanProperty = new WhereSpanPropertyFilter()
-                {
-                    SpanName = new StringProperty()
-                    {
-                        CompareAs = compareAs,
-                        Compare = expected
-                    }
-                }
-            };
-            
-            var spanQueryRequest = new SpanQueryRequest() { Take = take, Filters = { whereFilter }, Duration = duration };
-
-            var response = await _spanQueryServiceClient.QueryAsync(spanQueryRequest);
-
-            Assert.Equal(shouldBeIncluded, response.Spans.Count > 0);
-            if (shouldBeIncluded)
-                Assert.True(response.Spans[0].SpanId == spanToFind.SpanId);
-        }
-
-        [Theory]
         [InlineData("test", "test", StringCompareAsType.Equals, WhereSpanPropertyFilter.PropertyOneofCase.SpanName, true)]
         [InlineData("other", "test", StringCompareAsType.Equals, WhereSpanPropertyFilter.PropertyOneofCase.SpanName, false)]
         [InlineData("other", "test", StringCompareAsType.NotEquals, WhereSpanPropertyFilter.PropertyOneofCase.SpanName, true)]
@@ -246,6 +275,10 @@ public class SpanQueryServiceTests : IAsyncLifetime
         [InlineData("other", "test", StringCompareAsType.Contains, WhereSpanPropertyFilter.PropertyOneofCase.SpanName, false)]
         [InlineData("other", "test", StringCompareAsType.NotContains, WhereSpanPropertyFilter.PropertyOneofCase.SpanName, true)]
         [InlineData("te", "test", StringCompareAsType.NotContains, WhereSpanPropertyFilter.PropertyOneofCase.SpanName, false)]
+        [InlineData("", "", StringCompareAsType.IsEmpty, WhereSpanPropertyFilter.PropertyOneofCase.SpanName, true)]
+        [InlineData("test", "test", StringCompareAsType.IsEmpty, WhereSpanPropertyFilter.PropertyOneofCase.SpanName, false)]
+        [InlineData("test", "test", StringCompareAsType.IsNotEmpty, WhereSpanPropertyFilter.PropertyOneofCase.SpanName, true)]
+        [InlineData("", "", StringCompareAsType.IsNotEmpty, WhereSpanPropertyFilter.PropertyOneofCase.SpanName, false)]
         public async Task ReturnSpansWithMatchingStringFilter(string expected, string actual,
             StringCompareAsType compareAs, WhereSpanPropertyFilter.PropertyOneofCase propertyToCheck,
             bool shouldBeIncluded)
