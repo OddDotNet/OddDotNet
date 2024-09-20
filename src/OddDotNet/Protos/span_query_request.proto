@@ -2,18 +2,18 @@ syntax = "proto3";
 
 option csharp_namespace = "OddDotNet";
 
+import "span.proto";
+
 message SpanQueryRequest {
-  repeated Where whereFilters = 1;
+  repeated WhereSpanFilter filters = 1;
   Take take = 2;
   optional Duration duration = 3;
 }
 
-message Where {
+message WhereSpanFilter {
   oneof Filter {
-    WhereAttributeStringEqualFilter attributeStringEqual = 1;
-    WhereAttributeIntEqualFilter attributeIntEqual = 2;
-    WhereAttributeExistsFilter attributeExists = 3;
-    WhereSpanPropertyFilter spanProperty = 4;
+    WhereSpanPropertyFilter spanProperty = 1;
+    WhereSpanOrFilter spanOr = 2;
   }
 }
 
@@ -33,25 +33,22 @@ message TakeExact {
   int32 count = 1;
 }
 
-message WhereAttributeStringEqualFilter {
-  string attribute = 1;
-  string compare = 2;
-}
-
-message WhereAttributeIntEqualFilter {
-  string attribute = 1;
-  int64 compare = 2;
-}
-
-message WhereAttributeExistsFilter {
-  string attribute = 1;
-}
-
 message WhereSpanPropertyFilter {
   oneof property {
-    SpanNameProperty spanName = 1;
-    SpanIdProperty spanId = 2;
+    StringProperty spanName = 1;
+    ByteStringProperty spanId = 2;
+    ByteStringProperty traceId = 3;
+    ByteStringProperty parentSpanId = 4;
+    UInt64Property startTimeUnixNano = 5;
+    UInt64Property endTimeUnixNano = 6;
+    SpanStatusCodeProperty spanStatusCode = 7;
+    SpanKindProperty spanKind = 8;
+    KeyValueProperty spanAttribute = 9;
   }
+}
+
+message WhereSpanOrFilter {
+  
 }
 
 message Duration {
@@ -62,28 +59,93 @@ message Duration {
   }
 }
 
-message SpanNameProperty {
-  StringCompareType compareAs = 1;
+message StringProperty {
+  StringCompareAsType compareAs = 1;
   optional string compare = 2;
 }
 
-message SpanIdProperty {
-  ByteStringCompareType compareAs = 1;
-  bytes compare = 2;
+enum StringCompareAsType {
+  STRING_COMPARE_AS_TYPE_NONE = 0;
+  STRING_COMPARE_AS_TYPE_EQUALS = 1;
+  STRING_COMPARE_AS_TYPE_NOT_EQUALS = 2;
+  STRING_COMPARE_AS_TYPE_CONTAINS = 3;
+  STRING_COMPARE_AS_TYPE_NOT_CONTAINS = 4;
+  STRING_COMPARE_AS_TYPE_IS_EMPTY = 5;
+  STRING_COMPARE_AS_TYPE_IS_NOT_EMPTY = 6;
 }
 
-enum ByteStringCompareType {
-  BYTE_STRING_COMPARE_TYPE_NONE = 0;
-  BYTE_STRING_COMPARE_TYPE_EQUALS = 1;
-  BYTE_STRING_COMPARE_TYPE_NOT_EQUALS = 2;
+message ByteStringProperty {
+  ByteStringCompareAsType compareAs = 1;
+  optional bytes compare = 2;
 }
 
-enum StringCompareType {
-  STRING_COMPARE_TYPE_NONE = 0;
-  STRING_COMPARE_TYPE_EQUALS = 1;
-  STRING_COMPARE_TYPE_NOT_EQUALS = 2;
-  STRING_COMPARE_TYPE_CONTAINS = 3;
-  STRING_COMPARE_TYPE_NOT_CONTAINS = 4;
-  STRING_COMPARE_TYPE_IS_EMPTY = 5;
-  STRING_COMPARE_TYPE_IS_NOT_EMPTY = 6;
+enum ByteStringCompareAsType {
+  BYTE_STRING_COMPARE_AS_TYPE_NONE = 0;
+  BYTE_STRING_COMPARE_AS_TYPE_EQUALS = 1;
+  BYTE_STRING_COMPARE_AS_TYPE_NOT_EQUALS = 2;
+  BYTE_STRING_COMPARE_AS_TYPE_EMPTY = 3;
+  BYTE_STRING_COMPARE_AS_TYPE_NOT_EMPTY = 4;
+}
+
+message UInt64Property {
+  UInt64CompareAsType compareAs = 1;
+  optional uint64 compare = 2;
+}
+
+enum UInt64CompareAsType {
+  U_INT_64_COMPARE_AS_TYPE_NONE = 0;
+  U_INT_64_COMPARE_AS_TYPE_EQUALS = 1;
+  U_INT_64_COMPARE_AS_TYPE_NOT_EQUALS = 2;
+  U_INT_64_COMPARE_AS_TYPE_GREATER_THAN = 3;
+  U_INT_64_COMPARE_AS_TYPE_GREATER_THAN_EQUALS = 4;
+  U_INT_64_COMPARE_AS_TYPE_LESS_THAN = 5;
+  U_INT_64_COMPARE_AS_TYPE_LESS_THAN_EQUALS = 6;
+}
+
+message Int64Property {
+  Int64CompareAsType compareAs = 1;
+  optional int64 compare = 2;
+}
+
+enum Int64CompareAsType {
+  INT_64_COMPARE_AS_TYPE_NONE = 0;
+  INT_64_COMPARE_AS_TYPE_EQUALS = 1;
+  INT_64_COMPARE_AS_TYPE_NOT_EQUALS = 2;
+  INT_64_COMPARE_AS_TYPE_GREATER_THAN = 3;
+  INT_64_COMPARE_AS_TYPE_GREATER_THAN_EQUALS = 4;
+  INT_64_COMPARE_AS_TYPE_LESS_THAN = 5;
+  INT_64_COMPARE_AS_TYPE_LESS_THAN_EQUALS = 6;
+}
+
+message SpanStatusCodeProperty {
+  EnumCompareAsType compareAs = 1;
+  SpanStatusCode compare = 2;
+}
+
+message SpanKindProperty {
+  EnumCompareAsType compareAs = 1;
+  SpanKind compare = 2;
+}
+
+enum EnumCompareAsType {
+  ENUM_COMPARE_AS_TYPE_NONE = 0;
+  ENUM_COMPARE_AS_TYPE_EQUALS = 1;
+  ENUM_COMPARE_AS_TYPE_NOT_EQUALS = 2;
+}
+
+message KeyValueProperty {
+  string key = 1;
+  oneof value {
+    StringProperty stringValue = 2;
+    ByteStringProperty byteStringValue = 3;
+    UInt64Property uint64Value = 4;
+    Int64Property int64Value = 5;
+  }
+}
+
+enum KeyValueCompareAsType {
+  KEY_VALUE_COMPARE_AS_TYPE_NONE = 0;
+  KEY_VALUE_COMPARE_AS_TYPE_EQUALS = 1;
+  KEY_VALUE_COMPARE_AS_TYPE_NOT_EQUALS = 2;
+  
 }

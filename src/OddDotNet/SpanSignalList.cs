@@ -1,6 +1,8 @@
 using System.Runtime.CompilerServices;
 using System.Threading.Channels;
 using Google.Protobuf;
+using Google.Protobuf.Collections;
+using OpenTelemetry.Proto.Trace.V1;
 
 namespace OddDotNet;
 
@@ -126,70 +128,111 @@ public class SpanSignalList : ISignalList<Span>
 
     private static bool ShouldInclude(SpanQueryRequest spanQueryRequest, Span span)
     {
-        return spanQueryRequest.WhereFilters.Count == 0 || spanQueryRequest.WhereFilters.All(whereFilter => SpanMatchesWhereFilter(whereFilter, span));
+        return spanQueryRequest.Filters.Count == 0 || spanQueryRequest.Filters.All(whereFilter => SpanMatchesWhereFilter(whereFilter, span));
     }
 
-    private static bool SpanMatchesWhereFilter(Where filter, Span span) => filter.FilterCase switch
+    private static bool SpanMatchesWhereFilter(WhereSpanFilter filter, Span span) => filter.FilterCase switch
     {
-        Where.FilterOneofCase.AttributeStringEqual => ProcessWhereAttributeStringEqualFilter(
-            filter.AttributeStringEqual, span),
-        Where.FilterOneofCase.AttributeIntEqual => ProcessWhereAttributeIntEqualFilter(filter.AttributeIntEqual, span),
-        Where.FilterOneofCase.AttributeExists => ProcessWhereAttributeExistsFilter(filter.AttributeExists, span),
-        Where.FilterOneofCase.SpanProperty => ProcessSpanPropertyFilter(filter.SpanProperty, span),
+        WhereSpanFilter.FilterOneofCase.SpanProperty => ProcessSpanPropertyFilter(filter.SpanProperty, span),
         _ => throw new NotImplementedException("Something went wrong"),
     };
 
-    private static bool ProcessWhereAttributeStringEqualFilter(WhereAttributeStringEqualFilter filter, Span span)
-    {
-        if (!span.Attributes.TryGetValue(filter.Attribute, out var attribute)) 
-            return false;
-            
-        return attribute.HasStringValue && string.Equals(attribute.StringValue, filter.Compare, StringComparison.Ordinal);
-    }
-
-    private static bool ProcessWhereAttributeIntEqualFilter(WhereAttributeIntEqualFilter filter, Span span)
-    {
-        if (!span.Attributes.TryGetValue(filter.Attribute, out var attribute))
-            return false;
-
-        return attribute.HasIntValue && filter.Compare == attribute.IntValue;
-    }
-
-    private static bool ProcessWhereAttributeExistsFilter(WhereAttributeExistsFilter filter, Span span)
-    {
-        return span.Attributes.ContainsKey(filter.Attribute);
-    }
+    
 
     private static bool ProcessSpanPropertyFilter(WhereSpanPropertyFilter filter, Span span)
     {
         return filter.PropertyCase switch
         {
             WhereSpanPropertyFilter.PropertyOneofCase.SpanName => StringFilter(span.Name, filter.SpanName.Compare, filter.SpanName.CompareAs),
-            WhereSpanPropertyFilter.PropertyOneofCase.SpanId => ByteStringFilter(span.SpanId, filter.SpanId.Compare, filter.SpanId.CompareAs)
+            WhereSpanPropertyFilter.PropertyOneofCase.SpanId => ByteStringFilter(span.SpanId, filter.SpanId.Compare, filter.SpanId.CompareAs),
+            WhereSpanPropertyFilter.PropertyOneofCase.TraceId => ByteStringFilter(span.TraceId, filter.TraceId.Compare, filter.TraceId.CompareAs),
+            WhereSpanPropertyFilter.PropertyOneofCase.ParentSpanId => ByteStringFilter(span.ParentSpanId, filter.ParentSpanId.Compare, filter.ParentSpanId.CompareAs),
+            WhereSpanPropertyFilter.PropertyOneofCase.StartTimeUnixNano => UInt64Filter(span.StartTimeUnixNano, filter.StartTimeUnixNano.Compare, filter.StartTimeUnixNano.CompareAs),
+            WhereSpanPropertyFilter.PropertyOneofCase.EndTimeUnixNano => UInt64Filter(span.EndTimeUnixNano, filter.EndTimeUnixNano.Compare, filter.EndTimeUnixNano.CompareAs),
+            WhereSpanPropertyFilter.PropertyOneofCase.SpanStatusCode => StatusCodeFilter(span.Status.Code, filter.SpanStatusCode.Compare, filter.SpanStatusCode.CompareAs),
+            WhereSpanPropertyFilter.PropertyOneofCase.SpanKind => KindFilter(span.Kind, filter.SpanKind.Compare, filter.SpanKind.CompareAs),
+            WhereSpanPropertyFilter.PropertyOneofCase.SpanAttribute => KeyValueFilter(span.Attributes, filter.SpanAttribute)
         };
     }
 
-    private static bool StringFilter(string value, string compare, StringCompareType compareType)
+    private static bool StringFilter(string value, string compare, StringCompareAsType compareType)
     {
         return compareType switch
         {
-            StringCompareType.Equals => value.Equals(compare, StringComparison.Ordinal),
-            StringCompareType.NotEquals => !value.Equals(compare, StringComparison.Ordinal),
-            StringCompareType.Contains => value.Contains(compare),
-            StringCompareType.NotContains => !value.Contains(compare),
-            StringCompareType.IsEmpty => string.IsNullOrEmpty(value),
-            StringCompareType.IsNotEmpty => !string.IsNullOrEmpty(value),
-            StringCompareType.None => throw new NotImplementedException("Something went wrong"), // TODO update this exception
+            StringCompareAsType.Equals => value.Equals(compare, StringComparison.Ordinal),
+            StringCompareAsType.NotEquals => !value.Equals(compare, StringComparison.Ordinal),
+            StringCompareAsType.Contains => value.Contains(compare),
+            StringCompareAsType.NotContains => !value.Contains(compare),
+            StringCompareAsType.IsEmpty => string.IsNullOrEmpty(value),
+            StringCompareAsType.IsNotEmpty => !string.IsNullOrEmpty(value),
+            StringCompareAsType.None => throw new NotImplementedException("Something went wrong"), // TODO update this exception
             _ => throw new NotImplementedException("Something went wrong"),
         };
     }
 
-    private static bool ByteStringFilter(ByteString value, ByteString compare, ByteStringCompareType compareType)
+    private static bool ByteStringFilter(ByteString value, ByteString compare, ByteStringCompareAsType compareType)
     {
         return compareType switch
         {
-            ByteStringCompareType.Equals => value.Equals(compare),
-            ByteStringCompareType.NotEquals => !value.Equals(compare),
+            ByteStringCompareAsType.Equals => value.Equals(compare),
+            ByteStringCompareAsType.NotEquals => !value.Equals(compare),
+            ByteStringCompareAsType.Empty => value.IsEmpty,
+            ByteStringCompareAsType.NotEmpty => !value.IsEmpty
         };
+    }
+
+    private static bool UInt64Filter(ulong value, ulong compare, UInt64CompareAsType compareType)
+    {
+        return compareType switch
+        {
+            UInt64CompareAsType.Equals => value.Equals(compare),
+        };
+    }
+    
+    private static bool Int64Filter(long value, long compare, Int64CompareAsType compareType)
+    {
+        return compareType switch
+        {
+            Int64CompareAsType.Equals => value.Equals(compare),
+        };
+    }
+
+    private static bool StatusCodeFilter(SpanStatusCode value, SpanStatusCode compare,
+        EnumCompareAsType compareAsType)
+    {
+        return compareAsType switch
+        {
+            EnumCompareAsType.Equals => value.Equals(compare),
+            EnumCompareAsType.NotEquals => !value.Equals(compare),
+        };
+    }
+
+    private static bool KindFilter(SpanKind value, SpanKind compare, EnumCompareAsType compareAsType)
+    {
+        return compareAsType switch
+        {
+            EnumCompareAsType.Equals => value.Equals(compare),
+            EnumCompareAsType.NotEquals => !value.Equals(compare),
+        };
+    }
+
+    private static bool KeyValueFilter(MapField<string, AnyValue> map, KeyValueProperty property)
+    {
+        if (map.TryGetValue(property.Key, out var value))
+        {
+            return property.ValueCase switch
+            {
+                KeyValueProperty.ValueOneofCase.StringValue => StringFilter(value.StringValue,
+                    property.StringValue.Compare, property.StringValue.CompareAs),
+                KeyValueProperty.ValueOneofCase.ByteStringValue => ByteStringFilter(value.BytesValue, 
+                    property.ByteStringValue.Compare, property.ByteStringValue.CompareAs),
+                KeyValueProperty.ValueOneofCase.Uint64Value => UInt64Filter(value.UIntValue, 
+                    property.Uint64Value.Compare, property.Uint64Value.CompareAs),
+                KeyValueProperty.ValueOneofCase.Int64Value => Int64Filter(value.IntValue, 
+                    property.Int64Value.Compare, property.Int64Value.CompareAs)
+            };
+        }
+
+        return false;
     }
 }

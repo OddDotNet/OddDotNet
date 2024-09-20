@@ -76,9 +76,10 @@ message AnyValue {
     string string_value = 1;
     bool bool_value = 2;
     int64 int_value = 3;
-    double double_value = 4;
-    ArrayValue array_value = 5;
-    bytes bytes_value = 6;
+    uint64 u_int_value = 4;
+    double double_value = 5;
+    ArrayValue array_value = 6;
+    bytes bytes_value = 7;
   }
 }
 

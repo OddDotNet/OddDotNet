@@ -2,6 +2,7 @@ using Google.Protobuf;
 using Grpc.Net.Client;
 using Microsoft.Extensions.DependencyInjection;
 using OpenTelemetry.Proto.Collector.Trace.V1;
+using System.Linq;
 
 namespace OddDotNet.Aspire.Tests;
 
@@ -16,11 +17,11 @@ public class SpanQueryServiceTests : IAsyncLifetime
     public class WhereSpanPropertyShould : SpanQueryServiceTests
     {
         [Fact]
-        public async Task ReturnSpanWithMatchingNameProperty()
+        public async Task ReturnSpansWithMatchingStartTimeUnixNanoProperty()
         {
             var request = TestHelpers.CreateExportTraceServiceRequest();
             await _traceServiceClient.ExportAsync(request);
-
+            
             var spanToFind = request.ResourceSpans[0].ScopeSpans[0].Spans[0];
 
             var take = new Take()
@@ -28,216 +29,19 @@ public class SpanQueryServiceTests : IAsyncLifetime
                 TakeFirst = new TakeFirst()
             };
 
-            var whereFilter = new Where()
+            var whereFilter = new WhereSpanFilter()
             {
                 SpanProperty = new WhereSpanPropertyFilter()
                 {
-                    SpanName = new SpanNameProperty()
+                    StartTimeUnixNano = new UInt64Property()
                     {
-                        Compare = spanToFind.Name,
-                        CompareAs = StringCompareType.Equals
+                        Compare = spanToFind.StartTimeUnixNano,
+                        CompareAs = UInt64CompareAsType.Equals
                     }
                 }
             };
             
-            var spanQueryRequest = new SpanQueryRequest() { Take = take, WhereFilters = { whereFilter } };
-
-            var response = await _spanQueryServiceClient.QueryAsync(spanQueryRequest);
-            
-            Assert.NotEmpty(response.Spans);
-            Assert.Equal(spanToFind.Name, response.Spans[0].Name);
-        }
-
-        [Fact]
-        public async Task ReturnSpansThatDoNotMatchNameProperty()
-        {
-            var request = TestHelpers.CreateExportTraceServiceRequest();
-            await _traceServiceClient.ExportAsync(request);
-
-            var spanToFind = request.ResourceSpans[0].ScopeSpans[0].Spans[0];
-
-            var take = new Take()
-            {
-                TakeFirst = new TakeFirst()
-            };
-
-            var whereFilter = new Where()
-            {
-                SpanProperty = new WhereSpanPropertyFilter()
-                {
-                    SpanName = new SpanNameProperty()
-                    {
-                        Compare = "A span that doesn't match",
-                        CompareAs = StringCompareType.NotEquals
-                    }
-                }
-            };
-            
-            var spanQueryRequest = new SpanQueryRequest() { Take = take, WhereFilters = { whereFilter } };
-
-            var response = await _spanQueryServiceClient.QueryAsync(spanQueryRequest);
-            
-            Assert.NotEmpty(response.Spans);
-            Assert.Equal(spanToFind.Name, response.Spans[0].Name);
-        }
-        
-        [Fact]
-        public async Task ReturnSpansThatMatchSubstringNameProperty()
-        {
-            var request = TestHelpers.CreateExportTraceServiceRequest();
-            await _traceServiceClient.ExportAsync(request);
-
-            var spanToFind = request.ResourceSpans[0].ScopeSpans[0].Spans[0];
-
-            var take = new Take()
-            {
-                TakeFirst = new TakeFirst()
-            };
-
-            var whereFilter = new Where()
-            {
-                SpanProperty = new WhereSpanPropertyFilter()
-                {
-                    SpanName = new SpanNameProperty()
-                    {
-                        Compare = spanToFind.Name[..^2], // Missing last character
-                        CompareAs = StringCompareType.Contains
-                    }
-                }
-            };
-            
-            var spanQueryRequest = new SpanQueryRequest() { Take = take, WhereFilters = { whereFilter } };
-
-            var response = await _spanQueryServiceClient.QueryAsync(spanQueryRequest);
-            
-            Assert.NotEmpty(response.Spans);
-            Assert.Equal(spanToFind.Name, response.Spans[0].Name);
-        }
-        
-        [Fact]
-        public async Task ReturnSpansThatDoNotMatchSubstringNameProperty()
-        {
-            var request = TestHelpers.CreateExportTraceServiceRequest();
-            await _traceServiceClient.ExportAsync(request);
-
-            var spanToFind = request.ResourceSpans[0].ScopeSpans[0].Spans[0];
-
-            var take = new Take()
-            {
-                TakeFirst = new TakeFirst()
-            };
-
-            var whereFilter = new Where()
-            {
-                SpanProperty = new WhereSpanPropertyFilter()
-                {
-                    SpanName = new SpanNameProperty()
-                    {
-                        Compare = "A span that doesn't exist",
-                        CompareAs = StringCompareType.NotContains
-                    }
-                }
-            };
-            
-            var spanQueryRequest = new SpanQueryRequest() { Take = take, WhereFilters = { whereFilter } };
-
-            var response = await _spanQueryServiceClient.QueryAsync(spanQueryRequest);
-            
-            Assert.NotEmpty(response.Spans);
-            Assert.Equal(spanToFind.Name, response.Spans[0].Name);
-        }
-        
-        [Fact]
-        public async Task ReturnSpansWithNoNameProperty()
-        {
-            var request = TestHelpers.CreateExportTraceServiceRequest();
-            request.ResourceSpans[0].ScopeSpans[0].Spans[0].Name = "";
-            await _traceServiceClient.ExportAsync(request);
-
-            var spanToFind = request.ResourceSpans[0].ScopeSpans[0].Spans[0];
-
-            var take = new Take()
-            {
-                TakeFirst = new TakeFirst()
-            };
-
-            var whereFilter = new Where()
-            {
-                SpanProperty = new WhereSpanPropertyFilter()
-                {
-                    SpanName = new SpanNameProperty()
-                    {
-                        CompareAs = StringCompareType.IsEmpty
-                    }
-                }
-            };
-            
-            var spanQueryRequest = new SpanQueryRequest() { Take = take, WhereFilters = { whereFilter } };
-
-            var response = await _spanQueryServiceClient.QueryAsync(spanQueryRequest);
-            
-            Assert.NotEmpty(response.Spans);
-            Assert.Equal(spanToFind.Name, response.Spans[0].Name);
-        }
-        
-        [Fact]
-        public async Task ReturnSpansWithNotEmptyNameProperty()
-        {
-            var request = TestHelpers.CreateExportTraceServiceRequest();
-            await _traceServiceClient.ExportAsync(request);
-
-            var spanToFind = request.ResourceSpans[0].ScopeSpans[0].Spans[0];
-
-            var take = new Take()
-            {
-                TakeFirst = new TakeFirst()
-            };
-
-            var whereFilter = new Where()
-            {
-                SpanProperty = new WhereSpanPropertyFilter()
-                {
-                    SpanName = new SpanNameProperty()
-                    {
-                        CompareAs = StringCompareType.IsNotEmpty
-                    }
-                }
-            };
-            
-            var spanQueryRequest = new SpanQueryRequest() { Take = take, WhereFilters = { whereFilter } };
-
-            var response = await _spanQueryServiceClient.QueryAsync(spanQueryRequest);
-            
-            Assert.NotEmpty(response.Spans);
-            Assert.Equal(spanToFind.Name, response.Spans[0].Name);
-        }
-
-        [Fact]
-        public async Task ReturnSpansWithMatchingSpanIdProperty()
-        {
-            var request = TestHelpers.CreateExportTraceServiceRequest();
-            await _traceServiceClient.ExportAsync(request);
-
-            var spanToFind = request.ResourceSpans[0].ScopeSpans[0].Spans[0];
-
-            var take = new Take()
-            {
-                TakeFirst = new TakeFirst()
-            };
-
-            var whereFilter = new Where()
-            {
-                SpanProperty = new WhereSpanPropertyFilter()
-                {
-                    SpanId = new SpanIdProperty()
-                    {
-                        Compare = spanToFind.SpanId,
-                        CompareAs = ByteStringCompareType.Equals
-                    }
-                }
-            };
-            
-            var spanQueryRequest = new SpanQueryRequest() { Take = take, WhereFilters = { whereFilter } };
+            var spanQueryRequest = new SpanQueryRequest() { Take = take, Filters = { whereFilter } };
 
             var response = await _spanQueryServiceClient.QueryAsync(spanQueryRequest);
             
@@ -246,11 +50,11 @@ public class SpanQueryServiceTests : IAsyncLifetime
         }
         
         [Fact]
-        public async Task ReturnSpansWithNonMatchingSpanIdProperty()
+        public async Task ReturnSpansWithMatchingEndTimeUnixNanoProperty()
         {
             var request = TestHelpers.CreateExportTraceServiceRequest();
             await _traceServiceClient.ExportAsync(request);
-
+            
             var spanToFind = request.ResourceSpans[0].ScopeSpans[0].Spans[0];
 
             var take = new Take()
@@ -258,130 +62,339 @@ public class SpanQueryServiceTests : IAsyncLifetime
                 TakeFirst = new TakeFirst()
             };
 
-            var whereFilter = new Where()
+            var whereFilter = new WhereSpanFilter()
             {
                 SpanProperty = new WhereSpanPropertyFilter()
                 {
-                    SpanId = new SpanIdProperty()
+                    EndTimeUnixNano = new UInt64Property()
                     {
-                        Compare = ByteString.Empty,
-                        CompareAs = ByteStringCompareType.NotEquals
+                        Compare = spanToFind.StartTimeUnixNano,
+                        CompareAs = UInt64CompareAsType.Equals
                     }
                 }
             };
             
-            var spanQueryRequest = new SpanQueryRequest() { Take = take, WhereFilters = { whereFilter } };
+            var spanQueryRequest = new SpanQueryRequest() { Take = take, Filters = { whereFilter } };
 
             var response = await _spanQueryServiceClient.QueryAsync(spanQueryRequest);
             
             Assert.NotEmpty(response.Spans);
             Assert.Equal(spanToFind.SpanId, response.Spans[0].SpanId);
         }
-    }
-    
-    public class WhereAttributeExistsShould : SpanQueryServiceTests
-    {
+        
         [Fact]
-        public async Task ReturnSpanWithMatchingAttribute()
+        public async Task ReturnSpansWithMatchingStatusCodeProperty()
         {
             var request = TestHelpers.CreateExportTraceServiceRequest();
             await _traceServiceClient.ExportAsync(request);
             
-            var take = new Take
-            {
-                TakeExact = new TakeExact()
-                {
-                    Count = 1
-                }
-            }; 
-            
-            var whereFilter = new Where
-            {
-                AttributeExists = new WhereAttributeExistsFilter()
-                {
-                    Attribute = request.ResourceSpans[0].ScopeSpans[0].Spans[0].Attributes[0].Key,
-                }
-            };
-            
-            var spanQueryRequest = new SpanQueryRequest { Take = take, WhereFilters = { whereFilter }};
-            
-            var response = await _spanQueryServiceClient.QueryAsync(spanQueryRequest);
-            
-            Assert.NotEmpty(response.Spans);
-            Assert.Equal(request.ResourceSpans[0].ScopeSpans[0].Spans[0].SpanId, response.Spans[0].SpanId);
-        }
-    }
-
-    public class WhereAttributeStringEqualShould : SpanQueryServiceTests
-    {
-        [Fact]
-        public async Task ReturnSpanWithMatchingAttribute()
-        {
-            var request = TestHelpers.CreateExportTraceServiceRequest();
-            await _traceServiceClient.ExportAsync(request);
-            
-            var take = new Take
-            {
-                TakeExact = new TakeExact()
-                {
-                    Count = 1
-                }
-            };
-
             var spanToFind = request.ResourceSpans[0].ScopeSpans[0].Spans[0];
-            var attributeToFind = spanToFind.Attributes[0];
-            var whereFilter = new Where
+            var codeToFind = (SpanStatusCode)spanToFind.Status.Code;
+
+            var take = new Take()
             {
-                AttributeStringEqual = new WhereAttributeStringEqualFilter()
+                TakeFirst = new TakeFirst()
+            };
+
+            var whereFilter = new WhereSpanFilter()
+            {
+                SpanProperty = new WhereSpanPropertyFilter()
                 {
-                    Attribute = attributeToFind.Key,
-                    Compare = attributeToFind.Value.StringValue
+                    SpanStatusCode = new SpanStatusCodeProperty()
+                    {
+                        CompareAs = EnumCompareAsType.Equals,
+                        Compare = codeToFind
+                    }
                 }
             };
             
-            var spanQueryRequest = new SpanQueryRequest { Take = take, WhereFilters = { whereFilter }};
-            
+            var spanQueryRequest = new SpanQueryRequest() { Take = take, Filters = { whereFilter } };
+
             var response = await _spanQueryServiceClient.QueryAsync(spanQueryRequest);
             
             Assert.NotEmpty(response.Spans);
             Assert.Equal(spanToFind.SpanId, response.Spans[0].SpanId);
         }
-    }
-
-    public class WhereAttributeIntEqualShould : SpanQueryServiceTests
-    {
+        
         [Fact]
-        public async Task ReturnSpanWithMatchingAttribute()
+        public async Task ReturnSpansWithMatchingKindProperty()
         {
             var request = TestHelpers.CreateExportTraceServiceRequest();
-            var intAttribute = TestHelpers.CreateKeyValue("test.int", 123);
-            request.ResourceSpans[0].ScopeSpans[0].Spans[0].Attributes.Add(intAttribute);
             await _traceServiceClient.ExportAsync(request);
             
-            var take = new Take
+            var spanToFind = request.ResourceSpans[0].ScopeSpans[0].Spans[0];
+            var codeToFind = (SpanKind)spanToFind.Kind;
+
+            var take = new Take()
             {
-                TakeExact = new TakeExact()
-                {
-                    Count = 1
-                }
+                TakeFirst = new TakeFirst()
             };
 
-            var spanToFind = request.ResourceSpans[0].ScopeSpans[0].Spans[0];
-            var whereFilter = new Where
+            var whereFilter = new WhereSpanFilter()
             {
-                AttributeIntEqual = new WhereAttributeIntEqualFilter()
+                SpanProperty = new WhereSpanPropertyFilter()
                 {
-                    Attribute = intAttribute.Key,
-                    Compare = intAttribute.Value.IntValue
+                    SpanKind = new SpanKindProperty()
+                    {
+                        CompareAs = EnumCompareAsType.Equals,
+                        Compare = codeToFind
+                    }
                 }
             };
             
-            var spanQueryRequest = new SpanQueryRequest { Take = take, WhereFilters = { whereFilter }};
-            
+            var spanQueryRequest = new SpanQueryRequest() { Take = take, Filters = { whereFilter } };
+
             var response = await _spanQueryServiceClient.QueryAsync(spanQueryRequest);
             
             Assert.NotEmpty(response.Spans);
             Assert.Equal(spanToFind.SpanId, response.Spans[0].SpanId);
+        }
+
+        [Fact]
+        public async Task ReturnSpansWithMatchingSpanAttributeProperty()
+        {
+            var request = TestHelpers.CreateExportTraceServiceRequest();
+            await _traceServiceClient.ExportAsync(request);
+            
+            var spanToFind = request.ResourceSpans[0].ScopeSpans[0].Spans[0];
+            var take = new Take()
+            {
+                TakeFirst = new TakeFirst()
+            };
+
+            var whereFilter = new WhereSpanFilter()
+            {
+                SpanProperty = new WhereSpanPropertyFilter()
+                {
+                    SpanAttribute = new KeyValueProperty()
+                    {
+                        Key = spanToFind.Attributes[0].Key,
+                        StringValue = new StringProperty()
+                        {
+                            Compare = spanToFind.Attributes[0].Value.StringValue,
+                            CompareAs = StringCompareAsType.Equals
+                        }
+                    }
+                }
+            };
+            
+            var spanQueryRequest = new SpanQueryRequest() { Take = take, Filters = { whereFilter } };
+
+            var response = await _spanQueryServiceClient.QueryAsync(spanQueryRequest);
+            
+            Assert.NotEmpty(response.Spans);
+            Assert.Equal(spanToFind.SpanId, response.Spans[0].SpanId);
+        }
+
+        [Theory]
+        [InlineData("test", "test", StringCompareAsType.Equals, true)]
+        [InlineData("other", "test", StringCompareAsType.Equals, false)]
+        [InlineData("test", "test", StringCompareAsType.NotEquals, false)]
+        [InlineData("other", "test", StringCompareAsType.NotEquals, true)]
+        [InlineData("te", "test", StringCompareAsType.Contains, true)]
+        [InlineData("other", "test", StringCompareAsType.Contains, false)]
+        [InlineData("test", "test", StringCompareAsType.NotContains, false)]
+        [InlineData("other", "test", StringCompareAsType.NotContains, true)]
+        [InlineData("", "", StringCompareAsType.IsEmpty, true)]
+        [InlineData("", "test", StringCompareAsType.IsEmpty, false)]
+        [InlineData("", "", StringCompareAsType.IsNotEmpty, false)]
+        [InlineData("", "test", StringCompareAsType.IsNotEmpty, true)]
+        public async Task ReturnSpansWithMatchingNameStringFilter(string expected, string actual, StringCompareAsType compareAs, bool shouldBeIncluded)
+        {
+            var request = TestHelpers.CreateExportTraceServiceRequest();
+            var spanToFind = request.ResourceSpans[0].ScopeSpans[0].Spans[0];
+            spanToFind.Name = actual;
+            await _traceServiceClient.ExportAsync(request);
+            
+            var take = new Take()
+            {
+                TakeFirst = new TakeFirst()
+            };
+
+            var duration = new Duration()
+            {
+                SecondsValue = 1
+            };
+
+            var whereFilter = new WhereSpanFilter()
+            {
+                SpanProperty = new WhereSpanPropertyFilter()
+                {
+                    SpanName = new StringProperty()
+                    {
+                        CompareAs = compareAs,
+                        Compare = expected
+                    }
+                }
+            };
+            
+            var spanQueryRequest = new SpanQueryRequest() { Take = take, Filters = { whereFilter }, Duration = duration };
+
+            var response = await _spanQueryServiceClient.QueryAsync(spanQueryRequest);
+
+            Assert.Equal(shouldBeIncluded, response.Spans.Count > 0);
+            if (shouldBeIncluded)
+                Assert.True(response.Spans[0].SpanId == spanToFind.SpanId);
+        }
+
+        [Theory]
+        [InlineData("test", "test", StringCompareAsType.Equals, WhereSpanPropertyFilter.PropertyOneofCase.SpanName, true)]
+        [InlineData("other", "test", StringCompareAsType.Equals, WhereSpanPropertyFilter.PropertyOneofCase.SpanName, false)]
+        [InlineData("other", "test", StringCompareAsType.NotEquals, WhereSpanPropertyFilter.PropertyOneofCase.SpanName, true)]
+        [InlineData("test", "test", StringCompareAsType.NotEquals, WhereSpanPropertyFilter.PropertyOneofCase.SpanName, false)]
+        [InlineData("te", "test", StringCompareAsType.Contains, WhereSpanPropertyFilter.PropertyOneofCase.SpanName, true)]
+        [InlineData("other", "test", StringCompareAsType.Contains, WhereSpanPropertyFilter.PropertyOneofCase.SpanName, false)]
+        [InlineData("other", "test", StringCompareAsType.NotContains, WhereSpanPropertyFilter.PropertyOneofCase.SpanName, true)]
+        [InlineData("te", "test", StringCompareAsType.NotContains, WhereSpanPropertyFilter.PropertyOneofCase.SpanName, false)]
+        public async Task ReturnSpansWithMatchingStringFilter(string expected, string actual,
+            StringCompareAsType compareAs, WhereSpanPropertyFilter.PropertyOneofCase propertyToCheck,
+            bool shouldBeIncluded)
+        {
+            // Arrange
+            var request = TestHelpers.CreateExportTraceServiceRequest();
+            var spanToFind = request.ResourceSpans[0].ScopeSpans[0].Spans[0];
+            var stringProperty = new StringProperty
+            {
+                CompareAs = compareAs,
+                Compare = expected
+            };
+            var whereSpanPropertyFilter = new WhereSpanPropertyFilter();
+
+            switch (propertyToCheck)
+            {
+                case WhereSpanPropertyFilter.PropertyOneofCase.SpanName:
+                    spanToFind.Name = actual;
+                    whereSpanPropertyFilter.SpanName = stringProperty;
+                    break;
+            }
+            
+            // Send the trace
+            await _traceServiceClient.ExportAsync(request);
+            
+            //Act
+            var take = new Take()
+            {
+                TakeFirst = new TakeFirst()
+            };
+
+            var duration = new Duration()
+            {
+                SecondsValue = 1
+            };
+
+            var whereFilter = new WhereSpanFilter()
+            {
+                SpanProperty = whereSpanPropertyFilter
+            };
+            
+            var spanQueryRequest = new SpanQueryRequest() { Take = take, Filters = { whereFilter }, Duration = duration };
+
+            var response = await _spanQueryServiceClient.QueryAsync(spanQueryRequest);
+
+            // Assert
+            Assert.Equal(shouldBeIncluded, response.Spans.Count > 0);
+            if (shouldBeIncluded)
+                Assert.True(response.Spans[0].SpanId == spanToFind.SpanId);
+        }
+
+        [Theory]
+        [InlineData(new byte[]{0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41}, new byte[]{0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41}, ByteStringCompareAsType.Equals, WhereSpanPropertyFilter.PropertyOneofCase.SpanId, true)]
+        [InlineData(new byte[]{0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A}, new byte[]{0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41}, ByteStringCompareAsType.Equals, WhereSpanPropertyFilter.PropertyOneofCase.SpanId, false)]
+        [InlineData(new byte[]{0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A}, new byte[]{0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41}, ByteStringCompareAsType.NotEquals, WhereSpanPropertyFilter.PropertyOneofCase.SpanId, true)]
+        [InlineData(new byte[]{0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41}, new byte[]{0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41}, ByteStringCompareAsType.NotEquals, WhereSpanPropertyFilter.PropertyOneofCase.SpanId, false)]
+        [InlineData(new byte[]{0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41}, new byte[]{0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41}, ByteStringCompareAsType.Equals, WhereSpanPropertyFilter.PropertyOneofCase.ParentSpanId, true)]
+        [InlineData(new byte[]{0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A}, new byte[]{0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41}, ByteStringCompareAsType.Equals, WhereSpanPropertyFilter.PropertyOneofCase.ParentSpanId, false)]
+        [InlineData(new byte[]{0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A}, new byte[]{0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41}, ByteStringCompareAsType.NotEquals, WhereSpanPropertyFilter.PropertyOneofCase.ParentSpanId, true)]
+        [InlineData(new byte[]{0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41}, new byte[]{0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41}, ByteStringCompareAsType.NotEquals, WhereSpanPropertyFilter.PropertyOneofCase.ParentSpanId, false)]
+        [InlineData(new byte[]{}, new byte[]{}, ByteStringCompareAsType.Empty, WhereSpanPropertyFilter.PropertyOneofCase.ParentSpanId, true)]
+        [InlineData(new byte[]{0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41}, new byte[]{0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41}, ByteStringCompareAsType.Empty, WhereSpanPropertyFilter.PropertyOneofCase.ParentSpanId, false)]
+        [InlineData(new byte[]{0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41}, new byte[]{0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41}, ByteStringCompareAsType.NotEmpty, WhereSpanPropertyFilter.PropertyOneofCase.ParentSpanId, true)]
+        [InlineData(new byte[]{}, new byte[]{}, ByteStringCompareAsType.NotEmpty, WhereSpanPropertyFilter.PropertyOneofCase.ParentSpanId, false)]
+        [InlineData(
+            new byte[]{0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41}, 
+            new byte[]{0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41}, 
+            ByteStringCompareAsType.Equals, 
+            WhereSpanPropertyFilter.PropertyOneofCase.TraceId, 
+            true)
+        ]
+        [InlineData(
+            new byte[]{0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A}, 
+            new byte[]{0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41}, 
+            ByteStringCompareAsType.Equals, 
+            WhereSpanPropertyFilter.PropertyOneofCase.TraceId, 
+            false)
+        ]
+        [InlineData(
+            new byte[]{0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A}, 
+            new byte[]{0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41}, 
+            ByteStringCompareAsType.NotEquals, 
+            WhereSpanPropertyFilter.PropertyOneofCase.TraceId, 
+            true)
+        ]
+        [InlineData(
+            new byte[]{0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41}, 
+            new byte[]{0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41}, 
+            ByteStringCompareAsType.NotEquals, 
+            WhereSpanPropertyFilter.PropertyOneofCase.TraceId, 
+            false)
+        ]
+        public async Task ReturnSpansWithMatchingByteStringProperty(byte[] expected, byte[] actual,
+            ByteStringCompareAsType compareAs, WhereSpanPropertyFilter.PropertyOneofCase propertyToCheck,
+            bool shouldBeIncluded)
+        {
+            // Arrange
+            var request = TestHelpers.CreateExportTraceServiceRequest();
+            var spanToFind = request.ResourceSpans[0].ScopeSpans[0].Spans[0];
+            var byteStringProperty = new ByteStringProperty
+            {
+                CompareAs = compareAs,
+                Compare = ByteString.CopyFrom(expected)
+            };
+            var whereSpanPropertyFilter = new WhereSpanPropertyFilter();
+
+            switch (propertyToCheck)
+            {
+                case WhereSpanPropertyFilter.PropertyOneofCase.SpanId:
+                    spanToFind.SpanId = ByteString.CopyFrom(actual);
+                    whereSpanPropertyFilter.SpanId = byteStringProperty;
+                    break;
+                case WhereSpanPropertyFilter.PropertyOneofCase.TraceId:
+                    spanToFind.TraceId = ByteString.CopyFrom(actual);
+                    whereSpanPropertyFilter.TraceId = byteStringProperty;
+                    break;
+                case WhereSpanPropertyFilter.PropertyOneofCase.ParentSpanId:
+                    spanToFind.ParentSpanId = ByteString.CopyFrom(actual);
+                    whereSpanPropertyFilter.ParentSpanId = byteStringProperty;
+                    break;
+            }
+            
+            // Send the trace
+            await _traceServiceClient.ExportAsync(request);
+            
+            //Act
+            var take = new Take()
+            {
+                TakeFirst = new TakeFirst()
+            };
+
+            var duration = new Duration()
+            {
+                SecondsValue = 1
+            };
+
+            var whereFilter = new WhereSpanFilter()
+            {
+                SpanProperty = whereSpanPropertyFilter
+            };
+            
+            var spanQueryRequest = new SpanQueryRequest() { Take = take, Filters = { whereFilter }, Duration = duration };
+
+            var response = await _spanQueryServiceClient.QueryAsync(spanQueryRequest);
+
+            // Assert
+            Assert.Equal(shouldBeIncluded, response.Spans.Count > 0);
+            if (shouldBeIncluded)
+                Assert.True(response.Spans[0].SpanId == spanToFind.SpanId);
         }
     }
 
