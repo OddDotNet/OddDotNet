@@ -186,6 +186,11 @@ public class SpanSignalList : ISignalList<Span>
         return compareType switch
         {
             UInt64CompareAsType.Equals => value.Equals(compare),
+            UInt64CompareAsType.NotEquals => !value.Equals(compare),
+            UInt64CompareAsType.GreaterThanEquals => value >= compare,
+            UInt64CompareAsType.GreaterThan => value > compare,
+            UInt64CompareAsType.LessThanEquals => value <= compare,
+            UInt64CompareAsType.LessThan => value < compare,
         };
     }
     
