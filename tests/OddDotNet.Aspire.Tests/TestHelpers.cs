@@ -1,5 +1,6 @@
 using Bogus;
 using Google.Protobuf;
+using k8s;
 using OpenTelemetry.Proto.Collector.Trace.V1;
 using OpenTelemetry.Proto.Common.V1;
 using OpenTelemetry.Proto.Trace.V1;
@@ -29,6 +30,8 @@ public static class TestHelpers
             SpanId = ByteString.CopyFrom(faker.Random.Bytes(8)),
             TraceId = ByteString.CopyFrom(faker.Random.Bytes(16))
         };
+        item.Events.Add(CreateSpanEvent());
+        item.Links.Add(CreateSpanLink());
 
         return item;
     }
@@ -45,10 +48,19 @@ public static class TestHelpers
         return item;
     }
 
-    // TODO Implement
     public static OtelSpanLink CreateSpanLink()
     {
-        throw new NotImplementedException();
+        var faker = new Faker();
+        var item = new OtelSpanLink()
+        {
+            TraceId = ByteString.CopyFrom(faker.Random.Bytes(16)),
+            SpanId = ByteString.CopyFrom(faker.Random.Bytes(8)),
+            TraceState = faker.Random.String2(8),
+            Attributes = { CreateKeyValue(faker.Random.String2(8), faker.Random.String2(8)) },
+            Flags = faker.Random.UInt()
+        };
+
+        return item;
     }
     
     public static Status CreateSpanStatus()

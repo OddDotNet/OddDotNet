@@ -114,7 +114,12 @@ public class TraceService : OpenTelemetry.Proto.Collector.Trace.V1.TraceService.
     private static AnyValue GetAnyValue(OtelAnyValue otelValue) => otelValue.ValueCase switch
     {
         OtelAnyValue.ValueOneofCase.StringValue => new AnyValue() { StringValue = otelValue.StringValue },
+        OtelAnyValue.ValueOneofCase.BoolValue => new AnyValue() { BoolValue = otelValue.BoolValue },
         OtelAnyValue.ValueOneofCase.IntValue => new AnyValue() { IntValue = otelValue.IntValue },
+        OtelAnyValue.ValueOneofCase.DoubleValue => new AnyValue() { DoubleValue = otelValue.DoubleValue },
+        OtelAnyValue.ValueOneofCase.ArrayValue => throw new NotImplementedException("OTEL type not yet implemented"),
+        OtelAnyValue.ValueOneofCase.KvlistValue => throw new NotImplementedException("OTEL type not yet implemented"),
+        OtelAnyValue.ValueOneofCase.BytesValue => new AnyValue() { BytesValue = otelValue.BytesValue },
         _ => throw new NotImplementedException("OTEL type not yet implemented")
     };
 }
