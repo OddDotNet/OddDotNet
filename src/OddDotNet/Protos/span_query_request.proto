@@ -2,17 +2,18 @@ syntax = "proto3";
 
 option csharp_namespace = "OddDotNet";
 
+import "span.proto";
+
 message SpanQueryRequest {
-  repeated Where whereFilters = 1;
+  repeated WhereSpanFilter filters = 1;
   Take take = 2;
   optional Duration duration = 3;
 }
 
-message Where {
+message WhereSpanFilter {
   oneof Filter {
-    WhereAttributeStringEqualFilter attributeStringEqual = 1;
-    WhereAttributeIntEqualFilter attributeIntEqual = 2;
-    WhereAttributeExistsFilter attributeExists = 3;
+    WhereSpanPropertyFilter spanProperty = 1;
+    WhereSpanOrFilter spanOr = 2;
   }
 }
 
@@ -32,18 +33,38 @@ message TakeExact {
   int32 count = 1;
 }
 
-message WhereAttributeStringEqualFilter {
-  string attribute = 1;
-  string compare = 2;
+message WhereSpanPropertyFilter {
+  oneof property {
+    StringProperty name = 1;
+    ByteStringProperty spanId = 2;
+    ByteStringProperty traceId = 3;
+    ByteStringProperty parentSpanId = 4;
+    UInt64Property startTimeUnixNano = 5;
+    UInt64Property endTimeUnixNano = 6;
+    SpanStatusCodeProperty statusCode = 7;
+    SpanKindProperty kind = 8;
+    KeyValueProperty attribute = 9;
+    UInt64Property eventTimeUnixNano = 10;
+    StringProperty eventName = 11;
+    ByteStringProperty linkTraceId = 12;
+    ByteStringProperty linkSpanId = 13;
+    StringProperty linkTraceState = 14;
+    UInt32Property linkFlags = 15;
+    UInt32Property flags = 16;
+    StringProperty traceState = 17;
+    KeyValueProperty eventAttribute = 18;
+    KeyValueProperty linkAttribute = 19;
+    StringProperty instrumentationScopeName = 20;
+    KeyValueProperty instrumentationScopeAttribute = 21;
+    StringProperty instrumentationScopeVersion = 22;
+    StringProperty instrumentationScopeSchemaUrl = 23;
+    StringProperty ResourceSchemaUrl = 24;
+    KeyValueProperty resourceAttribute = 25;
+  }
 }
 
-message WhereAttributeIntEqualFilter {
-  string attribute = 1;
-  int64 compare = 2;
-}
-
-message WhereAttributeExistsFilter {
-  string attribute = 1;
+message WhereSpanOrFilter {
+  
 }
 
 message Duration {
@@ -52,4 +73,152 @@ message Duration {
     uint64 millisecondsValue = 2;
     uint64 minutesValue = 3;
   }
+}
+
+message StringProperty {
+  StringCompareAsType compareAs = 1;
+  optional string compare = 2;
+}
+
+enum StringCompareAsType {
+  STRING_COMPARE_AS_TYPE_NONE = 0;
+  STRING_COMPARE_AS_TYPE_EQUALS = 1;
+  STRING_COMPARE_AS_TYPE_NOT_EQUALS = 2;
+  STRING_COMPARE_AS_TYPE_CONTAINS = 3;
+  STRING_COMPARE_AS_TYPE_NOT_CONTAINS = 4;
+  STRING_COMPARE_AS_TYPE_IS_EMPTY = 5;
+  STRING_COMPARE_AS_TYPE_IS_NOT_EMPTY = 6;
+}
+
+message ByteStringProperty {
+  ByteStringCompareAsType compareAs = 1;
+  optional bytes compare = 2;
+}
+
+enum ByteStringCompareAsType {
+  BYTE_STRING_COMPARE_AS_TYPE_NONE = 0;
+  BYTE_STRING_COMPARE_AS_TYPE_EQUALS = 1;
+  BYTE_STRING_COMPARE_AS_TYPE_NOT_EQUALS = 2;
+  BYTE_STRING_COMPARE_AS_TYPE_EMPTY = 3;
+  BYTE_STRING_COMPARE_AS_TYPE_NOT_EMPTY = 4;
+}
+
+message BoolProperty {
+  BoolCompareAsType compareAs = 1;
+  optional bool compare = 2;
+}
+
+enum BoolCompareAsType {
+  BOOL_COMPARE_AS_TYPE_NONE = 0;
+  BOOL_COMPARE_AS_TYPE_EQUALS = 1;
+  BOOL_COMPARE_AS_TYPE_NOT_EQUALS = 2;
+}
+
+message UInt64Property {
+  UInt64CompareAsType compareAs = 1;
+  optional uint64 compare = 2;
+}
+
+enum UInt64CompareAsType {
+  U_INT_64_COMPARE_AS_TYPE_NONE = 0;
+  U_INT_64_COMPARE_AS_TYPE_EQUALS = 1;
+  U_INT_64_COMPARE_AS_TYPE_NOT_EQUALS = 2;
+  U_INT_64_COMPARE_AS_TYPE_GREATER_THAN = 3;
+  U_INT_64_COMPARE_AS_TYPE_GREATER_THAN_EQUALS = 4;
+  U_INT_64_COMPARE_AS_TYPE_LESS_THAN = 5;
+  U_INT_64_COMPARE_AS_TYPE_LESS_THAN_EQUALS = 6;
+}
+
+message UInt32Property {
+  UInt32CompareAsType compareAs = 1;
+  optional uint32 compare = 2;
+}
+
+enum UInt32CompareAsType {
+  U_INT_32_COMPARE_AS_TYPE_NONE = 0;
+  U_INT_32_COMPARE_AS_TYPE_EQUALS = 1;
+  U_INT_32_COMPARE_AS_TYPE_NOT_EQUALS = 2;
+  U_INT_32_COMPARE_AS_TYPE_GREATER_THAN = 3;
+  U_INT_32_COMPARE_AS_TYPE_GREATER_THAN_EQUALS = 4;
+  U_INT_32_COMPARE_AS_TYPE_LESS_THAN = 5;
+  U_INT_32_COMPARE_AS_TYPE_LESS_THAN_EQUALS = 6;
+}
+
+message Int64Property {
+  Int64CompareAsType compareAs = 1;
+  optional int64 compare = 2;
+}
+
+enum Int64CompareAsType {
+  INT_64_COMPARE_AS_TYPE_NONE = 0;
+  INT_64_COMPARE_AS_TYPE_EQUALS = 1;
+  INT_64_COMPARE_AS_TYPE_NOT_EQUALS = 2;
+  INT_64_COMPARE_AS_TYPE_GREATER_THAN = 3;
+  INT_64_COMPARE_AS_TYPE_GREATER_THAN_EQUALS = 4;
+  INT_64_COMPARE_AS_TYPE_LESS_THAN = 5;
+  INT_64_COMPARE_AS_TYPE_LESS_THAN_EQUALS = 6;
+}
+
+message Int32Property {
+  Int32CompareAsType compareAs = 1;
+  optional int32 compare = 2;
+}
+
+enum Int32CompareAsType {
+  INT_32_COMPARE_AS_TYPE_NONE = 0;
+  INT_32_COMPARE_AS_TYPE_EQUALS = 1;
+  INT_32_COMPARE_AS_TYPE_NOT_EQUALS = 2;
+  INT_32_COMPARE_AS_TYPE_GREATER_THAN = 3;
+  INT_32_COMPARE_AS_TYPE_GREATER_THAN_EQUALS = 4;
+  INT_32_COMPARE_AS_TYPE_LESS_THAN = 5;
+  INT_32_COMPARE_AS_TYPE_LESS_THAN_EQUALS = 6;
+}
+
+message DoubleProperty {
+  DoubleCompareAsType compareAs = 1;
+  optional double compare = 2;
+}
+
+enum DoubleCompareAsType {
+  DOUBLE_COMPARE_AS_TYPE_NONE = 0;
+  DOUBLE_COMPARE_AS_TYPE_EQUALS = 1;
+  DOUBLE_COMPARE_AS_TYPE_NOT_EQUALS = 2;
+  DOUBLE_COMPARE_AS_TYPE_GREATER_THAN = 3;
+  DOUBLE_COMPARE_AS_TYPE_GREATER_THAN_EQUALS = 4;
+  DOUBLE_COMPARE_AS_TYPE_LESS_THAN = 5;
+  DOUBLE_COMPARE_AS_TYPE_LESS_THAN_EQUALS = 6;
+}
+
+message SpanStatusCodeProperty {
+  EnumCompareAsType compareAs = 1;
+  SpanStatusCode compare = 2;
+}
+
+message SpanKindProperty {
+  EnumCompareAsType compareAs = 1;
+  SpanKind compare = 2;
+}
+
+enum EnumCompareAsType {
+  ENUM_COMPARE_AS_TYPE_NONE = 0;
+  ENUM_COMPARE_AS_TYPE_EQUALS = 1;
+  ENUM_COMPARE_AS_TYPE_NOT_EQUALS = 2;
+}
+
+message KeyValueProperty {
+  string key = 1;
+  oneof value {
+    StringProperty stringValue = 2;
+    BoolProperty boolValue = 3;
+    Int64Property int64Value = 4;
+    DoubleProperty doubleValue = 5;
+    ByteStringProperty byteStringValue = 6;
+  }
+}
+
+enum KeyValueCompareAsType {
+  KEY_VALUE_COMPARE_AS_TYPE_NONE = 0;
+  KEY_VALUE_COMPARE_AS_TYPE_EQUALS = 1;
+  KEY_VALUE_COMPARE_AS_TYPE_NOT_EQUALS = 2;
+  
 }

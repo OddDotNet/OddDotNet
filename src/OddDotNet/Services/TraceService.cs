@@ -35,7 +35,7 @@ public class TraceService : OpenTelemetry.Proto.Collector.Trace.V1.TraceService.
                         },
                         Name = span.Name,
                         Flags = span.Flags,
-                        Kind = (SpanKind)span.Kind, // TODO: make sure this actually works, not sure on syntax
+                        Kind = (SpanKind)span.Kind, 
                         Status = new SpanStatus() // TODO: determine if there's a better way we want to handle span status being null
                         {
                             Code = span.Status is not null ? (SpanStatusCode)span.Status.Code : SpanStatusCode.Unset,
@@ -114,7 +114,12 @@ public class TraceService : OpenTelemetry.Proto.Collector.Trace.V1.TraceService.
     private static AnyValue GetAnyValue(OtelAnyValue otelValue) => otelValue.ValueCase switch
     {
         OtelAnyValue.ValueOneofCase.StringValue => new AnyValue() { StringValue = otelValue.StringValue },
+        OtelAnyValue.ValueOneofCase.BoolValue => new AnyValue() { BoolValue = otelValue.BoolValue },
         OtelAnyValue.ValueOneofCase.IntValue => new AnyValue() { IntValue = otelValue.IntValue },
+        OtelAnyValue.ValueOneofCase.DoubleValue => new AnyValue() { DoubleValue = otelValue.DoubleValue },
+        OtelAnyValue.ValueOneofCase.ArrayValue => throw new NotImplementedException("OTEL type not yet implemented"),
+        OtelAnyValue.ValueOneofCase.KvlistValue => throw new NotImplementedException("OTEL type not yet implemented"),
+        OtelAnyValue.ValueOneofCase.BytesValue => new AnyValue() { BytesValue = otelValue.BytesValue },
         _ => throw new NotImplementedException("OTEL type not yet implemented")
     };
 }
