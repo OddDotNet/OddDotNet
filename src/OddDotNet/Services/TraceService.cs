@@ -35,7 +35,7 @@ public class TraceService : OpenTelemetry.Proto.Collector.Trace.V1.TraceService.
                         },
                         Name = span.Name,
                         Flags = span.Flags,
-                        Kind = (SpanKind)span.Kind, // TODO: make sure this actually works, not sure on syntax
+                        Kind = (SpanKind)span.Kind, 
                         Status = new SpanStatus() // TODO: determine if there's a better way we want to handle span status being null
                         {
                             Code = span.Status is not null ? (SpanStatusCode)span.Status.Code : SpanStatusCode.Unset,
