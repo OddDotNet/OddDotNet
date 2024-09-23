@@ -64,7 +64,7 @@ message WhereSpanPropertyFilter {
 }
 
 message WhereSpanOrFilter {
-  
+  repeated WhereSpanFilter filters = 1;
 }
 
 message Duration {
