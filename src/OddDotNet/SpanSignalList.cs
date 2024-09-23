@@ -142,6 +142,7 @@ public class SpanSignalList : ISignalList<Span>
     private static bool SpanMatchesWhereFilter(WhereSpanFilter filter, Span span) => filter.FilterCase switch
     {
         WhereSpanFilter.FilterOneofCase.SpanProperty => ProcessSpanPropertyFilter(filter.SpanProperty, span),
+        WhereSpanFilter.FilterOneofCase.SpanOr => filter.SpanOr.Filters.Any(whereFilter => SpanMatchesWhereFilter(whereFilter, span)),
         _ => throw new NotImplementedException("Something went wrong"),
     };
 
