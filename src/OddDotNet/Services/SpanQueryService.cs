@@ -19,4 +19,10 @@ public class SpanQueryService : OddDotNet.SpanQueryService.SpanQueryServiceBase
 
         return response;
     }
+
+    public override Task<SpanResetResponse> Reset(SpanResetRequest request, ServerCallContext context)
+    {
+        _spans.Reset(request);
+        return Task.FromResult<SpanResetResponse>(new());
+    }
 }

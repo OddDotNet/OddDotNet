@@ -4,7 +4,10 @@ option csharp_namespace = "OddDotNet";
 
 import "span_query_request.proto";
 import "span_query_response.proto";
+import "span_reset_request.proto";
+import "span_reset_response.proto";
 
 service SpanQueryService {
   rpc Query(SpanQueryRequest) returns (SpanQueryResponse);
+  rpc Reset(SpanResetRequest) returns (SpanResetResponse); 
 }
