@@ -92,6 +92,14 @@ public class SpanSignalList : ISignalList<Span>
         }
     }
 
+    public void Reset(IResetRequest<Span> request)
+    {
+        lock (Lock)
+        {
+            Spans.Clear();
+        }
+    }
+
     private static CancellationTokenSource GetQueryTimeout(SpanQueryRequest spanRequest)
     {
         var defaultTimeout = new CancellationTokenSource(TimeSpan.FromMilliseconds(int.MaxValue));
