@@ -1,3 +1,5 @@
+using OddDotNet.Proto.Spans.V1;
+
 namespace OddDotNet.Aspire.Tests;
 
 // Don't put more tests in this file. It is using xunit class fixtures to spin up a single instance of the Aspire

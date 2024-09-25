@@ -2,7 +2,9 @@ using System.Runtime.CompilerServices;
 using System.Threading.Channels;
 using Google.Protobuf;
 using Google.Protobuf.Collections;
-using OpenTelemetry.Proto.Trace.V1;
+using OddDotNet.Proto.Spans.V1;
+
+// using OpenTelemetry.Proto.Trace.V1;
 
 namespace OddDotNet;
 

@@ -1,3 +1,6 @@
 [submodule "src/OddDotNet/OpenTelemetry"]
 	path = src/OddDotNet/OpenTelemetry
 	url = https://github.com/open-telemetry/opentelemetry-proto.git
+[submodule "src/OddDotNet/OddDotProto"]
+	path = src/OddDotNet/OddDotProto
+	url = https://github.com/OddDotNet/OddDotProto.git

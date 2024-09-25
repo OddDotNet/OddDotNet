@@ -1,8 +1,9 @@
 using Grpc.Core;
+using OddDotNet.Proto.Spans.V1;
 
 namespace OddDotNet.Services;
 
-public class SpanQueryService : OddDotNet.SpanQueryService.SpanQueryServiceBase
+public class SpanQueryService : OddDotNet.Proto.Spans.V1.SpanQueryService.SpanQueryServiceBase
 {
     private readonly ISignalList<Span> _spans;
 
