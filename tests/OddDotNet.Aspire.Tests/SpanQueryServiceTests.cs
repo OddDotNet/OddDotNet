@@ -1,6 +1,7 @@
 using Google.Protobuf;
 using Grpc.Net.Client;
 using Microsoft.Extensions.DependencyInjection;
+using OddDotNet.Proto.Spans.V1;
 using OpenTelemetry.Proto.Collector.Trace.V1;
 
 namespace OddDotNet.Aspire.Tests;

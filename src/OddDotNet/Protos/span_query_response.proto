@@ -1,9 +1,0 @@
-syntax = "proto3";
-
-option csharp_namespace = "OddDotNet";
-
-import "span.proto";
-
-message SpanQueryResponse {
-  repeated Span spans = 1;
-}

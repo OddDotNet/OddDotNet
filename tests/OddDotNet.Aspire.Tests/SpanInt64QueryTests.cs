@@ -1,3 +1,5 @@
+using OddDotNet.Proto.Spans.V1;
+
 namespace OddDotNet.Aspire.Tests;
 
 public class SpanInt64QueryTests : IClassFixture<AspireFixture>, IAsyncLifetime

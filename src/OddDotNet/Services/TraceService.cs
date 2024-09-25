@@ -1,4 +1,5 @@
 using Grpc.Core;
+using OddDotNet.Proto.Spans.V1;
 using OpenTelemetry.Proto.Collector.Trace.V1;
 using OtelAnyValue = OpenTelemetry.Proto.Common.V1.AnyValue;
 

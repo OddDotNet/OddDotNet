@@ -1,4 +1,5 @@
 using OddDotNet;
+using OddDotNet.Proto.Spans.V1;
 using OddDotNet.Services;
 using SpanQueryService = OddDotNet.Services.SpanQueryService;
 
