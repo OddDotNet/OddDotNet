@@ -24,6 +24,6 @@ jobs:
         with:
           useConfigFile: true
       - name: Git Tag
-        run: git tag ${{ steps.version_step.outputs.GitVersion_FullSemVer }}
+        run: git tag ${{ steps.version_step.outputs.GitVersion_MajorMinorPatch }}
       - name: Push Tag
-        run: git push origin ${{ steps.version_step.outputs.GitVersion_FullSemVer }}
+        run: git push origin ${{ steps.version_step.outputs.GitVersion_MajorMinorPatch }}
