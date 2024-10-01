@@ -91,25 +91,16 @@ public class SpanQueryServiceTests : IAsyncLifetime
     {
         // 3 traces are exported at 500, 1000, and 5000 ms. 
         [Theory]
-        [InlineData(10, Duration.ValueOneofCase.SecondsValue, 3)] // Should return all traces
-        [InlineData(1200, Duration.ValueOneofCase.MillisecondsValue, 2)] // Times out before 3rd trace is received
-        [InlineData(1, Duration.ValueOneofCase.MinutesValue, 3)] // should return all traces
-        public async Task ReturnAllSpansWithinTimeframe(uint takeDuration, Duration.ValueOneofCase takeDurationValue, int expectedCount)
+        [InlineData(10000, 3)] // Should return all traces
+        [InlineData(1200, 2)] // Times out before 3rd trace is received
+        [InlineData(60000, 3)] // should return all traces
+        public async Task ReturnAllSpansWithinTimeframe(int takeDuration, int expectedCount)
         {
             var request = TestHelpers.CreateExportTraceServiceRequest();
-            var duration = new Duration();
-            switch (takeDurationValue)
+            var duration = new Duration
             {
-                case Duration.ValueOneofCase.SecondsValue:
-                    duration.SecondsValue = takeDuration;
-                    break;
-                case Duration.ValueOneofCase.MillisecondsValue:
-                    duration.MillisecondsValue = takeDuration;
-                    break;
-                case Duration.ValueOneofCase.MinutesValue:
-                    duration.MinutesValue = takeDuration;
-                    break;
-            }
+                Milliseconds = takeDuration
+            };
             
             var take = new Take
             {

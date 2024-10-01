@@ -105,20 +105,10 @@ public class SpanSignalList : ISignalList<Span>
     private static CancellationTokenSource GetQueryTimeout(SpanQueryRequest spanRequest)
     {
         var defaultTimeout = new CancellationTokenSource(TimeSpan.FromMilliseconds(int.MaxValue));
-        
-        return spanRequest.Duration is null ? 
-            defaultTimeout : 
-            spanRequest.Duration?.ValueCase switch
-        {
-            Duration.ValueOneofCase.MillisecondsValue => new CancellationTokenSource(
-                TimeSpan.FromMilliseconds(spanRequest.Duration.MillisecondsValue)),
-            Duration.ValueOneofCase.SecondsValue => new CancellationTokenSource(
-                TimeSpan.FromSeconds(spanRequest.Duration.SecondsValue)),
-            Duration.ValueOneofCase.MinutesValue => new CancellationTokenSource(
-                TimeSpan.FromMinutes(spanRequest.Duration.MinutesValue)),
-            Duration.ValueOneofCase.None => defaultTimeout,
-            _ => defaultTimeout
-        };
+
+        return spanRequest.Duration is null
+            ? defaultTimeout
+            : new CancellationTokenSource(TimeSpan.FromMilliseconds(spanRequest.Duration.Milliseconds));
     }
 
     private void PruneExpiredSpans()

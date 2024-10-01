@@ -50,7 +50,7 @@ public class SpanBoolQueryTests : IClassFixture<AspireFixture>, IAsyncLifetime
 
         var duration = new Duration()
         {
-            SecondsValue = 1
+            Milliseconds = 1000
         };
 
         var whereFilter = new WhereSpanFilter()

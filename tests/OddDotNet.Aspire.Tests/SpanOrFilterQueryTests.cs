@@ -64,7 +64,7 @@ public class SpanOrFilterQueryTests : IClassFixture<AspireFixture>, IAsyncLifeti
 
         var duration = new Duration()
         {
-            SecondsValue = 1
+            Milliseconds = 1000
         };
         
         var spanQueryRequest = new SpanQueryRequest() { Take = take, Filters = { orFilter }, Duration = duration };
