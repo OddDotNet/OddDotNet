@@ -12,26 +12,26 @@ public class SpanUInt32QueryTests : IClassFixture<AspireFixture>, IAsyncLifetime
     }
 
     [Theory]
-    [InlineData(1u, 1u, UInt32CompareAsType.Equals, WhereSpanPropertyFilter.PropertyOneofCase.LinkFlags, true)]
-    [InlineData(0u, 1u, UInt32CompareAsType.Equals, WhereSpanPropertyFilter.PropertyOneofCase.LinkFlags, false)]
-    [InlineData(0u, 1u, UInt32CompareAsType.NotEquals, WhereSpanPropertyFilter.PropertyOneofCase.LinkFlags, true)]
-    [InlineData(1u, 1u, UInt32CompareAsType.NotEquals, WhereSpanPropertyFilter.PropertyOneofCase.LinkFlags, false)]
-    [InlineData(1u, 1u, UInt32CompareAsType.GreaterThanEquals, WhereSpanPropertyFilter.PropertyOneofCase.LinkFlags,
+    [InlineData(1u, 1u, NumberCompareAsType.Equals, WhereSpanPropertyFilter.ValueOneofCase.LinkFlags, true)]
+    [InlineData(0u, 1u, NumberCompareAsType.Equals, WhereSpanPropertyFilter.ValueOneofCase.LinkFlags, false)]
+    [InlineData(0u, 1u, NumberCompareAsType.NotEquals, WhereSpanPropertyFilter.ValueOneofCase.LinkFlags, true)]
+    [InlineData(1u, 1u, NumberCompareAsType.NotEquals, WhereSpanPropertyFilter.ValueOneofCase.LinkFlags, false)]
+    [InlineData(1u, 1u, NumberCompareAsType.GreaterThanEquals, WhereSpanPropertyFilter.ValueOneofCase.LinkFlags,
         true)]
-    [InlineData(1u, 2u, UInt32CompareAsType.GreaterThanEquals, WhereSpanPropertyFilter.PropertyOneofCase.LinkFlags,
+    [InlineData(1u, 2u, NumberCompareAsType.GreaterThanEquals, WhereSpanPropertyFilter.ValueOneofCase.LinkFlags,
         true)]
-    [InlineData(2u, 1u, UInt32CompareAsType.GreaterThanEquals, WhereSpanPropertyFilter.PropertyOneofCase.LinkFlags,
+    [InlineData(2u, 1u, NumberCompareAsType.GreaterThanEquals, WhereSpanPropertyFilter.ValueOneofCase.LinkFlags,
         false)]
-    [InlineData(1u, 2u, UInt32CompareAsType.GreaterThan, WhereSpanPropertyFilter.PropertyOneofCase.LinkFlags, true)]
-    [InlineData(1u, 1u, UInt32CompareAsType.GreaterThan, WhereSpanPropertyFilter.PropertyOneofCase.LinkFlags, false)]
-    [InlineData(1u, 1u, UInt32CompareAsType.LessThanEquals, WhereSpanPropertyFilter.PropertyOneofCase.LinkFlags, true)]
-    [InlineData(2u, 1u, UInt32CompareAsType.LessThanEquals, WhereSpanPropertyFilter.PropertyOneofCase.LinkFlags, true)]
-    [InlineData(1u, 2u, UInt32CompareAsType.LessThanEquals, WhereSpanPropertyFilter.PropertyOneofCase.LinkFlags, false)]
-    [InlineData(2u, 1u, UInt32CompareAsType.LessThan, WhereSpanPropertyFilter.PropertyOneofCase.LinkFlags, true)]
-    [InlineData(1u, 1u, UInt32CompareAsType.LessThan, WhereSpanPropertyFilter.PropertyOneofCase.LinkFlags, false)]
-    [InlineData(1u, 1u, UInt32CompareAsType.Equals, WhereSpanPropertyFilter.PropertyOneofCase.Flags, true)]
+    [InlineData(1u, 2u, NumberCompareAsType.GreaterThan, WhereSpanPropertyFilter.ValueOneofCase.LinkFlags, true)]
+    [InlineData(1u, 1u, NumberCompareAsType.GreaterThan, WhereSpanPropertyFilter.ValueOneofCase.LinkFlags, false)]
+    [InlineData(1u, 1u, NumberCompareAsType.LessThanEquals, WhereSpanPropertyFilter.ValueOneofCase.LinkFlags, true)]
+    [InlineData(2u, 1u, NumberCompareAsType.LessThanEquals, WhereSpanPropertyFilter.ValueOneofCase.LinkFlags, true)]
+    [InlineData(1u, 2u, NumberCompareAsType.LessThanEquals, WhereSpanPropertyFilter.ValueOneofCase.LinkFlags, false)]
+    [InlineData(2u, 1u, NumberCompareAsType.LessThan, WhereSpanPropertyFilter.ValueOneofCase.LinkFlags, true)]
+    [InlineData(1u, 1u, NumberCompareAsType.LessThan, WhereSpanPropertyFilter.ValueOneofCase.LinkFlags, false)]
+    [InlineData(1u, 1u, NumberCompareAsType.Equals, WhereSpanPropertyFilter.ValueOneofCase.Flags, true)]
     public async Task ReturnSpansWithMatchingUInt32Property(uint expected, uint actual,
-        UInt32CompareAsType compareAs, WhereSpanPropertyFilter.PropertyOneofCase propertyToCheck,
+        NumberCompareAsType compareAs, WhereSpanPropertyFilter.ValueOneofCase propertyToCheck,
         bool shouldBeIncluded)
     {
         // Arrange
@@ -46,11 +46,11 @@ public class SpanUInt32QueryTests : IClassFixture<AspireFixture>, IAsyncLifetime
 
         switch (propertyToCheck)
         {
-            case WhereSpanPropertyFilter.PropertyOneofCase.LinkFlags:
+            case WhereSpanPropertyFilter.ValueOneofCase.LinkFlags:
                 spanToFind.Links[0].Flags = actual;
                 whereSpanPropertyFilter.LinkFlags = uInt32Property;
                 break;
-            case WhereSpanPropertyFilter.PropertyOneofCase.Flags:
+            case WhereSpanPropertyFilter.ValueOneofCase.Flags:
                 spanToFind.Flags = actual;
                 whereSpanPropertyFilter.Flags = uInt32Property;
                 break;

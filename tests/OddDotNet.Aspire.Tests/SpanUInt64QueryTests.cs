@@ -12,36 +12,36 @@ public class SpanUInt64QueryTests : IClassFixture<AspireFixture>, IAsyncLifetime
     }
 
     [Theory]
-    [InlineData(1L, 1L, UInt64CompareAsType.Equals, WhereSpanPropertyFilter.PropertyOneofCase.StartTimeUnixNano, true)]
-    [InlineData(0L, 1L, UInt64CompareAsType.Equals, WhereSpanPropertyFilter.PropertyOneofCase.StartTimeUnixNano, false)]
-    [InlineData(0L, 1L, UInt64CompareAsType.NotEquals, WhereSpanPropertyFilter.PropertyOneofCase.StartTimeUnixNano,
+    [InlineData(1L, 1L, NumberCompareAsType.Equals, WhereSpanPropertyFilter.ValueOneofCase.StartTimeUnixNano, true)]
+    [InlineData(0L, 1L, NumberCompareAsType.Equals, WhereSpanPropertyFilter.ValueOneofCase.StartTimeUnixNano, false)]
+    [InlineData(0L, 1L, NumberCompareAsType.NotEquals, WhereSpanPropertyFilter.ValueOneofCase.StartTimeUnixNano,
         true)]
-    [InlineData(1L, 1L, UInt64CompareAsType.NotEquals, WhereSpanPropertyFilter.PropertyOneofCase.StartTimeUnixNano,
+    [InlineData(1L, 1L, NumberCompareAsType.NotEquals, WhereSpanPropertyFilter.ValueOneofCase.StartTimeUnixNano,
         false)]
-    [InlineData(1L, 1L, UInt64CompareAsType.GreaterThanEquals,
-        WhereSpanPropertyFilter.PropertyOneofCase.StartTimeUnixNano, true)]
-    [InlineData(1L, 2L, UInt64CompareAsType.GreaterThanEquals,
-        WhereSpanPropertyFilter.PropertyOneofCase.StartTimeUnixNano, true)]
-    [InlineData(2L, 1L, UInt64CompareAsType.GreaterThanEquals,
-        WhereSpanPropertyFilter.PropertyOneofCase.StartTimeUnixNano, false)]
-    [InlineData(1L, 2L, UInt64CompareAsType.GreaterThan, WhereSpanPropertyFilter.PropertyOneofCase.StartTimeUnixNano,
+    [InlineData(1L, 1L, NumberCompareAsType.GreaterThanEquals,
+        WhereSpanPropertyFilter.ValueOneofCase.StartTimeUnixNano, true)]
+    [InlineData(1L, 2L, NumberCompareAsType.GreaterThanEquals,
+        WhereSpanPropertyFilter.ValueOneofCase.StartTimeUnixNano, true)]
+    [InlineData(2L, 1L, NumberCompareAsType.GreaterThanEquals,
+        WhereSpanPropertyFilter.ValueOneofCase.StartTimeUnixNano, false)]
+    [InlineData(1L, 2L, NumberCompareAsType.GreaterThan, WhereSpanPropertyFilter.ValueOneofCase.StartTimeUnixNano,
         true)]
-    [InlineData(1L, 1L, UInt64CompareAsType.GreaterThan, WhereSpanPropertyFilter.PropertyOneofCase.StartTimeUnixNano,
+    [InlineData(1L, 1L, NumberCompareAsType.GreaterThan, WhereSpanPropertyFilter.ValueOneofCase.StartTimeUnixNano,
         false)]
-    [InlineData(1L, 1L, UInt64CompareAsType.LessThanEquals, WhereSpanPropertyFilter.PropertyOneofCase.StartTimeUnixNano,
+    [InlineData(1L, 1L, NumberCompareAsType.LessThanEquals, WhereSpanPropertyFilter.ValueOneofCase.StartTimeUnixNano,
         true)]
-    [InlineData(2L, 1L, UInt64CompareAsType.LessThanEquals, WhereSpanPropertyFilter.PropertyOneofCase.StartTimeUnixNano,
+    [InlineData(2L, 1L, NumberCompareAsType.LessThanEquals, WhereSpanPropertyFilter.ValueOneofCase.StartTimeUnixNano,
         true)]
-    [InlineData(1L, 2L, UInt64CompareAsType.LessThanEquals, WhereSpanPropertyFilter.PropertyOneofCase.StartTimeUnixNano,
+    [InlineData(1L, 2L, NumberCompareAsType.LessThanEquals, WhereSpanPropertyFilter.ValueOneofCase.StartTimeUnixNano,
         false)]
-    [InlineData(2L, 1L, UInt64CompareAsType.LessThan, WhereSpanPropertyFilter.PropertyOneofCase.StartTimeUnixNano,
+    [InlineData(2L, 1L, NumberCompareAsType.LessThan, WhereSpanPropertyFilter.ValueOneofCase.StartTimeUnixNano,
         true)]
-    [InlineData(1L, 1L, UInt64CompareAsType.LessThan, WhereSpanPropertyFilter.PropertyOneofCase.StartTimeUnixNano,
+    [InlineData(1L, 1L, NumberCompareAsType.LessThan, WhereSpanPropertyFilter.ValueOneofCase.StartTimeUnixNano,
         false)]
-    [InlineData(1L, 1L, UInt64CompareAsType.Equals, WhereSpanPropertyFilter.PropertyOneofCase.EndTimeUnixNano, true)]
-    [InlineData(1L, 1L, UInt64CompareAsType.Equals, WhereSpanPropertyFilter.PropertyOneofCase.EventTimeUnixNano, true)]
+    [InlineData(1L, 1L, NumberCompareAsType.Equals, WhereSpanPropertyFilter.ValueOneofCase.EndTimeUnixNano, true)]
+    [InlineData(1L, 1L, NumberCompareAsType.Equals, WhereSpanPropertyFilter.ValueOneofCase.EventTimeUnixNano, true)]
     public async Task ReturnSpansWithMatchingUInt64Property(ulong expected, ulong actual,
-        UInt64CompareAsType compareAs, WhereSpanPropertyFilter.PropertyOneofCase propertyToCheck,
+        NumberCompareAsType compareAs, WhereSpanPropertyFilter.ValueOneofCase propertyToCheck,
         bool shouldBeIncluded)
     {
         // Arrange
@@ -56,15 +56,15 @@ public class SpanUInt64QueryTests : IClassFixture<AspireFixture>, IAsyncLifetime
 
         switch (propertyToCheck)
         {
-            case WhereSpanPropertyFilter.PropertyOneofCase.StartTimeUnixNano:
+            case WhereSpanPropertyFilter.ValueOneofCase.StartTimeUnixNano:
                 spanToFind.StartTimeUnixNano = actual;
                 whereSpanPropertyFilter.StartTimeUnixNano = uInt64Property;
                 break;
-            case WhereSpanPropertyFilter.PropertyOneofCase.EndTimeUnixNano:
+            case WhereSpanPropertyFilter.ValueOneofCase.EndTimeUnixNano:
                 spanToFind.EndTimeUnixNano = actual;
                 whereSpanPropertyFilter.EndTimeUnixNano = uInt64Property;
                 break;
-            case WhereSpanPropertyFilter.PropertyOneofCase.EventTimeUnixNano:
+            case WhereSpanPropertyFilter.ValueOneofCase.EventTimeUnixNano:
                 spanToFind.Events[0].TimeUnixNano = actual;
                 whereSpanPropertyFilter.EventTimeUnixNano = uInt64Property;
                 break;
