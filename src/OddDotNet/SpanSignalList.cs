@@ -117,12 +117,12 @@ public class SpanSignalList : ISignalList<Span>
         Spans.RemoveAll(expirable => expirable.ExpireAt < currentTime);
     }
 
-    private static int GetTakeCount(SpanQueryRequest spanQueryRequest) => spanQueryRequest.Take.TakeTypeCase switch
+    private static int GetTakeCount(SpanQueryRequest spanQueryRequest) => spanQueryRequest.Take.ValueCase switch
     {
-        Take.TakeTypeOneofCase.TakeFirst => 1,
-        Take.TakeTypeOneofCase.TakeAll => int.MaxValue,
-        Take.TakeTypeOneofCase.TakeExact => spanQueryRequest.Take.TakeExact.Count,
-        Take.TakeTypeOneofCase.None => throw new Exception("Take type invalid"), // TODO change to better exception,
+        Take.ValueOneofCase.TakeFirst => 1,
+        Take.ValueOneofCase.TakeAll => int.MaxValue,
+        Take.ValueOneofCase.TakeExact => spanQueryRequest.Take.TakeExact.Count,
+        Take.ValueOneofCase.None => throw new Exception("Take type invalid"), // TODO change to better exception,
         _ => throw new Exception("Take type invalid") // TODO change to better exception
     };
 
@@ -131,10 +131,10 @@ public class SpanSignalList : ISignalList<Span>
         return spanQueryRequest.Filters.Count == 0 || spanQueryRequest.Filters.All(whereFilter => SpanMatchesWhereFilter(whereFilter, span));
     }
 
-    private static bool SpanMatchesWhereFilter(WhereSpanFilter filter, Span span) => filter.FilterCase switch
+    private static bool SpanMatchesWhereFilter(WhereSpanFilter filter, Span span) => filter.ValueCase switch
     {
-        WhereSpanFilter.FilterOneofCase.SpanProperty => ProcessSpanPropertyFilter(filter.SpanProperty, span),
-        WhereSpanFilter.FilterOneofCase.SpanOr => filter.SpanOr.Filters.Any(whereFilter => SpanMatchesWhereFilter(whereFilter, span)),
+        WhereSpanFilter.ValueOneofCase.SpanProperty => ProcessSpanPropertyFilter(filter.SpanProperty, span),
+        WhereSpanFilter.ValueOneofCase.SpanOr => filter.SpanOr.Filters.Any(whereFilter => SpanMatchesWhereFilter(whereFilter, span)),
         _ => throw new NotImplementedException("Something went wrong"),
     };
 
@@ -142,33 +142,33 @@ public class SpanSignalList : ISignalList<Span>
 
     private static bool ProcessSpanPropertyFilter(WhereSpanPropertyFilter filter, Span span)
     {
-        return filter.PropertyCase switch
+        return filter.ValueCase switch
         {
-            WhereSpanPropertyFilter.PropertyOneofCase.Name => StringFilter(span.Name, filter.Name.Compare, filter.Name.CompareAs),
-            WhereSpanPropertyFilter.PropertyOneofCase.TraceState => StringFilter(span.TraceState, filter.TraceState.Compare, filter.TraceState.CompareAs),
-            WhereSpanPropertyFilter.PropertyOneofCase.SpanId => ByteStringFilter(span.SpanId, filter.SpanId.Compare, filter.SpanId.CompareAs),
-            WhereSpanPropertyFilter.PropertyOneofCase.TraceId => ByteStringFilter(span.TraceId, filter.TraceId.Compare, filter.TraceId.CompareAs),
-            WhereSpanPropertyFilter.PropertyOneofCase.ParentSpanId => ByteStringFilter(span.ParentSpanId, filter.ParentSpanId.Compare, filter.ParentSpanId.CompareAs),
-            WhereSpanPropertyFilter.PropertyOneofCase.StartTimeUnixNano => UInt64Filter(span.StartTimeUnixNano, filter.StartTimeUnixNano.Compare, filter.StartTimeUnixNano.CompareAs),
-            WhereSpanPropertyFilter.PropertyOneofCase.EndTimeUnixNano => UInt64Filter(span.EndTimeUnixNano, filter.EndTimeUnixNano.Compare, filter.EndTimeUnixNano.CompareAs),
-            WhereSpanPropertyFilter.PropertyOneofCase.StatusCode => StatusCodeFilter(span.Status.Code, filter.StatusCode.Compare, filter.StatusCode.CompareAs),
-            WhereSpanPropertyFilter.PropertyOneofCase.Kind => KindFilter(span.Kind, filter.Kind.Compare, filter.Kind.CompareAs),
-            WhereSpanPropertyFilter.PropertyOneofCase.Attribute => KeyValueFilter(span.Attributes, filter.Attribute),
-            WhereSpanPropertyFilter.PropertyOneofCase.Flags => UInt32Filter(span.Flags, filter.Flags.Compare, filter.Flags.CompareAs),
-            WhereSpanPropertyFilter.PropertyOneofCase.EventTimeUnixNano => span.Events.Any(spanEvent => UInt64Filter(spanEvent.TimeUnixNano, filter.EventTimeUnixNano.Compare, filter.EventTimeUnixNano.CompareAs)),
-            WhereSpanPropertyFilter.PropertyOneofCase.EventName => span.Events.Any(spanEvent => StringFilter(spanEvent.Name, filter.EventName.Compare, filter.EventName.CompareAs)),
-            WhereSpanPropertyFilter.PropertyOneofCase.LinkTraceId => span.Links.Any(link => ByteStringFilter(link.TraceId, filter.LinkTraceId.Compare, filter.LinkTraceId.CompareAs)),
-            WhereSpanPropertyFilter.PropertyOneofCase.LinkSpanId => span.Links.Any(link => ByteStringFilter(link.SpanId, filter.LinkSpanId.Compare, filter.LinkSpanId.CompareAs)),
-            WhereSpanPropertyFilter.PropertyOneofCase.LinkTraceState => span.Links.Any(link => StringFilter(link.TraceState, filter.LinkTraceState.Compare, filter.LinkTraceState.CompareAs)),
-            WhereSpanPropertyFilter.PropertyOneofCase.LinkFlags => span.Links.Any(link => UInt32Filter(link.Flags, filter.LinkFlags.Compare, filter.LinkFlags.CompareAs)),
-            WhereSpanPropertyFilter.PropertyOneofCase.LinkAttribute => span.Links.Any(link => KeyValueFilter(link.Attributes, filter.LinkAttribute)),
-            WhereSpanPropertyFilter.PropertyOneofCase.EventAttribute => span.Events.Any(spanEvent => KeyValueFilter(spanEvent.Attributes, filter.EventAttribute)),
-            WhereSpanPropertyFilter.PropertyOneofCase.InstrumentationScopeAttribute => KeyValueFilter(span.InstrumentationScope.Attributes, filter.InstrumentationScopeAttribute),
-            WhereSpanPropertyFilter.PropertyOneofCase.InstrumentationScopeName => StringFilter(span.InstrumentationScope.Name, filter.InstrumentationScopeName.Compare, filter.InstrumentationScopeName.CompareAs),
-            WhereSpanPropertyFilter.PropertyOneofCase.InstrumentationScopeSchemaUrl => StringFilter(span.InstrumentationScope.SchemaUrl, filter.InstrumentationScopeSchemaUrl.Compare, filter.InstrumentationScopeSchemaUrl.CompareAs),
-            WhereSpanPropertyFilter.PropertyOneofCase.InstrumentationScopeVersion => StringFilter(span.InstrumentationScope.Version, filter.InstrumentationScopeVersion.Compare, filter.InstrumentationScopeVersion.CompareAs),
-            WhereSpanPropertyFilter.PropertyOneofCase.ResourceAttribute => KeyValueFilter(span.InstrumentationScope.Resource.Attributes, filter.ResourceAttribute),
-            WhereSpanPropertyFilter.PropertyOneofCase.ResourceSchemaUrl => StringFilter(span.InstrumentationScope.Resource.SchemaUrl, filter.ResourceSchemaUrl.Compare, filter.ResourceSchemaUrl.CompareAs),
+            WhereSpanPropertyFilter.ValueOneofCase.Name => StringFilter(span.Name, filter.Name.Compare, filter.Name.CompareAs),
+            WhereSpanPropertyFilter.ValueOneofCase.TraceState => StringFilter(span.TraceState, filter.TraceState.Compare, filter.TraceState.CompareAs),
+            WhereSpanPropertyFilter.ValueOneofCase.SpanId => ByteStringFilter(span.SpanId, filter.SpanId.Compare, filter.SpanId.CompareAs),
+            WhereSpanPropertyFilter.ValueOneofCase.TraceId => ByteStringFilter(span.TraceId, filter.TraceId.Compare, filter.TraceId.CompareAs),
+            WhereSpanPropertyFilter.ValueOneofCase.ParentSpanId => ByteStringFilter(span.ParentSpanId, filter.ParentSpanId.Compare, filter.ParentSpanId.CompareAs),
+            WhereSpanPropertyFilter.ValueOneofCase.StartTimeUnixNano => UInt64Filter(span.StartTimeUnixNano, filter.StartTimeUnixNano.Compare, filter.StartTimeUnixNano.CompareAs),
+            WhereSpanPropertyFilter.ValueOneofCase.EndTimeUnixNano => UInt64Filter(span.EndTimeUnixNano, filter.EndTimeUnixNano.Compare, filter.EndTimeUnixNano.CompareAs),
+            WhereSpanPropertyFilter.ValueOneofCase.StatusCode => StatusCodeFilter(span.Status.Code, filter.StatusCode.Compare, filter.StatusCode.CompareAs),
+            WhereSpanPropertyFilter.ValueOneofCase.Kind => KindFilter(span.Kind, filter.Kind.Compare, filter.Kind.CompareAs),
+            WhereSpanPropertyFilter.ValueOneofCase.Attribute => KeyValueFilter(span.Attributes, filter.Attribute),
+            WhereSpanPropertyFilter.ValueOneofCase.Flags => UInt32Filter(span.Flags, filter.Flags.Compare, filter.Flags.CompareAs),
+            WhereSpanPropertyFilter.ValueOneofCase.EventTimeUnixNano => span.Events.Any(spanEvent => UInt64Filter(spanEvent.TimeUnixNano, filter.EventTimeUnixNano.Compare, filter.EventTimeUnixNano.CompareAs)),
+            WhereSpanPropertyFilter.ValueOneofCase.EventName => span.Events.Any(spanEvent => StringFilter(spanEvent.Name, filter.EventName.Compare, filter.EventName.CompareAs)),
+            WhereSpanPropertyFilter.ValueOneofCase.LinkTraceId => span.Links.Any(link => ByteStringFilter(link.TraceId, filter.LinkTraceId.Compare, filter.LinkTraceId.CompareAs)),
+            WhereSpanPropertyFilter.ValueOneofCase.LinkSpanId => span.Links.Any(link => ByteStringFilter(link.SpanId, filter.LinkSpanId.Compare, filter.LinkSpanId.CompareAs)),
+            WhereSpanPropertyFilter.ValueOneofCase.LinkTraceState => span.Links.Any(link => StringFilter(link.TraceState, filter.LinkTraceState.Compare, filter.LinkTraceState.CompareAs)),
+            WhereSpanPropertyFilter.ValueOneofCase.LinkFlags => span.Links.Any(link => UInt32Filter(link.Flags, filter.LinkFlags.Compare, filter.LinkFlags.CompareAs)),
+            WhereSpanPropertyFilter.ValueOneofCase.LinkAttribute => span.Links.Any(link => KeyValueFilter(link.Attributes, filter.LinkAttribute)),
+            WhereSpanPropertyFilter.ValueOneofCase.EventAttribute => span.Events.Any(spanEvent => KeyValueFilter(spanEvent.Attributes, filter.EventAttribute)),
+            WhereSpanPropertyFilter.ValueOneofCase.InstrumentationScopeAttribute => KeyValueFilter(span.InstrumentationScope.Attributes, filter.InstrumentationScopeAttribute),
+            WhereSpanPropertyFilter.ValueOneofCase.InstrumentationScopeName => StringFilter(span.InstrumentationScope.Name, filter.InstrumentationScopeName.Compare, filter.InstrumentationScopeName.CompareAs),
+            WhereSpanPropertyFilter.ValueOneofCase.InstrumentationScopeSchemaUrl => StringFilter(span.InstrumentationScope.SchemaUrl, filter.InstrumentationScopeSchemaUrl.Compare, filter.InstrumentationScopeSchemaUrl.CompareAs),
+            WhereSpanPropertyFilter.ValueOneofCase.InstrumentationScopeVersion => StringFilter(span.InstrumentationScope.Version, filter.InstrumentationScopeVersion.Compare, filter.InstrumentationScopeVersion.CompareAs),
+            WhereSpanPropertyFilter.ValueOneofCase.ResourceAttribute => KeyValueFilter(span.InstrumentationScope.Resource.Attributes, filter.ResourceAttribute),
+            WhereSpanPropertyFilter.ValueOneofCase.ResourceSchemaUrl => StringFilter(span.InstrumentationScope.Resource.SchemaUrl, filter.ResourceSchemaUrl.Compare, filter.ResourceSchemaUrl.CompareAs),
         };
     }
 
@@ -198,55 +198,55 @@ public class SpanSignalList : ISignalList<Span>
         };
     }
 
-    private static bool UInt64Filter(ulong value, ulong compare, UInt64CompareAsType compareType)
+    private static bool UInt64Filter(ulong value, ulong compare, NumberCompareAsType compareType)
     {
         return compareType switch
         {
-            UInt64CompareAsType.Equals => value.Equals(compare),
-            UInt64CompareAsType.NotEquals => !value.Equals(compare),
-            UInt64CompareAsType.GreaterThanEquals => value >= compare,
-            UInt64CompareAsType.GreaterThan => value > compare,
-            UInt64CompareAsType.LessThanEquals => value <= compare,
-            UInt64CompareAsType.LessThan => value < compare,
+            NumberCompareAsType.Equals => value.Equals(compare),
+            NumberCompareAsType.NotEquals => !value.Equals(compare),
+            NumberCompareAsType.GreaterThanEquals => value >= compare,
+            NumberCompareAsType.GreaterThan => value > compare,
+            NumberCompareAsType.LessThanEquals => value <= compare,
+            NumberCompareAsType.LessThan => value < compare,
         };
     }
     
-    private static bool UInt32Filter(uint value, uint compare, UInt32CompareAsType compareType)
+    private static bool UInt32Filter(uint value, uint compare, NumberCompareAsType compareType)
     {
         return compareType switch
         {
-            UInt32CompareAsType.Equals => value.Equals(compare),
-            UInt32CompareAsType.NotEquals => !value.Equals(compare),
-            UInt32CompareAsType.GreaterThanEquals => value >= compare,
-            UInt32CompareAsType.GreaterThan => value > compare,
-            UInt32CompareAsType.LessThanEquals => value <= compare,
-            UInt32CompareAsType.LessThan => value < compare,
+            NumberCompareAsType.Equals => value.Equals(compare),
+            NumberCompareAsType.NotEquals => !value.Equals(compare),
+            NumberCompareAsType.GreaterThanEquals => value >= compare,
+            NumberCompareAsType.GreaterThan => value > compare,
+            NumberCompareAsType.LessThanEquals => value <= compare,
+            NumberCompareAsType.LessThan => value < compare,
         };
     }
     
-    private static bool Int64Filter(long value, long compare, Int64CompareAsType compareType)
+    private static bool Int64Filter(long value, long compare, NumberCompareAsType compareType)
     {
         return compareType switch
         {
-            Int64CompareAsType.Equals => value.Equals(compare),
-            Int64CompareAsType.NotEquals => !value.Equals(compare),
-            Int64CompareAsType.GreaterThanEquals => value >= compare,
-            Int64CompareAsType.GreaterThan => value > compare,
-            Int64CompareAsType.LessThanEquals => value <= compare,
-            Int64CompareAsType.LessThan => value < compare,
+            NumberCompareAsType.Equals => value.Equals(compare),
+            NumberCompareAsType.NotEquals => !value.Equals(compare),
+            NumberCompareAsType.GreaterThanEquals => value >= compare,
+            NumberCompareAsType.GreaterThan => value > compare,
+            NumberCompareAsType.LessThanEquals => value <= compare,
+            NumberCompareAsType.LessThan => value < compare,
         };
     }
     
-    private static bool DoubleFilter(double value, double compare, DoubleCompareAsType compareType)
+    private static bool DoubleFilter(double value, double compare, NumberCompareAsType compareType)
     {
         return compareType switch
         {
-            DoubleCompareAsType.Equals => value.Equals(compare),
-            DoubleCompareAsType.NotEquals => !value.Equals(compare),
-            DoubleCompareAsType.GreaterThanEquals => value >= compare,
-            DoubleCompareAsType.GreaterThan => value > compare,
-            DoubleCompareAsType.LessThanEquals => value <= compare,
-            DoubleCompareAsType.LessThan => value < compare,
+            NumberCompareAsType.Equals => value.Equals(compare),
+            NumberCompareAsType.NotEquals => !value.Equals(compare),
+            NumberCompareAsType.GreaterThanEquals => value >= compare,
+            NumberCompareAsType.GreaterThan => value > compare,
+            NumberCompareAsType.LessThanEquals => value <= compare,
+            NumberCompareAsType.LessThan => value < compare,
         };
     }
     

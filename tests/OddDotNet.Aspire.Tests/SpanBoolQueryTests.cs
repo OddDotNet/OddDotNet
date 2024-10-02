@@ -12,12 +12,12 @@ public class SpanBoolQueryTests : IClassFixture<AspireFixture>, IAsyncLifetime
     }
 
     [Theory]
-    [InlineData(true, true, BoolCompareAsType.Equals, WhereSpanPropertyFilter.PropertyOneofCase.Attribute, true)]
-    [InlineData(false, true, BoolCompareAsType.Equals, WhereSpanPropertyFilter.PropertyOneofCase.Attribute, false)]
-    [InlineData(false, true, BoolCompareAsType.NotEquals, WhereSpanPropertyFilter.PropertyOneofCase.Attribute, true)]
-    [InlineData(true, true, BoolCompareAsType.NotEquals, WhereSpanPropertyFilter.PropertyOneofCase.Attribute, false)]
+    [InlineData(true, true, BoolCompareAsType.Equals, WhereSpanPropertyFilter.ValueOneofCase.Attribute, true)]
+    [InlineData(false, true, BoolCompareAsType.Equals, WhereSpanPropertyFilter.ValueOneofCase.Attribute, false)]
+    [InlineData(false, true, BoolCompareAsType.NotEquals, WhereSpanPropertyFilter.ValueOneofCase.Attribute, true)]
+    [InlineData(true, true, BoolCompareAsType.NotEquals, WhereSpanPropertyFilter.ValueOneofCase.Attribute, false)]
     public async Task ReturnSpansWithMatchingBoolProperty(bool expected, bool actual,
-        BoolCompareAsType compareAs, WhereSpanPropertyFilter.PropertyOneofCase propertyToCheck,
+        BoolCompareAsType compareAs, WhereSpanPropertyFilter.ValueOneofCase propertyToCheck,
         bool shouldBeIncluded)
     {
         // Arrange
@@ -32,7 +32,7 @@ public class SpanBoolQueryTests : IClassFixture<AspireFixture>, IAsyncLifetime
 
         switch (propertyToCheck)
         {
-            case WhereSpanPropertyFilter.PropertyOneofCase.Attribute:
+            case WhereSpanPropertyFilter.ValueOneofCase.Attribute:
                 spanToFind.Attributes[0].Value.BoolValue = actual;
                 spanToFind.Attributes[0].Key = "test";
                 whereSpanPropertyFilter.Attribute = new KeyValueProperty() { Key = "test", BoolValue = boolProperty };

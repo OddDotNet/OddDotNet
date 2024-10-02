@@ -7,28 +7,28 @@ public class SpanDoubleQueryTests : IClassFixture<AspireFixture>, IAsyncLifetime
     private readonly AspireFixture _fixture;
 
     [Theory]
-    [InlineData(1.0, 1.0, DoubleCompareAsType.Equals, WhereSpanPropertyFilter.PropertyOneofCase.Attribute, true)]
-    [InlineData(0.0, 1.0, DoubleCompareAsType.Equals, WhereSpanPropertyFilter.PropertyOneofCase.Attribute, false)]
-    [InlineData(0.0, 1.0, DoubleCompareAsType.NotEquals, WhereSpanPropertyFilter.PropertyOneofCase.Attribute, true)]
-    [InlineData(1.0, 1.0, DoubleCompareAsType.NotEquals, WhereSpanPropertyFilter.PropertyOneofCase.Attribute, false)]
-    [InlineData(1.0, 1.0, DoubleCompareAsType.GreaterThanEquals, WhereSpanPropertyFilter.PropertyOneofCase.Attribute,
+    [InlineData(1.0, 1.0, NumberCompareAsType.Equals, WhereSpanPropertyFilter.ValueOneofCase.Attribute, true)]
+    [InlineData(0.0, 1.0, NumberCompareAsType.Equals, WhereSpanPropertyFilter.ValueOneofCase.Attribute, false)]
+    [InlineData(0.0, 1.0, NumberCompareAsType.NotEquals, WhereSpanPropertyFilter.ValueOneofCase.Attribute, true)]
+    [InlineData(1.0, 1.0, NumberCompareAsType.NotEquals, WhereSpanPropertyFilter.ValueOneofCase.Attribute, false)]
+    [InlineData(1.0, 1.0, NumberCompareAsType.GreaterThanEquals, WhereSpanPropertyFilter.ValueOneofCase.Attribute,
         true)]
-    [InlineData(1.0, 2.0, DoubleCompareAsType.GreaterThanEquals, WhereSpanPropertyFilter.PropertyOneofCase.Attribute,
+    [InlineData(1.0, 2.0, NumberCompareAsType.GreaterThanEquals, WhereSpanPropertyFilter.ValueOneofCase.Attribute,
         true)]
-    [InlineData(2.0, 1.0, DoubleCompareAsType.GreaterThanEquals, WhereSpanPropertyFilter.PropertyOneofCase.Attribute,
+    [InlineData(2.0, 1.0, NumberCompareAsType.GreaterThanEquals, WhereSpanPropertyFilter.ValueOneofCase.Attribute,
         false)]
-    [InlineData(1.0, 2.0, DoubleCompareAsType.GreaterThan, WhereSpanPropertyFilter.PropertyOneofCase.Attribute, true)]
-    [InlineData(1.0, 1.0, DoubleCompareAsType.GreaterThan, WhereSpanPropertyFilter.PropertyOneofCase.Attribute, false)]
-    [InlineData(1.0, 1.0, DoubleCompareAsType.LessThanEquals, WhereSpanPropertyFilter.PropertyOneofCase.Attribute,
+    [InlineData(1.0, 2.0, NumberCompareAsType.GreaterThan, WhereSpanPropertyFilter.ValueOneofCase.Attribute, true)]
+    [InlineData(1.0, 1.0, NumberCompareAsType.GreaterThan, WhereSpanPropertyFilter.ValueOneofCase.Attribute, false)]
+    [InlineData(1.0, 1.0, NumberCompareAsType.LessThanEquals, WhereSpanPropertyFilter.ValueOneofCase.Attribute,
         true)]
-    [InlineData(2.0, 1.0, DoubleCompareAsType.LessThanEquals, WhereSpanPropertyFilter.PropertyOneofCase.Attribute,
+    [InlineData(2.0, 1.0, NumberCompareAsType.LessThanEquals, WhereSpanPropertyFilter.ValueOneofCase.Attribute,
         true)]
-    [InlineData(1.0, 2.0, DoubleCompareAsType.LessThanEquals, WhereSpanPropertyFilter.PropertyOneofCase.Attribute,
+    [InlineData(1.0, 2.0, NumberCompareAsType.LessThanEquals, WhereSpanPropertyFilter.ValueOneofCase.Attribute,
         false)]
-    [InlineData(2.0, 1.0, DoubleCompareAsType.LessThan, WhereSpanPropertyFilter.PropertyOneofCase.Attribute, true)]
-    [InlineData(1.0, 1.0, DoubleCompareAsType.LessThan, WhereSpanPropertyFilter.PropertyOneofCase.Attribute, false)]
+    [InlineData(2.0, 1.0, NumberCompareAsType.LessThan, WhereSpanPropertyFilter.ValueOneofCase.Attribute, true)]
+    [InlineData(1.0, 1.0, NumberCompareAsType.LessThan, WhereSpanPropertyFilter.ValueOneofCase.Attribute, false)]
     public async Task ReturnSpansWithMatchingDoubleProperty(double expected, double actual,
-        DoubleCompareAsType compareAs, WhereSpanPropertyFilter.PropertyOneofCase propertyToCheck,
+        NumberCompareAsType compareAs, WhereSpanPropertyFilter.ValueOneofCase propertyToCheck,
         bool shouldBeIncluded)
     {
         // Arrange
@@ -43,7 +43,7 @@ public class SpanDoubleQueryTests : IClassFixture<AspireFixture>, IAsyncLifetime
 
         switch (propertyToCheck)
         {
-            case WhereSpanPropertyFilter.PropertyOneofCase.Attribute:
+            case WhereSpanPropertyFilter.ValueOneofCase.Attribute:
                 spanToFind.Attributes[0].Value.DoubleValue = actual;
                 spanToFind.Attributes[0].Key = "test";
                 whereSpanPropertyFilter.Attribute = new KeyValueProperty()

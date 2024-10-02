@@ -12,25 +12,25 @@ public class SpanInt64QueryTests : IClassFixture<AspireFixture>, IAsyncLifetime
     }
 
     [Theory]
-    [InlineData(1L, 1L, Int64CompareAsType.Equals, WhereSpanPropertyFilter.PropertyOneofCase.Attribute, true)]
-    [InlineData(0L, 1L, Int64CompareAsType.Equals, WhereSpanPropertyFilter.PropertyOneofCase.Attribute, false)]
-    [InlineData(0L, 1L, Int64CompareAsType.NotEquals, WhereSpanPropertyFilter.PropertyOneofCase.Attribute, true)]
-    [InlineData(1L, 1L, Int64CompareAsType.NotEquals, WhereSpanPropertyFilter.PropertyOneofCase.Attribute, false)]
-    [InlineData(1L, 1L, Int64CompareAsType.GreaterThanEquals, WhereSpanPropertyFilter.PropertyOneofCase.Attribute,
+    [InlineData(1L, 1L, NumberCompareAsType.Equals, WhereSpanPropertyFilter.ValueOneofCase.Attribute, true)]
+    [InlineData(0L, 1L, NumberCompareAsType.Equals, WhereSpanPropertyFilter.ValueOneofCase.Attribute, false)]
+    [InlineData(0L, 1L, NumberCompareAsType.NotEquals, WhereSpanPropertyFilter.ValueOneofCase.Attribute, true)]
+    [InlineData(1L, 1L, NumberCompareAsType.NotEquals, WhereSpanPropertyFilter.ValueOneofCase.Attribute, false)]
+    [InlineData(1L, 1L, NumberCompareAsType.GreaterThanEquals, WhereSpanPropertyFilter.ValueOneofCase.Attribute,
         true)]
-    [InlineData(1L, 2L, Int64CompareAsType.GreaterThanEquals, WhereSpanPropertyFilter.PropertyOneofCase.Attribute,
+    [InlineData(1L, 2L, NumberCompareAsType.GreaterThanEquals, WhereSpanPropertyFilter.ValueOneofCase.Attribute,
         true)]
-    [InlineData(2L, 1L, Int64CompareAsType.GreaterThanEquals, WhereSpanPropertyFilter.PropertyOneofCase.Attribute,
+    [InlineData(2L, 1L, NumberCompareAsType.GreaterThanEquals, WhereSpanPropertyFilter.ValueOneofCase.Attribute,
         false)]
-    [InlineData(1L, 2L, Int64CompareAsType.GreaterThan, WhereSpanPropertyFilter.PropertyOneofCase.Attribute, true)]
-    [InlineData(1L, 1L, Int64CompareAsType.GreaterThan, WhereSpanPropertyFilter.PropertyOneofCase.Attribute, false)]
-    [InlineData(1L, 1L, Int64CompareAsType.LessThanEquals, WhereSpanPropertyFilter.PropertyOneofCase.Attribute, true)]
-    [InlineData(2L, 1L, Int64CompareAsType.LessThanEquals, WhereSpanPropertyFilter.PropertyOneofCase.Attribute, true)]
-    [InlineData(1L, 2L, Int64CompareAsType.LessThanEquals, WhereSpanPropertyFilter.PropertyOneofCase.Attribute, false)]
-    [InlineData(2L, 1L, Int64CompareAsType.LessThan, WhereSpanPropertyFilter.PropertyOneofCase.Attribute, true)]
-    [InlineData(1L, 1L, Int64CompareAsType.LessThan, WhereSpanPropertyFilter.PropertyOneofCase.Attribute, false)]
+    [InlineData(1L, 2L, NumberCompareAsType.GreaterThan, WhereSpanPropertyFilter.ValueOneofCase.Attribute, true)]
+    [InlineData(1L, 1L, NumberCompareAsType.GreaterThan, WhereSpanPropertyFilter.ValueOneofCase.Attribute, false)]
+    [InlineData(1L, 1L, NumberCompareAsType.LessThanEquals, WhereSpanPropertyFilter.ValueOneofCase.Attribute, true)]
+    [InlineData(2L, 1L, NumberCompareAsType.LessThanEquals, WhereSpanPropertyFilter.ValueOneofCase.Attribute, true)]
+    [InlineData(1L, 2L, NumberCompareAsType.LessThanEquals, WhereSpanPropertyFilter.ValueOneofCase.Attribute, false)]
+    [InlineData(2L, 1L, NumberCompareAsType.LessThan, WhereSpanPropertyFilter.ValueOneofCase.Attribute, true)]
+    [InlineData(1L, 1L, NumberCompareAsType.LessThan, WhereSpanPropertyFilter.ValueOneofCase.Attribute, false)]
     public async Task ReturnSpansWithMatchingInt64Property(long expected, long actual,
-        Int64CompareAsType compareAs, WhereSpanPropertyFilter.PropertyOneofCase propertyToCheck,
+        NumberCompareAsType compareAs, WhereSpanPropertyFilter.ValueOneofCase propertyToCheck,
         bool shouldBeIncluded)
     {
         // Arrange
@@ -45,7 +45,7 @@ public class SpanInt64QueryTests : IClassFixture<AspireFixture>, IAsyncLifetime
 
         switch (propertyToCheck)
         {
-            case WhereSpanPropertyFilter.PropertyOneofCase.Attribute:
+            case WhereSpanPropertyFilter.ValueOneofCase.Attribute:
                 spanToFind.Attributes[0].Value.IntValue = actual;
                 spanToFind.Attributes[0].Key = "test";
                 whereSpanPropertyFilter.Attribute = new KeyValueProperty() { Key = "test", Int64Value = int64Property };
