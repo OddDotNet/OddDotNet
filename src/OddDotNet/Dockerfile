@@ -1,29 +1,26 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+﻿FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 USER $APP_UID
+ARG TARGETARCH
 WORKDIR /app
 EXPOSE 4317
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
+ARG TARGETARCH
 WORKDIR /src
 COPY ["OddDotNet.csproj", "."]
-RUN dotnet restore "OddDotNet.csproj"
+RUN dotnet restore --arch $TARGETARCH "OddDotNet.csproj"
 COPY . .
-RUN pwd
-RUN ls
-RUN dotnet build "OddDotNet.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build --arch $TARGETARCH "OddDotNet.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
+ARG TARGETARCH
 WORKDIR /src
-RUN pwd
-RUN ls
-RUN dotnet publish "OddDotNet.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish --arch $TARGETARCH "OddDotNet.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
-RUN pwd
-RUN ls
 COPY --from=publish /app/publish .
 ENV ASPNETCORE_URLS=http://+:4317
 ENTRYPOINT ["dotnet", "OddDotNet.dll"]
