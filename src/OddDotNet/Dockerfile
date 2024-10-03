@@ -1,7 +1,10 @@
 ﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+RUN apt-get update && apt-get install -y curl
 USER $APP_UID
 WORKDIR /app
 EXPOSE 4317
+EXPOSE 4318
+
 
 FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
@@ -21,5 +24,5 @@ RUN dotnet publish --arch $TARGETARCH "OddDotNet.csproj" -c $BUILD_CONFIGURATION
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENV ASPNETCORE_URLS=http://+:4317
+HEALTHCHECK CMD curl --fail http://localhost:4318/healthz || exit
 ENTRYPOINT ["dotnet", "OddDotNet.dll"]
