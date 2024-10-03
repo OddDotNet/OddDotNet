@@ -1,6 +1,5 @@
-﻿FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 USER $APP_UID
-ARG TARGETARCH
 WORKDIR /app
 EXPOSE 4317
 
