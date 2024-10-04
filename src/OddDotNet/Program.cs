@@ -7,6 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddGrpc();
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+builder.Services.AddHealthChecks();
 
 builder.Services.AddScoped<ISignalList<Span>, SpanSignalList>();
 builder.Services.AddScoped<IChannelManager<Span>, SpanChannelManager>();
@@ -14,12 +18,34 @@ builder.Services.AddSingleton(TimeProvider.System);
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-app.MapGrpcService<LogsService>();
-app.MapGrpcService<MetricsService>();
-app.MapGrpcService<TraceService>();
-app.MapGrpcService<SpanQueryService>();
-app.MapGet("/",
-    () =>
-        "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
+// Configure `application/grpc` requests to map to the grpc services
+app.MapWhen(context => context.Request.ContentType == "application/grpc", iab =>
+{
+    iab.UseRouting()
+        .UseEndpoints(endpoints =>
+        {
+            endpoints.MapGrpcService<LogsService>();
+            endpoints.MapGrpcService<MetricsService>();
+            endpoints.MapGrpcService<TraceService>();
+            endpoints.MapGrpcService<SpanQueryService>();
+        });
+});
+
+// Configure all other content types to map to http controllers
+app.MapWhen(context => context.Request.ContentType != "application/grpc", iab =>
+{
+    iab.UseRouting()
+        .UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllers();
+            endpoints.MapHealthChecks("/healthz");
+        });
+    
+    if (app.Environment.IsDevelopment())
+    {
+        iab.UseSwagger();
+        iab.UseSwaggerUI();
+    }
+});
+
 app.Run();

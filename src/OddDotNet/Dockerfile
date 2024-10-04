@@ -1,7 +1,16 @@
 ﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+RUN apt-get update && apt-get install -y curl
+
+# Unset this var, as http config is handled by the kestrel section of appsettings.
+# The aspnet:8.0 image this set to 8080 out of the box, but we don't want that.
+# Rider shows an error here, but this does in fact work correctly.
+ENV ASPNETCORE_HTTP_PORTS=
+
 USER $APP_UID
 WORKDIR /app
 EXPOSE 4317
+EXPOSE 4318
+
 
 FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
@@ -21,5 +30,5 @@ RUN dotnet publish --arch $TARGETARCH "OddDotNet.csproj" -c $BUILD_CONFIGURATION
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENV ASPNETCORE_URLS=http://+:4317
+HEALTHCHECK CMD curl --fail http://localhost:4318/healthz || exit
 ENTRYPOINT ["dotnet", "OddDotNet.dll"]
