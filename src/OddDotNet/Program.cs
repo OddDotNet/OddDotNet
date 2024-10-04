@@ -18,12 +18,6 @@ builder.Services.AddSingleton(TimeProvider.System);
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
 // Configure `application/grpc` requests to map to the grpc services
 app.MapWhen(context => context.Request.ContentType == "application/grpc", iab =>
 {
@@ -46,6 +40,12 @@ app.MapWhen(context => context.Request.ContentType != "application/grpc", iab =>
             endpoints.MapControllers();
             endpoints.MapHealthChecks("/healthz");
         });
+    
+    if (app.Environment.IsDevelopment())
+    {
+        iab.UseSwagger();
+        iab.UseSwaggerUI();
+    }
 });
 
 app.Run();

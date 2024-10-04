@@ -1,5 +1,11 @@
 ﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 RUN apt-get update && apt-get install -y curl
+
+# Unset this var, as http config is handled by the kestrel section of appsettings.
+# The aspnet:8.0 image this set to 8080 out of the box, but we don't want that.
+# Rider shows an error here, but this does in fact work correctly.
+ENV ASPNETCORE_HTTP_PORTS=
+
 USER $APP_UID
 WORKDIR /app
 EXPOSE 4317
