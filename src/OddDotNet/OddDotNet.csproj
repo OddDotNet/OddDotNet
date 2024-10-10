@@ -12,11 +12,6 @@
         <Protobuf Include="OddDotProto/**/*.proto" GrpcServices="Both" ProtoRoot="OddDotProto/"/>
     </ItemGroup>
 
-    <!-- OpenTelemetry proto definitions -->
-    <ItemGroup>
-        <Protobuf Include="OpenTelemetry/**/*.proto" GrpcServices="Both" ProtoRoot="OpenTelemetry/"/>
-    </ItemGroup>
-
     <ItemGroup>
         <PackageReference Include="Grpc.AspNetCore" Version="2.57.0"/>
         <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.8.1" />
