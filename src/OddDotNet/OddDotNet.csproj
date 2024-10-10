@@ -9,7 +9,7 @@
 
     <!-- Internal proto definitions -->
     <ItemGroup>
-        <Protobuf Include="OddDotProto/**/*.proto" GrpcServices="Both" ProtoRoot="OddDotProto/"/>
+        <Protobuf Include="submodules/OddDotProto/**/*.proto" GrpcServices="Both" ProtoRoot="OddDotProto/"/>
     </ItemGroup>
 
     <ItemGroup>

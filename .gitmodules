@@ -1,0 +1,3 @@
+[submodule "src/OddDotNet/submodules/OddDotProto"]
+	path = src/OddDotNet/submodules/OddDotProto
+	url = https://github.com/OddDotNet/OddDotProto.git
