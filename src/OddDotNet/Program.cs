@@ -1,5 +1,5 @@
 using OddDotNet;
-using OddDotNet.Proto.Spans.V1;
+using OddDotNet.Proto.Trace.V1;
 using OddDotNet.Services;
 using SpanQueryService = OddDotNet.Services.SpanQueryService;
 
@@ -12,8 +12,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHealthChecks();
 
-builder.Services.AddScoped<ISignalList<Span>, SpanSignalList>();
-builder.Services.AddScoped<IChannelManager<Span>, SpanChannelManager>();
+builder.Services.AddScoped<ISignalList<FlatSpan>, SpanSignalList>();
+builder.Services.AddScoped<IChannelManager<FlatSpan>, SpanChannelManager>();
 builder.Services.AddSingleton(TimeProvider.System);
 
 var app = builder.Build();

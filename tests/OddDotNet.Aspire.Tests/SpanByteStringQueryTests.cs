@@ -1,5 +1,5 @@
 using Google.Protobuf;
-using OddDotNet.Proto.Spans.V1;
+using OddDotNet.Proto.Trace.V1;
 
 namespace OddDotNet.Aspire.Tests;
 
@@ -170,7 +170,7 @@ public class SpanByteStringQueryTests : IClassFixture<AspireFixture>, IAsyncLife
         // Assert
         Assert.Equal(shouldBeIncluded, response.Spans.Count > 0);
         if (shouldBeIncluded)
-            Assert.True(response.Spans[0].SpanId == spanToFind.SpanId);
+            Assert.True(response.Spans[0].Span.SpanId == spanToFind.SpanId);
     }
     
     public Task InitializeAsync()

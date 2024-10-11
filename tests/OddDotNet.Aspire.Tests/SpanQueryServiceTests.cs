@@ -1,7 +1,6 @@
-using Google.Protobuf;
 using Grpc.Net.Client;
 using Microsoft.Extensions.DependencyInjection;
-using OddDotNet.Proto.Spans.V1;
+using OddDotNet.Proto.Trace.V1;
 using OpenTelemetry.Proto.Collector.Trace.V1;
 
 namespace OddDotNet.Aspire.Tests;
@@ -23,7 +22,7 @@ public class SpanQueryServiceTests : IAsyncLifetime
             await _traceServiceClient.ExportAsync(request);
             
             var spanToFind = request.ResourceSpans[0].ScopeSpans[0].Spans[0];
-            var codeToFind = (SpanStatusCode)spanToFind.Status.Code;
+            var codeToFind = spanToFind.Status.Code;
 
             var take = new Take()
             {
@@ -47,7 +46,7 @@ public class SpanQueryServiceTests : IAsyncLifetime
             var response = await _spanQueryServiceClient.QueryAsync(spanQueryRequest);
             
             Assert.NotEmpty(response.Spans);
-            Assert.Equal(spanToFind.SpanId, response.Spans[0].SpanId);
+            Assert.Equal(spanToFind.SpanId, response.Spans[0].Span.SpanId);
         }
         
         [Fact]
@@ -57,7 +56,7 @@ public class SpanQueryServiceTests : IAsyncLifetime
             await _traceServiceClient.ExportAsync(request);
             
             var spanToFind = request.ResourceSpans[0].ScopeSpans[0].Spans[0];
-            var codeToFind = (SpanKind)spanToFind.Kind;
+            var codeToFind = spanToFind.Kind;
 
             var take = new Take()
             {
@@ -81,7 +80,7 @@ public class SpanQueryServiceTests : IAsyncLifetime
             var response = await _spanQueryServiceClient.QueryAsync(spanQueryRequest);
             
             Assert.NotEmpty(response.Spans);
-            Assert.Equal(spanToFind.SpanId, response.Spans[0].SpanId);
+            Assert.Equal(spanToFind.SpanId, response.Spans[0].Span.SpanId);
         }
 
         
