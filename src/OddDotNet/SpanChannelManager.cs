@@ -1,14 +1,14 @@
 using System.Threading.Channels;
-using OddDotNet.Proto.Spans.V1;
+using OddDotNet.Proto.Trace.V1;
 
 namespace OddDotNet;
 
-public class SpanChannelManager : IChannelManager<Span>
+public class SpanChannelManager : IChannelManager<FlatSpan>
 {
-    private static readonly List<Channel<Span>> Channels = [];
+    private static readonly List<Channel<FlatSpan>> Channels = [];
     
     private static readonly object Lock = new();
-    public void NotifyChannels(Span signal)
+    public void NotifyChannels(FlatSpan signal)
     {
         lock (Lock)
         {
@@ -20,9 +20,9 @@ public class SpanChannelManager : IChannelManager<Span>
         }
     }
 
-    public Channel<Span> AddChannel()
+    public Channel<FlatSpan> AddChannel()
     {
-        Channel<Span> channel = Channel.CreateUnbounded<Span>(
+        Channel<FlatSpan> channel = Channel.CreateUnbounded<FlatSpan>(
             new UnboundedChannelOptions()
             {
                 SingleReader = true,
@@ -37,7 +37,7 @@ public class SpanChannelManager : IChannelManager<Span>
         return channel;
     }
 
-    public bool RemoveChannel(Channel<Span> channel)
+    public bool RemoveChannel(Channel<FlatSpan> channel)
     {
         lock (Lock)
         {

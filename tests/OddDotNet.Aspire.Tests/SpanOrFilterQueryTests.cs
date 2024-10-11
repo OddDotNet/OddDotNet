@@ -1,4 +1,4 @@
-using OddDotNet.Proto.Spans.V1;
+using OddDotNet.Proto.Trace.V1;
 
 namespace OddDotNet.Aspire.Tests;
 
@@ -72,7 +72,7 @@ public class SpanOrFilterQueryTests : IClassFixture<AspireFixture>, IAsyncLifeti
         var response = await _fixture.SpanQueryServiceClient.QueryAsync(spanQueryRequest);
 
         // Assert
-        Assert.True(response.Spans[0].SpanId == spanToFind.SpanId);
+        Assert.True(response.Spans[0].Span.SpanId == spanToFind.SpanId);
     }
     
 

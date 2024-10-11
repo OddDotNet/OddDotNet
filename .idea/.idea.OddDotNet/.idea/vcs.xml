@@ -2,7 +2,6 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/src/OddDotNet/OddDotProto" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/src/OddDotNet/OpenTelemetry" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/OddDotNet/submodules/OddDotProto" vcs="Git" />
   </component>
 </project>
