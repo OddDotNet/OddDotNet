@@ -2,6 +2,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Channels;
 using Google.Protobuf;
 using Google.Protobuf.Collections;
+using Microsoft.Extensions.Options;
 using OddDotNet.Proto.Trace.V1;
 using OpenTelemetry.Proto.Common.V1;
 using OpenTelemetry.Proto.Trace.V1;
@@ -14,26 +15,26 @@ public class SpanSignalList : ISignalList<FlatSpan>
     private readonly IChannelManager<FlatSpan> _channels;
     private readonly TimeProvider _timeProvider;
     private readonly ILogger<SpanSignalList> _logger;
+    private readonly OddSettings _oddSettings;
 
     private static readonly List<Expirable<FlatSpan>> Spans = [];
 
     private static readonly object Lock = new();
-    public SpanSignalList(IChannelManager<FlatSpan> channels, TimeProvider timeProvider, ILogger<SpanSignalList> logger)
+    public SpanSignalList(IChannelManager<FlatSpan> channels, TimeProvider timeProvider, ILogger<SpanSignalList> logger, IOptions<OddSettings> oddSettings)
     {
         _channels = channels;
         _timeProvider = timeProvider;
         _logger = logger;
+        _oddSettings = oddSettings.Value;
     }
 
     public void Add(FlatSpan signal)
     {
         lock (Lock)
         {
-            PruneExpiredSpans();
             
-            // Add the new span with 30 second expire
-            // TODO make this configurable
-            DateTimeOffset expiresAt = _timeProvider.GetUtcNow().AddSeconds(30);
+            // Add the new span with configured expiration
+            DateTimeOffset expiresAt = _timeProvider.GetUtcNow().AddMilliseconds(_oddSettings.Cache.Expiration);
             Spans.Add(new Expirable<FlatSpan>(signal, expiresAt));
             
             // Notify any listening channels
@@ -54,8 +55,6 @@ public class SpanSignalList : ISignalList<FlatSpan>
             // Create the channel and populate it with the current contents of the span list
             lock (Lock)
             {
-                PruneExpiredSpans();
-
                 foreach (var expirableSpan in Spans)
                 {
                     channel.Writer.TryWrite(expirableSpan.Signal);
@@ -75,7 +74,7 @@ public class SpanSignalList : ISignalList<FlatSpan>
                 }
                 catch (OperationCanceledException ex)
                 {
-                    _logger.LogWarning(ex, "The query operation was cancelled");
+                    _logger.LogDebug(ex, "The query operation was cancelled");
                     break;
                 }
                 
@@ -103,6 +102,17 @@ public class SpanSignalList : ISignalList<FlatSpan>
         }
     }
 
+    public void Prune()
+    {
+        _logger.LogDebug("Prune");
+        lock (Lock)
+        {
+            DateTimeOffset currentTime = _timeProvider.GetUtcNow();
+            int numRemoved = Spans.RemoveAll(expirable => expirable.ExpireAt < currentTime);
+            _logger.LogDebug("Removed {numRemoved} spans", numRemoved);
+        }
+    }
+
     private static CancellationTokenSource GetQueryTimeout(SpanQueryRequest spanRequest)
     {
         var defaultTimeout = new CancellationTokenSource(TimeSpan.FromMilliseconds(int.MaxValue));
@@ -112,11 +122,11 @@ public class SpanSignalList : ISignalList<FlatSpan>
             : new CancellationTokenSource(TimeSpan.FromMilliseconds(spanRequest.Duration.Milliseconds));
     }
 
-    private void PruneExpiredSpans()
-    {
-        DateTimeOffset currentTime = _timeProvider.GetUtcNow();
-        Spans.RemoveAll(expirable => expirable.ExpireAt < currentTime);
-    }
+    // private void PruneExpiredSpans()
+    // {
+    //     DateTimeOffset currentTime = _timeProvider.GetUtcNow();
+    //     Spans.RemoveAll(expirable => expirable.ExpireAt < currentTime);
+    // }
 
     private static int GetTakeCount(SpanQueryRequest spanQueryRequest) => spanQueryRequest.Take.ValueCase switch
     {
