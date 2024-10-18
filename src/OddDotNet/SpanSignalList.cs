@@ -66,7 +66,7 @@ public class SpanSignalList : ISignalList<FlatSpan>
 
             while (currentCount < takeCount && !cts.IsCancellationRequested)
             {
-                FlatSpan? span = null;
+                FlatSpan? span;
                 try
                 {
                     await channel.Reader.WaitToReadAsync(cts.Token);
