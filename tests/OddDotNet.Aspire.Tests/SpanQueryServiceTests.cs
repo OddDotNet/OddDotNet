@@ -108,10 +108,10 @@ public class SpanQueryServiceTests : IAsyncLifetime
             
             var spanQueryRequest = new SpanQueryRequest { Take = take, Duration = duration};
             
-            // Start the query waiting for 3 seconds, and send spans at 500, 1000, 2000 ms
+            // Start the query waiting for 3 seconds, and send spans at delayed intervals
             var responseTask = _spanQueryServiceClient.QueryAsync(spanQueryRequest);
-            var exportFirst = ExportDelayedTrace(request, TimeSpan.FromMilliseconds(500));
-            var exportSecond = ExportDelayedTrace(request, TimeSpan.FromMilliseconds(1000));
+            var exportFirst = ExportDelayedTrace(request, TimeSpan.FromMilliseconds(250));
+            var exportSecond = ExportDelayedTrace(request, TimeSpan.FromMilliseconds(500));
             var exportThird = ExportDelayedTrace(request, TimeSpan.FromMilliseconds(2000));
 
             await Task.WhenAll(responseTask.ResponseAsync, exportFirst, exportSecond, exportThird);
