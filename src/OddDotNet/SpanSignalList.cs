@@ -306,7 +306,7 @@ public class SpanSignalList : ISignalList<FlatSpan>
         var keyValue = values.FirstOrDefault(kv => kv.Key == property.Key);
         if (keyValue is not null)
         {
-            // TODO add support for ArrayValue and KvListValue
+            // TODO add support for KvListValue
             return property.ValueCase switch
             {
                 KeyValueProperty.ValueOneofCase.None => false,
@@ -321,6 +321,7 @@ public class SpanSignalList : ISignalList<FlatSpan>
                 KeyValueProperty.ValueOneofCase.DoubleValue => DoubleFilter(keyValue.Value.DoubleValue, 
                     property.DoubleValue),
                 KeyValueProperty.ValueOneofCase.ArrayValue => ArrayFilter(keyValue.Value.ArrayValue.Values, property.ArrayValue),
+                _ => false
             };
         }
 
@@ -359,11 +360,15 @@ public class SpanSignalList : ISignalList<FlatSpan>
                         AnyValue.ValueOneofCase.DoubleValue => compareValue.HasDoubleValue && DoubleFilter(value.DoubleValue, new DoubleProperty { CompareAs = NumberCompareAsType.Equals, Compare = compareValue.DoubleValue }),
                         AnyValue.ValueOneofCase.BytesValue => compareValue.HasBytesValue && ByteStringFilter(value.BytesValue, new ByteStringProperty { CompareAs = ByteStringCompareAsType.Equals, Compare = compareValue.BytesValue}),
                         AnyValue.ValueOneofCase.ArrayValue => compareValue.ArrayValue.Values.Count > 0 && ArrayContainsFilter(values, new ArrayProperty { CompareAs = ArrayCompareAsType.Contains, Compare = new AnyValue { ArrayValue = compareValue.ArrayValue }}),
+                        AnyValue.ValueOneofCase.KvlistValue => throw new NotImplementedException("KvListValue is not yet supported"),
                         AnyValue.ValueOneofCase.None => false,
+                        _ => false
                     };
                 });
             }),
+            AnyValue.ValueOneofCase.KvlistValue => throw new NotImplementedException("KvListValue is not yet supported"),
             AnyValue.ValueOneofCase.None => false,
+            _ => false
         };
     }
 }
