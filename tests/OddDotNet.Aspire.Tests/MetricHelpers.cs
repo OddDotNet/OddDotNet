@@ -7,7 +7,7 @@ namespace OddDotNet.Aspire.Tests;
 
 public static class MetricHelpers
 {
-    public static Metric CreateMetric()
+    public static Metric CreateMetric(MetricType metricType)
     {
         var faker = new Faker();
         var item = new Metric
@@ -15,21 +15,78 @@ public static class MetricHelpers
             Name = faker.Random.String2(8),
             Description = faker.Random.String2(8),
             Unit = faker.Random.String2(8),
-            Metadata = { CommonHelpers.CreateKeyValue(faker.Random.String2(8), faker.Random.String2(8)) },
-            Gauge = CreateGauge()
+            Metadata = { CommonHelpers.CreateKeyValue(faker.Random.String2(8), faker.Random.String2(8)) }
         };
+
+        switch (metricType)
+        {
+            case MetricType.Gauge:
+                item.Gauge = CreateGauge();
+                break;
+            case MetricType.Sum:
+                item.Sum = CreateSum();
+                break;
+            case MetricType.Histogram:
+                item.Histogram = CreateHistogram();
+                break;
+        }
 
         return item;
     }
 
     public static Gauge CreateGauge()
     {
-        var faker = new Faker();
         var item = new Gauge
         {
             DataPoints = { CreateNumberDataPoint() }
         };
 
+        return item;
+    }
+
+    public static Sum CreateSum()
+    {
+        var faker = new Faker();
+        var item = new Sum
+        {
+            DataPoints = { CreateNumberDataPoint() },
+            AggregationTemporality = faker.PickRandom<AggregationTemporality>(),
+            IsMonotonic = true
+        };
+
+        return item;
+    }
+
+    public static Histogram CreateHistogram()
+    {
+        var faker = new Faker();
+        var item = new Histogram
+        {
+            DataPoints = { CreateHistogramDataPoint() },
+            AggregationTemporality = faker.PickRandom<AggregationTemporality>()
+        };
+
+        return item;
+    }
+
+    public static HistogramDataPoint CreateHistogramDataPoint()
+    {
+        var faker = new Faker();
+        var item = new HistogramDataPoint
+        {
+            Attributes = { CommonHelpers.CreateKeyValue(faker.Random.String2(8), faker.Random.String2(8)) },
+            BucketCounts = { faker.Random.ULong() },
+            Count = faker.Random.ULong(),
+            Exemplars = { CreateExemplar() },
+            ExplicitBounds = { faker.Random.Double() },
+            Flags = faker.Random.UInt(),
+            Max = faker.Random.Double(),
+            Min = faker.Random.Double(),
+            StartTimeUnixNano = faker.Random.ULong(),
+            Sum = faker.Random.Double(),
+            TimeUnixNano = faker.Random.ULong(),
+        };
+        
         return item;
     }
 
@@ -71,7 +128,7 @@ public static class MetricHelpers
         {
             Scope = CommonHelpers.CreateInstrumentationScope(),
             SchemaUrl = faker.Internet.Url(),
-            Metrics = { CreateMetric() }
+            Metrics = { CreateMetric(MetricType.Gauge) }
         };
 
         return item;
@@ -99,4 +156,13 @@ public static class MetricHelpers
 
         return item;
     }
+}
+
+public enum MetricType
+{
+    Gauge,
+    Sum,
+    Histogram,
+    ExponentialHistogram,
+    Summary
 }

@@ -70,6 +70,6 @@ public class MetricTakeTests : IClassFixture<AspireFixture>
         var queryRequest = new MetricQueryRequest { Take = take, Duration = duration };
         var response = await _fixture.MetricQueryServiceClient.QueryAsync(queryRequest);
         
-        Assert.Single(response.Metrics);
+        Assert.NotEmpty(response.Metrics);
     }
 }

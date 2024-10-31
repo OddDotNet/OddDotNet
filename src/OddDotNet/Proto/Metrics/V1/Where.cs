@@ -7,6 +7,7 @@ public sealed partial class Where : IWhere<FlatMetric>
         ValueOneofCase.None => false,
         ValueOneofCase.Property => Property.Matches(signal),
         ValueOneofCase.Gauge => Gauge.Matches(signal.Metric.Gauge),
-        
+        ValueOneofCase.Sum => Sum.Matches(signal.Metric.Sum),
+        ValueOneofCase.Histogram => Histogram.Matches(signal.Metric.Histogram),
     };
 }
