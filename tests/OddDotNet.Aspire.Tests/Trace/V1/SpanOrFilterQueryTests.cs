@@ -1,6 +1,7 @@
+using OddDotNet.Proto.Common.V1;
 using OddDotNet.Proto.Trace.V1;
 
-namespace OddDotNet.Aspire.Tests;
+namespace OddDotNet.Aspire.Tests.Trace.V1;
 
 public class SpanOrFilterQueryTests : IClassFixture<AspireFixture>, IAsyncLifetime
 {
@@ -14,10 +15,10 @@ public class SpanOrFilterQueryTests : IClassFixture<AspireFixture>, IAsyncLifeti
     [Fact]
     public async Task ReturnTrueWhenAnyFiltersTrue()
     {
-        var request = TestHelpers.CreateExportTraceServiceRequest();
+        var request = TraceHelpers.CreateExportTraceServiceRequest();
         var spanToFind = request.ResourceSpans[0].ScopeSpans[0].Spans[0];
         
-        var falseFirstPropertyFilter = new WhereSpanPropertyFilter()
+        var falseFirstPropertyFilter = new WherePropertyFilter()
         {
             Name = new StringProperty()
             {
@@ -25,12 +26,12 @@ public class SpanOrFilterQueryTests : IClassFixture<AspireFixture>, IAsyncLifeti
                 CompareAs = StringCompareAsType.Equals
             }
         };
-        var falseFirstFilter = new WhereSpanFilter()
+        var falseFirstFilter = new WhereFilter()
         {
-            SpanProperty = falseFirstPropertyFilter
+            Property = falseFirstPropertyFilter
         };
         
-        var trueSecondPropertyFilter = new WhereSpanPropertyFilter()
+        var trueSecondPropertyFilter = new WherePropertyFilter()
         {
             Name = new StringProperty()
             {
@@ -39,18 +40,18 @@ public class SpanOrFilterQueryTests : IClassFixture<AspireFixture>, IAsyncLifeti
             }
         };
 
-        var trueSecondFilter = new WhereSpanFilter()
+        var trueSecondFilter = new WhereFilter()
         {
-            SpanProperty = trueSecondPropertyFilter
+            Property = trueSecondPropertyFilter
         };
         
-        var whereSpanOrFilter = new WhereSpanOrFilter();
+        var whereSpanOrFilter = new WhereOrFilter();
         whereSpanOrFilter.Filters.Add(falseFirstFilter);
         whereSpanOrFilter.Filters.Add(trueSecondFilter);
 
-        var orFilter = new WhereSpanFilter
+        var orFilter = new WhereFilter
         {
-            SpanOr = whereSpanOrFilter
+            Or = whereSpanOrFilter
         };
         
         // Send the trace

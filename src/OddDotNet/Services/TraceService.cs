@@ -7,9 +7,9 @@ namespace OddDotNet.Services;
 
 public class TraceService : OpenTelemetry.Proto.Collector.Trace.V1.TraceService.TraceServiceBase
 {
-    private readonly ISignalList<FlatSpan> _spans;
+    private readonly SignalList<FlatSpan> _spans;
 
-    public TraceService(ISignalList<FlatSpan> spans)
+    public TraceService(SignalList<FlatSpan> spans)
     {
         _spans = spans;
     }

@@ -1,6 +1,6 @@
-namespace OddDotNet;
-
-public interface IResetRequest<TSignal> where TSignal : class
-{
-    
-}
+// namespace OddDotNet;
+//
+// public interface IResetRequest<TSignal> where TSignal : class
+// {
+//     
+// }

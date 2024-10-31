@@ -1,9 +1,12 @@
 using Grpc.Net.Client;
 using Microsoft.Extensions.DependencyInjection;
+using OddDotNet.Proto.Common.V1;
 using OddDotNet.Proto.Trace.V1;
 using OpenTelemetry.Proto.Collector.Trace.V1;
+using SpanKindProperty = OddDotNet.Proto.Trace.V1.SpanKindProperty;
+using SpanStatusCodeProperty = OddDotNet.Proto.Trace.V1.SpanStatusCodeProperty;
 
-namespace OddDotNet.Aspire.Tests;
+namespace OddDotNet.Aspire.Tests.Trace.V1;
 
 public class SpanQueryServiceTests : IAsyncLifetime
 {
@@ -18,7 +21,7 @@ public class SpanQueryServiceTests : IAsyncLifetime
         [Fact]
         public async Task ReturnSpansWithMatchingStatusCodeProperty()
         {
-            var request = TestHelpers.CreateExportTraceServiceRequest();
+            var request = TraceHelpers.CreateExportTraceServiceRequest();
             await _traceServiceClient.ExportAsync(request);
             
             var spanToFind = request.ResourceSpans[0].ScopeSpans[0].Spans[0];
@@ -29,9 +32,9 @@ public class SpanQueryServiceTests : IAsyncLifetime
                 TakeFirst = new TakeFirst()
             };
 
-            var whereFilter = new WhereSpanFilter()
+            var whereFilter = new WhereFilter()
             {
-                SpanProperty = new WhereSpanPropertyFilter()
+                Property = new WherePropertyFilter()
                 {
                     StatusCode = new SpanStatusCodeProperty()
                     {
@@ -52,7 +55,7 @@ public class SpanQueryServiceTests : IAsyncLifetime
         [Fact]
         public async Task ReturnSpansWithMatchingKindProperty()
         {
-            var request = TestHelpers.CreateExportTraceServiceRequest();
+            var request = TraceHelpers.CreateExportTraceServiceRequest();
             await _traceServiceClient.ExportAsync(request);
             
             var spanToFind = request.ResourceSpans[0].ScopeSpans[0].Spans[0];
@@ -63,9 +66,9 @@ public class SpanQueryServiceTests : IAsyncLifetime
                 TakeFirst = new TakeFirst()
             };
 
-            var whereFilter = new WhereSpanFilter()
+            var whereFilter = new WhereFilter()
             {
-                SpanProperty = new WhereSpanPropertyFilter()
+                Property = new WherePropertyFilter()
                 {
                     Kind = new SpanKindProperty()
                     {
@@ -82,8 +85,6 @@ public class SpanQueryServiceTests : IAsyncLifetime
             Assert.NotEmpty(response.Spans);
             Assert.Equal(spanToFind.SpanId, response.Spans[0].Span.SpanId);
         }
-
-        
     }
 
     public class TakeAllShould : SpanQueryServiceTests
@@ -95,7 +96,7 @@ public class SpanQueryServiceTests : IAsyncLifetime
         [InlineData(60000, 3)] // should return all traces
         public async Task ReturnAllSpansWithinTimeframe(int takeDuration, int expectedCount)
         {
-            var request = TestHelpers.CreateExportTraceServiceRequest();
+            var request = TraceHelpers.CreateExportTraceServiceRequest();
             var duration = new Duration
             {
                 Milliseconds = takeDuration

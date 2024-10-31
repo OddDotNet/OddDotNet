@@ -1,7 +1,8 @@
 using Google.Protobuf;
+using OddDotNet.Proto.Common.V1;
 using OddDotNet.Proto.Trace.V1;
 
-namespace OddDotNet.Aspire.Tests;
+namespace OddDotNet.Aspire.Tests.Trace.V1;
 
 // Don't put more tests in this file. It is using xunit class fixtures to spin up a single instance of the Aspire
 // AppHost for performance. These tests need to run sequentially as they're using the same instance and need to perform
@@ -20,123 +21,123 @@ public class SpanByteStringQueryTests : IClassFixture<AspireFixture>, IAsyncLife
         new byte[] { 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41 },
         new byte[] { 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41 },
         ByteStringCompareAsType.Equals,
-        WhereSpanPropertyFilter.ValueOneofCase.SpanId,
+        WherePropertyFilter.ValueOneofCase.SpanId,
         true)
     ]
     [InlineData(
         new byte[] { 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A },
         new byte[] { 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41 },
         ByteStringCompareAsType.Equals,
-        WhereSpanPropertyFilter.ValueOneofCase.SpanId,
+        WherePropertyFilter.ValueOneofCase.SpanId,
         false)
     ]
     [InlineData(
         new byte[] { 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A },
         new byte[] { 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41 },
         ByteStringCompareAsType.NotEquals,
-        WhereSpanPropertyFilter.ValueOneofCase.SpanId,
+        WherePropertyFilter.ValueOneofCase.SpanId,
         true)
     ]
     [InlineData(
         new byte[] { 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41 },
         new byte[] { 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41 },
         ByteStringCompareAsType.NotEquals,
-        WhereSpanPropertyFilter.ValueOneofCase.SpanId,
+        WherePropertyFilter.ValueOneofCase.SpanId,
         false)
     ]
     [InlineData(
         new byte[] { },
         new byte[] { },
         ByteStringCompareAsType.Empty,
-        WhereSpanPropertyFilter.ValueOneofCase.ParentSpanId,
+        WherePropertyFilter.ValueOneofCase.ParentSpanId,
         true)
     ]
     [InlineData(
         new byte[] { 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41 },
         new byte[] { 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41 },
         ByteStringCompareAsType.Empty,
-        WhereSpanPropertyFilter.ValueOneofCase.ParentSpanId,
+        WherePropertyFilter.ValueOneofCase.ParentSpanId,
         false)
     ]
     [InlineData(
         new byte[] { 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41 },
         new byte[] { 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41 },
         ByteStringCompareAsType.NotEmpty,
-        WhereSpanPropertyFilter.ValueOneofCase.ParentSpanId,
+        WherePropertyFilter.ValueOneofCase.ParentSpanId,
         true)
     ]
     [InlineData(
         new byte[] { },
         new byte[] { },
         ByteStringCompareAsType.NotEmpty,
-        WhereSpanPropertyFilter.ValueOneofCase.ParentSpanId,
+        WherePropertyFilter.ValueOneofCase.ParentSpanId,
         false)
     ]
     [InlineData(
         new byte[] { 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41 },
         new byte[] { 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41 },
         ByteStringCompareAsType.Equals,
-        WhereSpanPropertyFilter.ValueOneofCase.TraceId,
+        WherePropertyFilter.ValueOneofCase.TraceId,
         true)
     ]
     [InlineData(
         new byte[] { 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41 },
         new byte[] { 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41 },
         ByteStringCompareAsType.Equals,
-        WhereSpanPropertyFilter.ValueOneofCase.LinkTraceId,
+        WherePropertyFilter.ValueOneofCase.LinkTraceId,
         true)
     ]
     [InlineData(
         new byte[] { 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41 },
         new byte[] { 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41 },
         ByteStringCompareAsType.Equals,
-        WhereSpanPropertyFilter.ValueOneofCase.LinkSpanId,
+        WherePropertyFilter.ValueOneofCase.LinkSpanId,
         true)
     ]
     [InlineData(
         new byte[] { 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A },
         new byte[] { 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41 },
         ByteStringCompareAsType.NotEquals,
-        WhereSpanPropertyFilter.ValueOneofCase.Attribute,
+        WherePropertyFilter.ValueOneofCase.Attribute,
         true)
     ]
     public async Task ReturnSpansWithMatchingByteStringProperty(byte[] expected, byte[] actual,
-        ByteStringCompareAsType compareAs, WhereSpanPropertyFilter.ValueOneofCase propertyToCheck,
+        ByteStringCompareAsType compareAs, WherePropertyFilter.ValueOneofCase propertyToCheck,
         bool shouldBeIncluded)
     {
         // Arrange
-        var request = TestHelpers.CreateExportTraceServiceRequest();
+        var request = TraceHelpers.CreateExportTraceServiceRequest();
         var spanToFind = request.ResourceSpans[0].ScopeSpans[0].Spans[0];
         var byteStringProperty = new ByteStringProperty
         {
             CompareAs = compareAs,
             Compare = ByteString.CopyFrom(expected)
         };
-        var whereSpanPropertyFilter = new WhereSpanPropertyFilter();
+        var whereSpanPropertyFilter = new WherePropertyFilter();
 
         switch (propertyToCheck)
         {
-            case WhereSpanPropertyFilter.ValueOneofCase.SpanId:
+            case WherePropertyFilter.ValueOneofCase.SpanId:
                 spanToFind.SpanId = ByteString.CopyFrom(actual);
                 whereSpanPropertyFilter.SpanId = byteStringProperty;
                 break;
-            case WhereSpanPropertyFilter.ValueOneofCase.TraceId:
+            case WherePropertyFilter.ValueOneofCase.TraceId:
                 spanToFind.TraceId = ByteString.CopyFrom(actual);
                 whereSpanPropertyFilter.TraceId = byteStringProperty;
                 break;
-            case WhereSpanPropertyFilter.ValueOneofCase.ParentSpanId:
+            case WherePropertyFilter.ValueOneofCase.ParentSpanId:
                 spanToFind.ParentSpanId = ByteString.CopyFrom(actual);
                 whereSpanPropertyFilter.ParentSpanId = byteStringProperty;
                 break;
-            case WhereSpanPropertyFilter.ValueOneofCase.LinkTraceId:
+            case WherePropertyFilter.ValueOneofCase.LinkTraceId:
                 spanToFind.Links[0].TraceId = ByteString.CopyFrom(actual);
                 whereSpanPropertyFilter.LinkTraceId = byteStringProperty;
                 break;
-            case WhereSpanPropertyFilter.ValueOneofCase.LinkSpanId:
+            case WherePropertyFilter.ValueOneofCase.LinkSpanId:
                 spanToFind.Links[0].SpanId = ByteString.CopyFrom(actual);
                 whereSpanPropertyFilter.LinkSpanId = byteStringProperty;
                 break;
-            case WhereSpanPropertyFilter.ValueOneofCase.Attribute:
+            case WherePropertyFilter.ValueOneofCase.Attribute:
                 spanToFind.Attributes[0].Value.BytesValue = ByteString.CopyFrom(actual);
                 spanToFind.Attributes[0].Key = "test";
                 whereSpanPropertyFilter.Attribute = new KeyValueProperty()
@@ -158,9 +159,9 @@ public class SpanByteStringQueryTests : IClassFixture<AspireFixture>, IAsyncLife
             Milliseconds = 1000
         };
 
-        var whereFilter = new WhereSpanFilter()
+        var whereFilter = new WhereFilter()
         {
-            SpanProperty = whereSpanPropertyFilter
+            Property = whereSpanPropertyFilter
         };
 
         var spanQueryRequest = new SpanQueryRequest() { Take = take, Filters = { whereFilter }, Duration = duration };

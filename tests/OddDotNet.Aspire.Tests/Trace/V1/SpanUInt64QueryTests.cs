@@ -1,6 +1,7 @@
+using OddDotNet.Proto.Common.V1;
 using OddDotNet.Proto.Trace.V1;
 
-namespace OddDotNet.Aspire.Tests;
+namespace OddDotNet.Aspire.Tests.Trace.V1;
 
 public class SpanUInt64QueryTests : IClassFixture<AspireFixture>, IAsyncLifetime
 {
@@ -12,59 +13,59 @@ public class SpanUInt64QueryTests : IClassFixture<AspireFixture>, IAsyncLifetime
     }
 
     [Theory]
-    [InlineData(1L, 1L, NumberCompareAsType.Equals, WhereSpanPropertyFilter.ValueOneofCase.StartTimeUnixNano, true)]
-    [InlineData(0L, 1L, NumberCompareAsType.Equals, WhereSpanPropertyFilter.ValueOneofCase.StartTimeUnixNano, false)]
-    [InlineData(0L, 1L, NumberCompareAsType.NotEquals, WhereSpanPropertyFilter.ValueOneofCase.StartTimeUnixNano,
+    [InlineData(1L, 1L, NumberCompareAsType.Equals, WherePropertyFilter.ValueOneofCase.StartTimeUnixNano, true)]
+    [InlineData(0L, 1L, NumberCompareAsType.Equals, WherePropertyFilter.ValueOneofCase.StartTimeUnixNano, false)]
+    [InlineData(0L, 1L, NumberCompareAsType.NotEquals, WherePropertyFilter.ValueOneofCase.StartTimeUnixNano,
         true)]
-    [InlineData(1L, 1L, NumberCompareAsType.NotEquals, WhereSpanPropertyFilter.ValueOneofCase.StartTimeUnixNano,
+    [InlineData(1L, 1L, NumberCompareAsType.NotEquals, WherePropertyFilter.ValueOneofCase.StartTimeUnixNano,
         false)]
     [InlineData(1L, 1L, NumberCompareAsType.GreaterThanEquals,
-        WhereSpanPropertyFilter.ValueOneofCase.StartTimeUnixNano, true)]
+        WherePropertyFilter.ValueOneofCase.StartTimeUnixNano, true)]
     [InlineData(1L, 2L, NumberCompareAsType.GreaterThanEquals,
-        WhereSpanPropertyFilter.ValueOneofCase.StartTimeUnixNano, true)]
+        WherePropertyFilter.ValueOneofCase.StartTimeUnixNano, true)]
     [InlineData(2L, 1L, NumberCompareAsType.GreaterThanEquals,
-        WhereSpanPropertyFilter.ValueOneofCase.StartTimeUnixNano, false)]
-    [InlineData(1L, 2L, NumberCompareAsType.GreaterThan, WhereSpanPropertyFilter.ValueOneofCase.StartTimeUnixNano,
+        WherePropertyFilter.ValueOneofCase.StartTimeUnixNano, false)]
+    [InlineData(1L, 2L, NumberCompareAsType.GreaterThan, WherePropertyFilter.ValueOneofCase.StartTimeUnixNano,
         true)]
-    [InlineData(1L, 1L, NumberCompareAsType.GreaterThan, WhereSpanPropertyFilter.ValueOneofCase.StartTimeUnixNano,
+    [InlineData(1L, 1L, NumberCompareAsType.GreaterThan, WherePropertyFilter.ValueOneofCase.StartTimeUnixNano,
         false)]
-    [InlineData(1L, 1L, NumberCompareAsType.LessThanEquals, WhereSpanPropertyFilter.ValueOneofCase.StartTimeUnixNano,
+    [InlineData(1L, 1L, NumberCompareAsType.LessThanEquals, WherePropertyFilter.ValueOneofCase.StartTimeUnixNano,
         true)]
-    [InlineData(2L, 1L, NumberCompareAsType.LessThanEquals, WhereSpanPropertyFilter.ValueOneofCase.StartTimeUnixNano,
+    [InlineData(2L, 1L, NumberCompareAsType.LessThanEquals, WherePropertyFilter.ValueOneofCase.StartTimeUnixNano,
         true)]
-    [InlineData(1L, 2L, NumberCompareAsType.LessThanEquals, WhereSpanPropertyFilter.ValueOneofCase.StartTimeUnixNano,
+    [InlineData(1L, 2L, NumberCompareAsType.LessThanEquals, WherePropertyFilter.ValueOneofCase.StartTimeUnixNano,
         false)]
-    [InlineData(2L, 1L, NumberCompareAsType.LessThan, WhereSpanPropertyFilter.ValueOneofCase.StartTimeUnixNano,
+    [InlineData(2L, 1L, NumberCompareAsType.LessThan, WherePropertyFilter.ValueOneofCase.StartTimeUnixNano,
         true)]
-    [InlineData(1L, 1L, NumberCompareAsType.LessThan, WhereSpanPropertyFilter.ValueOneofCase.StartTimeUnixNano,
+    [InlineData(1L, 1L, NumberCompareAsType.LessThan, WherePropertyFilter.ValueOneofCase.StartTimeUnixNano,
         false)]
-    [InlineData(1L, 1L, NumberCompareAsType.Equals, WhereSpanPropertyFilter.ValueOneofCase.EndTimeUnixNano, true)]
-    [InlineData(1L, 1L, NumberCompareAsType.Equals, WhereSpanPropertyFilter.ValueOneofCase.EventTimeUnixNano, true)]
+    [InlineData(1L, 1L, NumberCompareAsType.Equals, WherePropertyFilter.ValueOneofCase.EndTimeUnixNano, true)]
+    [InlineData(1L, 1L, NumberCompareAsType.Equals, WherePropertyFilter.ValueOneofCase.EventTimeUnixNano, true)]
     public async Task ReturnSpansWithMatchingUInt64Property(ulong expected, ulong actual,
-        NumberCompareAsType compareAs, WhereSpanPropertyFilter.ValueOneofCase propertyToCheck,
+        NumberCompareAsType compareAs, WherePropertyFilter.ValueOneofCase propertyToCheck,
         bool shouldBeIncluded)
     {
         // Arrange
-        var request = TestHelpers.CreateExportTraceServiceRequest();
+        var request = TraceHelpers.CreateExportTraceServiceRequest();
         var spanToFind = request.ResourceSpans[0].ScopeSpans[0].Spans[0];
         var uInt64Property = new UInt64Property
         {
             CompareAs = compareAs,
             Compare = expected
         };
-        var whereSpanPropertyFilter = new WhereSpanPropertyFilter();
+        var whereSpanPropertyFilter = new WherePropertyFilter();
 
         switch (propertyToCheck)
         {
-            case WhereSpanPropertyFilter.ValueOneofCase.StartTimeUnixNano:
+            case WherePropertyFilter.ValueOneofCase.StartTimeUnixNano:
                 spanToFind.StartTimeUnixNano = actual;
                 whereSpanPropertyFilter.StartTimeUnixNano = uInt64Property;
                 break;
-            case WhereSpanPropertyFilter.ValueOneofCase.EndTimeUnixNano:
+            case WherePropertyFilter.ValueOneofCase.EndTimeUnixNano:
                 spanToFind.EndTimeUnixNano = actual;
                 whereSpanPropertyFilter.EndTimeUnixNano = uInt64Property;
                 break;
-            case WhereSpanPropertyFilter.ValueOneofCase.EventTimeUnixNano:
+            case WherePropertyFilter.ValueOneofCase.EventTimeUnixNano:
                 spanToFind.Events[0].TimeUnixNano = actual;
                 whereSpanPropertyFilter.EventTimeUnixNano = uInt64Property;
                 break;
@@ -84,9 +85,9 @@ public class SpanUInt64QueryTests : IClassFixture<AspireFixture>, IAsyncLifetime
             Milliseconds = 1000
         };
 
-        var whereFilter = new WhereSpanFilter()
+        var whereFilter = new WhereFilter()
         {
-            SpanProperty = whereSpanPropertyFilter
+            Property = whereSpanPropertyFilter
         };
 
         var spanQueryRequest = new SpanQueryRequest() { Take = take, Filters = { whereFilter }, Duration = duration };

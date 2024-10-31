@@ -1,6 +1,7 @@
+using OddDotNet.Proto.Common.V1;
 using OddDotNet.Proto.Trace.V1;
 
-namespace OddDotNet.Aspire.Tests;
+namespace OddDotNet.Aspire.Tests.Trace.V1;
 
 public class SpanBoolQueryTests : IClassFixture<AspireFixture>, IAsyncLifetime
 {
@@ -12,27 +13,27 @@ public class SpanBoolQueryTests : IClassFixture<AspireFixture>, IAsyncLifetime
     }
 
     [Theory]
-    [InlineData(true, true, BoolCompareAsType.Equals, WhereSpanPropertyFilter.ValueOneofCase.Attribute, true)]
-    [InlineData(false, true, BoolCompareAsType.Equals, WhereSpanPropertyFilter.ValueOneofCase.Attribute, false)]
-    [InlineData(false, true, BoolCompareAsType.NotEquals, WhereSpanPropertyFilter.ValueOneofCase.Attribute, true)]
-    [InlineData(true, true, BoolCompareAsType.NotEquals, WhereSpanPropertyFilter.ValueOneofCase.Attribute, false)]
+    [InlineData(true, true, BoolCompareAsType.Equals, WherePropertyFilter.ValueOneofCase.Attribute, true)]
+    [InlineData(false, true, BoolCompareAsType.Equals, WherePropertyFilter.ValueOneofCase.Attribute, false)]
+    [InlineData(false, true, BoolCompareAsType.NotEquals, WherePropertyFilter.ValueOneofCase.Attribute, true)]
+    [InlineData(true, true, BoolCompareAsType.NotEquals, WherePropertyFilter.ValueOneofCase.Attribute, false)]
     public async Task ReturnSpansWithMatchingBoolProperty(bool expected, bool actual,
-        BoolCompareAsType compareAs, WhereSpanPropertyFilter.ValueOneofCase propertyToCheck,
+        BoolCompareAsType compareAs, WherePropertyFilter.ValueOneofCase propertyToCheck,
         bool shouldBeIncluded)
     {
         // Arrange
-        var request = TestHelpers.CreateExportTraceServiceRequest();
+        var request = TraceHelpers.CreateExportTraceServiceRequest();
         var spanToFind = request.ResourceSpans[0].ScopeSpans[0].Spans[0];
         var boolProperty = new BoolProperty
         {
             CompareAs = compareAs,
             Compare = expected
         };
-        var whereSpanPropertyFilter = new WhereSpanPropertyFilter();
+        var whereSpanPropertyFilter = new WherePropertyFilter();
 
         switch (propertyToCheck)
         {
-            case WhereSpanPropertyFilter.ValueOneofCase.Attribute:
+            case WherePropertyFilter.ValueOneofCase.Attribute:
                 spanToFind.Attributes[0].Value.BoolValue = actual;
                 spanToFind.Attributes[0].Key = "test";
                 whereSpanPropertyFilter.Attribute = new KeyValueProperty() { Key = "test", BoolValue = boolProperty };
@@ -53,9 +54,9 @@ public class SpanBoolQueryTests : IClassFixture<AspireFixture>, IAsyncLifetime
             Milliseconds = 1000
         };
 
-        var whereFilter = new WhereSpanFilter()
+        var whereFilter = new WhereFilter()
         {
-            SpanProperty = whereSpanPropertyFilter
+            Property = whereSpanPropertyFilter
         };
 
         var spanQueryRequest = new SpanQueryRequest() { Take = take, Filters = { whereFilter }, Duration = duration };

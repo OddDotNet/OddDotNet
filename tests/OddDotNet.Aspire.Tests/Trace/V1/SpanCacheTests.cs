@@ -1,9 +1,10 @@
 using Grpc.Net.Client;
 using Microsoft.Extensions.DependencyInjection;
+using OddDotNet.Proto.Common.V1;
 using OddDotNet.Proto.Trace.V1;
 using OpenTelemetry.Proto.Collector.Trace.V1;
 
-namespace OddDotNet.Aspire.Tests;
+namespace OddDotNet.Aspire.Tests.Trace.V1;
 
 public class SpanCacheTests : IAsyncLifetime
 {
@@ -16,13 +17,13 @@ public class SpanCacheTests : IAsyncLifetime
     public async Task RemoveSpansAfterConfiguredTimeout()
     {
         // Arrange
-        var exportRequest = TestHelpers.CreateExportTraceServiceRequest();
+        var exportRequest = TraceHelpers.CreateExportTraceServiceRequest();
         var traceId = exportRequest.ResourceSpans[0].ScopeSpans[0].Spans[0].TraceId;
         var take = new Take { TakeFirst = new() };
         var duration = new Duration { Milliseconds = 1000 };
-        var traceIdFilter = new WhereSpanFilter
+        var traceIdFilter = new WhereFilter
         {
-            SpanProperty = new WhereSpanPropertyFilter
+            Property = new WherePropertyFilter
             {
                 TraceId = new ByteStringProperty
                 {
