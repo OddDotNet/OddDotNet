@@ -10,6 +10,7 @@ public sealed partial class PropertyFilter : IWhere<FlatMetric>
         ValueOneofCase.Name => StringFilter.Matches(signal.Metric.Name, Name),
         ValueOneofCase.Description => StringFilter.Matches(signal.Metric.Description, Description),
         ValueOneofCase.Unit => StringFilter.Matches(signal.Metric.Unit, Unit),
-        ValueOneofCase.Metadata => KeyValueFilter.Matches(signal.Metric.Metadata, Metadata)
+        ValueOneofCase.Metadata => KeyValueFilter.Matches(signal.Metric.Metadata, Metadata),
+        _ => false
     };
 }

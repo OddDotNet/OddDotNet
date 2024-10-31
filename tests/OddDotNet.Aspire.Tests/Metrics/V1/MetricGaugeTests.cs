@@ -212,4 +212,154 @@ public class MetricGaugeTests : IClassFixture<AspireFixture>
         
         Assert.Single(response.Metrics);
     }
+    
+    [Fact]
+    public async Task ReturnMetricsWithMatchingDataPointExemplarTimeUnixNanoProperty()
+    {
+        var request = MetricHelpers.CreateExportMetricsServiceRequest();
+        await _fixture.MetricsServiceClient.ExportAsync(request);
+
+        var filter = new Where
+        {
+            Gauge = new GaugeFilter
+            {
+                DataPoint = new NumberDataPointFilter
+                {
+                    Exemplar = new ExemplarFilter
+                    {
+                        TimeUnixNano = new UInt64Property
+                        {
+                            CompareAs = NumberCompareAsType.Equals,
+                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Gauge.DataPoints[0].Exemplars[0].TimeUnixNano
+                        }
+                    }
+                }
+            }
+        };
+        
+        var query = new MetricQueryRequest { Filters = { filter }};
+        var response = await _fixture.MetricQueryServiceClient.QueryAsync(query);
+        
+        Assert.Single(response.Metrics);
+    }
+    
+    [Fact]
+    public async Task ReturnMetricsWithMatchingDataPointExemplarValueAsDoubleProperty()
+    {
+        var request = MetricHelpers.CreateExportMetricsServiceRequest();
+        await _fixture.MetricsServiceClient.ExportAsync(request);
+
+        var filter = new Where
+        {
+            Gauge = new GaugeFilter
+            {
+                DataPoint = new NumberDataPointFilter
+                {
+                    Exemplar = new ExemplarFilter
+                    {
+                        ValueAsDouble = new DoubleProperty
+                        {
+                            CompareAs = NumberCompareAsType.Equals,
+                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Gauge.DataPoints[0].Exemplars[0].AsDouble
+                        }
+                    }
+                }
+            }
+        };
+        
+        var query = new MetricQueryRequest { Filters = { filter }};
+        var response = await _fixture.MetricQueryServiceClient.QueryAsync(query);
+        
+        Assert.Single(response.Metrics);
+    }
+    
+    [Fact]
+    public async Task ReturnMetricsWithMatchingDataPointExemplarValueAsIntProperty()
+    {
+        var request = MetricHelpers.CreateExportMetricsServiceRequest();
+        await _fixture.MetricsServiceClient.ExportAsync(request);
+
+        var filter = new Where
+        {
+            Gauge = new GaugeFilter
+            {
+                DataPoint = new NumberDataPointFilter
+                {
+                    Exemplar = new ExemplarFilter
+                    {
+                        ValueAsInt = new Int64Property
+                        {
+                            CompareAs = NumberCompareAsType.Equals,
+                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Gauge.DataPoints[0].Exemplars[0].AsInt
+                        }
+                    }
+                }
+            }
+        };
+        
+        var query = new MetricQueryRequest { Filters = { filter }};
+        var response = await _fixture.MetricQueryServiceClient.QueryAsync(query);
+        
+        Assert.Single(response.Metrics);
+    }
+    
+    [Fact]
+    public async Task ReturnMetricsWithMatchingDataPointExemplarSpanIdProperty()
+    {
+        var request = MetricHelpers.CreateExportMetricsServiceRequest();
+        await _fixture.MetricsServiceClient.ExportAsync(request);
+
+        var filter = new Where
+        {
+            Gauge = new GaugeFilter
+            {
+                DataPoint = new NumberDataPointFilter
+                {
+                    Exemplar = new ExemplarFilter
+                    {
+                        SpanId = new ByteStringProperty
+                        {
+                            CompareAs = ByteStringCompareAsType.Equals,
+                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Gauge.DataPoints[0].Exemplars[0].SpanId
+                        }
+                    }
+                }
+            }
+        };
+        
+        var query = new MetricQueryRequest { Filters = { filter }};
+        var response = await _fixture.MetricQueryServiceClient.QueryAsync(query);
+        
+        Assert.Single(response.Metrics);
+    }
+    
+    [Fact]
+    public async Task ReturnMetricsWithMatchingDataPointExemplarTraceIdProperty()
+    {
+        var request = MetricHelpers.CreateExportMetricsServiceRequest();
+        await _fixture.MetricsServiceClient.ExportAsync(request);
+
+        var filter = new Where
+        {
+            Gauge = new GaugeFilter
+            {
+                DataPoint = new NumberDataPointFilter
+                {
+                    Exemplar = new ExemplarFilter
+                    {
+                        TraceId = new ByteStringProperty
+                        {
+                            CompareAs = ByteStringCompareAsType.Equals,
+                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Gauge.DataPoints[0].Exemplars[0].TraceId
+                        }
+                    }
+                }
+            }
+        };
+        
+        var query = new MetricQueryRequest { Filters = { filter }};
+        var response = await _fixture.MetricQueryServiceClient.QueryAsync(query);
+        
+        Assert.Single(response.Metrics);
+    }
 }
