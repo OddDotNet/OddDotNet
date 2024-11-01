@@ -29,6 +29,9 @@ public static class MetricHelpers
             case MetricType.Histogram:
                 item.Histogram = CreateHistogram();
                 break;
+            case MetricType.ExponentialHistogram:
+                item.ExponentialHistogram = CreateExponentialHistogram();
+                break;
         }
 
         return item;
@@ -68,6 +71,18 @@ public static class MetricHelpers
 
         return item;
     }
+    
+    public static ExponentialHistogram CreateExponentialHistogram()
+    {
+        var faker = new Faker();
+        var item = new ExponentialHistogram
+        {
+            DataPoints = { CreateExponentialHistogramDataPoint() },
+            AggregationTemporality = faker.PickRandom<AggregationTemporality>(),
+        };
+
+        return item;
+    }
 
     public static HistogramDataPoint CreateHistogramDataPoint()
     {
@@ -87,6 +102,42 @@ public static class MetricHelpers
             TimeUnixNano = faker.Random.ULong(),
         };
         
+        return item;
+    }
+    
+    public static ExponentialHistogramDataPoint CreateExponentialHistogramDataPoint()
+    {
+        var faker = new Faker();
+        var item = new ExponentialHistogramDataPoint
+        {
+            Attributes = { CommonHelpers.CreateKeyValue(faker.Random.String2(8), faker.Random.String2(8)) },
+            Count = faker.Random.ULong(),
+            Exemplars = { CreateExemplar() },
+            Flags = faker.Random.UInt(),
+            Max = faker.Random.Double(),
+            Min = faker.Random.Double(),
+            StartTimeUnixNano = faker.Random.ULong(),
+            Sum = faker.Random.Double(),
+            TimeUnixNano = faker.Random.ULong(),
+            Scale = faker.Random.Int(),
+            ZeroCount = faker.Random.ULong(),
+            Positive = CreateExponentialHistogramDataPointBucket(),
+            Negative = CreateExponentialHistogramDataPointBucket(),
+            ZeroThreshold = faker.Random.Double()
+        };
+        
+        return item;
+    }
+
+    public static ExponentialHistogramDataPoint.Types.Buckets CreateExponentialHistogramDataPointBucket()
+    {
+        var faker = new Faker();
+        var item = new ExponentialHistogramDataPoint.Types.Buckets
+        {
+            Offset = faker.Random.Int(),
+            BucketCounts = { faker.Random.ULong() }
+        };
+
         return item;
     }
 

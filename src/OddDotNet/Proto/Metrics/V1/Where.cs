@@ -9,5 +9,6 @@ public sealed partial class Where : IWhere<FlatMetric>
         ValueOneofCase.Gauge => Gauge.Matches(signal.Metric.Gauge),
         ValueOneofCase.Sum => Sum.Matches(signal.Metric.Sum),
         ValueOneofCase.Histogram => Histogram.Matches(signal.Metric.Histogram),
+        ValueOneofCase.ExponentialHistogram => ExponentialHistogram.Matches(signal.Metric.ExponentialHistogram),
     };
 }
