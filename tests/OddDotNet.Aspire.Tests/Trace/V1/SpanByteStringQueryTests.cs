@@ -21,88 +21,74 @@ public class SpanByteStringQueryTests : IClassFixture<AspireFixture>, IAsyncLife
         new byte[] { 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41 },
         new byte[] { 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41 },
         ByteStringCompareAsType.Equals,
-        WherePropertyFilter.ValueOneofCase.SpanId,
+        PropertyFilter.ValueOneofCase.SpanId,
         true)
     ]
     [InlineData(
         new byte[] { 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A },
         new byte[] { 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41 },
         ByteStringCompareAsType.Equals,
-        WherePropertyFilter.ValueOneofCase.SpanId,
+        PropertyFilter.ValueOneofCase.SpanId,
         false)
     ]
     [InlineData(
         new byte[] { 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A },
         new byte[] { 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41 },
         ByteStringCompareAsType.NotEquals,
-        WherePropertyFilter.ValueOneofCase.SpanId,
+        PropertyFilter.ValueOneofCase.SpanId,
         true)
     ]
     [InlineData(
         new byte[] { 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41 },
         new byte[] { 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41 },
         ByteStringCompareAsType.NotEquals,
-        WherePropertyFilter.ValueOneofCase.SpanId,
+        PropertyFilter.ValueOneofCase.SpanId,
         false)
     ]
     [InlineData(
         new byte[] { },
         new byte[] { },
         ByteStringCompareAsType.Empty,
-        WherePropertyFilter.ValueOneofCase.ParentSpanId,
+        PropertyFilter.ValueOneofCase.ParentSpanId,
         true)
     ]
     [InlineData(
         new byte[] { 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41 },
         new byte[] { 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41 },
         ByteStringCompareAsType.Empty,
-        WherePropertyFilter.ValueOneofCase.ParentSpanId,
+        PropertyFilter.ValueOneofCase.ParentSpanId,
         false)
     ]
     [InlineData(
         new byte[] { 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41 },
         new byte[] { 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41 },
         ByteStringCompareAsType.NotEmpty,
-        WherePropertyFilter.ValueOneofCase.ParentSpanId,
+        PropertyFilter.ValueOneofCase.ParentSpanId,
         true)
     ]
     [InlineData(
         new byte[] { },
         new byte[] { },
         ByteStringCompareAsType.NotEmpty,
-        WherePropertyFilter.ValueOneofCase.ParentSpanId,
+        PropertyFilter.ValueOneofCase.ParentSpanId,
         false)
     ]
     [InlineData(
         new byte[] { 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41 },
         new byte[] { 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41 },
         ByteStringCompareAsType.Equals,
-        WherePropertyFilter.ValueOneofCase.TraceId,
-        true)
-    ]
-    [InlineData(
-        new byte[] { 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41 },
-        new byte[] { 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41 },
-        ByteStringCompareAsType.Equals,
-        WherePropertyFilter.ValueOneofCase.LinkTraceId,
-        true)
-    ]
-    [InlineData(
-        new byte[] { 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41 },
-        new byte[] { 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41 },
-        ByteStringCompareAsType.Equals,
-        WherePropertyFilter.ValueOneofCase.LinkSpanId,
+        PropertyFilter.ValueOneofCase.TraceId,
         true)
     ]
     [InlineData(
         new byte[] { 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A },
         new byte[] { 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41 },
         ByteStringCompareAsType.NotEquals,
-        WherePropertyFilter.ValueOneofCase.Attribute,
+        PropertyFilter.ValueOneofCase.Attribute,
         true)
     ]
     public async Task ReturnSpansWithMatchingByteStringProperty(byte[] expected, byte[] actual,
-        ByteStringCompareAsType compareAs, WherePropertyFilter.ValueOneofCase propertyToCheck,
+        ByteStringCompareAsType compareAs, PropertyFilter.ValueOneofCase propertyToCheck,
         bool shouldBeIncluded)
     {
         // Arrange
@@ -113,31 +99,23 @@ public class SpanByteStringQueryTests : IClassFixture<AspireFixture>, IAsyncLife
             CompareAs = compareAs,
             Compare = ByteString.CopyFrom(expected)
         };
-        var whereSpanPropertyFilter = new WherePropertyFilter();
+        var whereSpanPropertyFilter = new PropertyFilter();
 
         switch (propertyToCheck)
         {
-            case WherePropertyFilter.ValueOneofCase.SpanId:
+            case PropertyFilter.ValueOneofCase.SpanId:
                 spanToFind.SpanId = ByteString.CopyFrom(actual);
                 whereSpanPropertyFilter.SpanId = byteStringProperty;
                 break;
-            case WherePropertyFilter.ValueOneofCase.TraceId:
+            case PropertyFilter.ValueOneofCase.TraceId:
                 spanToFind.TraceId = ByteString.CopyFrom(actual);
                 whereSpanPropertyFilter.TraceId = byteStringProperty;
                 break;
-            case WherePropertyFilter.ValueOneofCase.ParentSpanId:
+            case PropertyFilter.ValueOneofCase.ParentSpanId:
                 spanToFind.ParentSpanId = ByteString.CopyFrom(actual);
                 whereSpanPropertyFilter.ParentSpanId = byteStringProperty;
                 break;
-            case WherePropertyFilter.ValueOneofCase.LinkTraceId:
-                spanToFind.Links[0].TraceId = ByteString.CopyFrom(actual);
-                whereSpanPropertyFilter.LinkTraceId = byteStringProperty;
-                break;
-            case WherePropertyFilter.ValueOneofCase.LinkSpanId:
-                spanToFind.Links[0].SpanId = ByteString.CopyFrom(actual);
-                whereSpanPropertyFilter.LinkSpanId = byteStringProperty;
-                break;
-            case WherePropertyFilter.ValueOneofCase.Attribute:
+            case PropertyFilter.ValueOneofCase.Attribute:
                 spanToFind.Attributes[0].Value.BytesValue = ByteString.CopyFrom(actual);
                 spanToFind.Attributes[0].Key = "test";
                 whereSpanPropertyFilter.Attribute = new KeyValueProperty()
@@ -159,7 +137,7 @@ public class SpanByteStringQueryTests : IClassFixture<AspireFixture>, IAsyncLife
             Milliseconds = 1000
         };
 
-        var whereFilter = new WhereFilter()
+        var whereFilter = new Where()
         {
             Property = whereSpanPropertyFilter
         };

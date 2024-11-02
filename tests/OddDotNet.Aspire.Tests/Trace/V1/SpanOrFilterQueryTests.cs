@@ -18,7 +18,7 @@ public class SpanOrFilterQueryTests : IClassFixture<AspireFixture>, IAsyncLifeti
         var request = TraceHelpers.CreateExportTraceServiceRequest();
         var spanToFind = request.ResourceSpans[0].ScopeSpans[0].Spans[0];
         
-        var falseFirstPropertyFilter = new WherePropertyFilter()
+        var falseFirstPropertyFilter = new PropertyFilter()
         {
             Name = new StringProperty()
             {
@@ -26,12 +26,12 @@ public class SpanOrFilterQueryTests : IClassFixture<AspireFixture>, IAsyncLifeti
                 CompareAs = StringCompareAsType.Equals
             }
         };
-        var falseFirstFilter = new WhereFilter()
+        var falseFirstFilter = new Where()
         {
             Property = falseFirstPropertyFilter
         };
         
-        var trueSecondPropertyFilter = new WherePropertyFilter()
+        var trueSecondPropertyFilter = new PropertyFilter()
         {
             Name = new StringProperty()
             {
@@ -40,16 +40,16 @@ public class SpanOrFilterQueryTests : IClassFixture<AspireFixture>, IAsyncLifeti
             }
         };
 
-        var trueSecondFilter = new WhereFilter()
+        var trueSecondFilter = new Where()
         {
             Property = trueSecondPropertyFilter
         };
         
-        var whereSpanOrFilter = new WhereOrFilter();
+        var whereSpanOrFilter = new OrFilter();
         whereSpanOrFilter.Filters.Add(falseFirstFilter);
         whereSpanOrFilter.Filters.Add(trueSecondFilter);
 
-        var orFilter = new WhereFilter
+        var orFilter = new Where
         {
             Or = whereSpanOrFilter
         };

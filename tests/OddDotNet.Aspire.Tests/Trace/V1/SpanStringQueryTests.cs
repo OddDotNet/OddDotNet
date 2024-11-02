@@ -16,32 +16,22 @@ public class SpanStringQueryTests : IClassFixture<AspireFixture>, IAsyncLifetime
     }
     
     [Theory]
-    [InlineData("test", "test", StringCompareAsType.Equals, WherePropertyFilter.ValueOneofCase.Name, true)]
-    [InlineData("other", "test", StringCompareAsType.Equals, WherePropertyFilter.ValueOneofCase.Name, false)]
-    [InlineData("other", "test", StringCompareAsType.NotEquals, WherePropertyFilter.ValueOneofCase.Name, true)]
-    [InlineData("test", "test", StringCompareAsType.NotEquals, WherePropertyFilter.ValueOneofCase.Name, false)]
-    [InlineData("te", "test", StringCompareAsType.Contains, WherePropertyFilter.ValueOneofCase.Name, true)]
-    [InlineData("other", "test", StringCompareAsType.Contains, WherePropertyFilter.ValueOneofCase.Name, false)]
-    [InlineData("other", "test", StringCompareAsType.NotContains, WherePropertyFilter.ValueOneofCase.Name, true)]
-    [InlineData("te", "test", StringCompareAsType.NotContains, WherePropertyFilter.ValueOneofCase.Name, false)]
-    [InlineData("", "", StringCompareAsType.IsEmpty, WherePropertyFilter.ValueOneofCase.Name, true)]
-    [InlineData("test", "test", StringCompareAsType.IsEmpty, WherePropertyFilter.ValueOneofCase.Name, false)]
-    [InlineData("test", "test", StringCompareAsType.IsNotEmpty, WherePropertyFilter.ValueOneofCase.Name, true)]
-    [InlineData("", "", StringCompareAsType.IsNotEmpty, WherePropertyFilter.ValueOneofCase.Name, false)]
-    [InlineData("test", "test", StringCompareAsType.Equals, WherePropertyFilter.ValueOneofCase.EventName, true)]
-    [InlineData("test", "test", StringCompareAsType.Equals, WherePropertyFilter.ValueOneofCase.LinkTraceState, true)]
-    [InlineData("test", "test", StringCompareAsType.Equals, WherePropertyFilter.ValueOneofCase.Attribute, true)]
-    [InlineData("test", "test", StringCompareAsType.Equals, WherePropertyFilter.ValueOneofCase.TraceState, true)]
-    [InlineData("test", "test", StringCompareAsType.Equals, WherePropertyFilter.ValueOneofCase.EventAttribute, true)]
-    [InlineData("test", "test", StringCompareAsType.Equals, WherePropertyFilter.ValueOneofCase.LinkAttribute, true)]
-    [InlineData("test", "test", StringCompareAsType.Equals, WherePropertyFilter.ValueOneofCase.InstrumentationScopeName, true)]
-    [InlineData("test", "test", StringCompareAsType.Equals, WherePropertyFilter.ValueOneofCase.InstrumentationScopeAttribute, true)]
-    [InlineData("test", "test", StringCompareAsType.Equals, WherePropertyFilter.ValueOneofCase.InstrumentationScopeVersion, true)]
-    [InlineData("test", "test", StringCompareAsType.Equals, WherePropertyFilter.ValueOneofCase.InstrumentationScopeSchemaUrl, true)]
-    [InlineData("test", "test", StringCompareAsType.Equals, WherePropertyFilter.ValueOneofCase.ResourceSchemaUrl, true)]
-    [InlineData("test", "test", StringCompareAsType.Equals, WherePropertyFilter.ValueOneofCase.ResourceAttribute, true)]
+    [InlineData("test", "test", StringCompareAsType.Equals, PropertyFilter.ValueOneofCase.Name, true)]
+    [InlineData("other", "test", StringCompareAsType.Equals, PropertyFilter.ValueOneofCase.Name, false)]
+    [InlineData("other", "test", StringCompareAsType.NotEquals, PropertyFilter.ValueOneofCase.Name, true)]
+    [InlineData("test", "test", StringCompareAsType.NotEquals, PropertyFilter.ValueOneofCase.Name, false)]
+    [InlineData("te", "test", StringCompareAsType.Contains, PropertyFilter.ValueOneofCase.Name, true)]
+    [InlineData("other", "test", StringCompareAsType.Contains, PropertyFilter.ValueOneofCase.Name, false)]
+    [InlineData("other", "test", StringCompareAsType.NotContains, PropertyFilter.ValueOneofCase.Name, true)]
+    [InlineData("te", "test", StringCompareAsType.NotContains, PropertyFilter.ValueOneofCase.Name, false)]
+    [InlineData("", "", StringCompareAsType.IsEmpty, PropertyFilter.ValueOneofCase.Name, true)]
+    [InlineData("test", "test", StringCompareAsType.IsEmpty, PropertyFilter.ValueOneofCase.Name, false)]
+    [InlineData("test", "test", StringCompareAsType.IsNotEmpty, PropertyFilter.ValueOneofCase.Name, true)]
+    [InlineData("", "", StringCompareAsType.IsNotEmpty, PropertyFilter.ValueOneofCase.Name, false)]
+    [InlineData("test", "test", StringCompareAsType.Equals, PropertyFilter.ValueOneofCase.Attribute, true)]
+    [InlineData("test", "test", StringCompareAsType.Equals, PropertyFilter.ValueOneofCase.TraceState, true)]
     public async Task ReturnSpansWithMatchingStringProperty(string expected, string actual,
-        StringCompareAsType compareAs, WherePropertyFilter.ValueOneofCase propertyToCheck,
+        StringCompareAsType compareAs, PropertyFilter.ValueOneofCase propertyToCheck,
         bool shouldBeIncluded)
     {
         // Arrange
@@ -56,66 +46,22 @@ public class SpanStringQueryTests : IClassFixture<AspireFixture>, IAsyncLifetime
             CompareAs = compareAs,
             Compare = expected
         };
-        var whereSpanPropertyFilter = new WherePropertyFilter();
+        var whereSpanPropertyFilter = new PropertyFilter();
 
         switch (propertyToCheck)
         {
-            case WherePropertyFilter.ValueOneofCase.Name:
+            case PropertyFilter.ValueOneofCase.Name:
                 spanToFind.Name = actual;
                 whereSpanPropertyFilter.Name = stringProperty;
                 break;
-            case WherePropertyFilter.ValueOneofCase.EventName:
-                spanToFind.Events[0].Name = actual;
-                whereSpanPropertyFilter.EventName = stringProperty;
-                break;
-            case WherePropertyFilter.ValueOneofCase.TraceState:
+            case PropertyFilter.ValueOneofCase.TraceState:
                 spanToFind.TraceState = actual;
                 whereSpanPropertyFilter.TraceState = stringProperty;
                 break;
-            case WherePropertyFilter.ValueOneofCase.LinkTraceState:
-                spanToFind.Links[0].TraceState = actual;
-                whereSpanPropertyFilter.LinkTraceState = stringProperty;
-                break;
-            case WherePropertyFilter.ValueOneofCase.Attribute:
+            case PropertyFilter.ValueOneofCase.Attribute:
                 spanToFind.Attributes[0].Value.StringValue = actual;
                 spanToFind.Attributes[0].Key = "test";
                 whereSpanPropertyFilter.Attribute = new KeyValueProperty() { Key = "test", StringValue = stringProperty};
-                break;
-            case WherePropertyFilter.ValueOneofCase.EventAttribute:
-                spanToFind.Events[0].Attributes[0].Value.StringValue = actual;
-                spanToFind.Events[0].Attributes[0].Key = "test";
-                whereSpanPropertyFilter.EventAttribute = new KeyValueProperty() { Key = "test", StringValue = stringProperty};
-                break;
-            case WherePropertyFilter.ValueOneofCase.LinkAttribute:
-                spanToFind.Links[0].Attributes[0].Value.StringValue = actual;
-                spanToFind.Links[0].Attributes[0].Key = "test";
-                whereSpanPropertyFilter.LinkAttribute = new KeyValueProperty() { Key = "test", StringValue = stringProperty};
-                break;
-            case WherePropertyFilter.ValueOneofCase.InstrumentationScopeName:
-                scopeToFind.Scope.Name = actual;
-                whereSpanPropertyFilter.InstrumentationScopeName = stringProperty;
-                break;
-            case WherePropertyFilter.ValueOneofCase.InstrumentationScopeAttribute:
-                scopeToFind.Scope.Attributes[0].Value.StringValue = actual;
-                scopeToFind.Scope.Attributes[0].Key = "test";
-                whereSpanPropertyFilter.InstrumentationScopeAttribute = new KeyValueProperty() { Key = "test", StringValue = stringProperty};
-                break;
-            case WherePropertyFilter.ValueOneofCase.InstrumentationScopeVersion:
-                scopeToFind.Scope.Version = actual;
-                whereSpanPropertyFilter.InstrumentationScopeVersion = stringProperty;
-                break;
-            case WherePropertyFilter.ValueOneofCase.InstrumentationScopeSchemaUrl:
-                scopeToFind.SchemaUrl = actual;
-                whereSpanPropertyFilter.InstrumentationScopeSchemaUrl = stringProperty;
-                break;
-            case WherePropertyFilter.ValueOneofCase.ResourceSchemaUrl:
-                resourceToFind.SchemaUrl = actual;
-                whereSpanPropertyFilter.ResourceSchemaUrl = stringProperty;
-                break;
-            case WherePropertyFilter.ValueOneofCase.ResourceAttribute:
-                resourceToFind.Resource.Attributes[0].Value.StringValue = actual;
-                resourceToFind.Resource.Attributes[0].Key = "test";
-                whereSpanPropertyFilter.ResourceAttribute = new KeyValueProperty() { Key = "test", StringValue = stringProperty};
                 break;
         }
         
@@ -133,7 +79,7 @@ public class SpanStringQueryTests : IClassFixture<AspireFixture>, IAsyncLifetime
             Milliseconds = 1000
         };
 
-        var whereFilter = new WhereFilter()
+        var whereFilter = new Where()
         {
             Property = whereSpanPropertyFilter
         };

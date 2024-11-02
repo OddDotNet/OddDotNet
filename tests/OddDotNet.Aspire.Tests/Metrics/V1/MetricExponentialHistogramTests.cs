@@ -21,17 +21,20 @@ public class MetricExponentialHistogramTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            ExponentialHistogram = new ExponentialHistogramFilter
+            Property = new PropertyFilter
             {
-                DataPoint = new ExponentialHistogramDataPointFilter
+                ExponentialHistogram = new ExponentialHistogramFilter
                 {
-                    Attribute = new KeyValueProperty
+                    DataPoint = new ExponentialHistogramDataPointFilter
                     {
-                        Key = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].ExponentialHistogram.DataPoints[0].Attributes[0].Key,
-                        StringValue = new StringProperty
+                        Attribute = new KeyValueProperty
                         {
-                            CompareAs = StringCompareAsType.Equals,
-                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].ExponentialHistogram.DataPoints[0].Attributes[0].Value.StringValue
+                            Key = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].ExponentialHistogram.DataPoints[0].Attributes[0].Key,
+                            StringValue = new StringProperty
+                            {
+                                CompareAs = StringCompareAsType.Equals,
+                                Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].ExponentialHistogram.DataPoints[0].Attributes[0].Value.StringValue
+                            }
                         }
                     }
                 }
@@ -53,14 +56,17 @@ public class MetricExponentialHistogramTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            ExponentialHistogram = new ExponentialHistogramFilter
+            Property = new PropertyFilter
             {
-                DataPoint = new ExponentialHistogramDataPointFilter
+                ExponentialHistogram = new ExponentialHistogramFilter
                 {
-                    StartTimeUnixNano = new UInt64Property
+                    DataPoint = new ExponentialHistogramDataPointFilter
                     {
-                        CompareAs = NumberCompareAsType.Equals,
-                        Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].ExponentialHistogram.DataPoints[0].StartTimeUnixNano
+                        StartTimeUnixNano = new UInt64Property
+                        {
+                            CompareAs = NumberCompareAsType.Equals,
+                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].ExponentialHistogram.DataPoints[0].StartTimeUnixNano
+                        }
                     }
                 }
             }
@@ -81,14 +87,17 @@ public class MetricExponentialHistogramTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            ExponentialHistogram = new ExponentialHistogramFilter
+            Property = new PropertyFilter
             {
-                DataPoint = new ExponentialHistogramDataPointFilter
+                ExponentialHistogram = new ExponentialHistogramFilter
                 {
-                    TimeUnixNano = new UInt64Property
+                    DataPoint = new ExponentialHistogramDataPointFilter
                     {
-                        CompareAs = NumberCompareAsType.Equals,
-                        Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].ExponentialHistogram.DataPoints[0].TimeUnixNano
+                        TimeUnixNano = new UInt64Property
+                        {
+                            CompareAs = NumberCompareAsType.Equals,
+                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].ExponentialHistogram.DataPoints[0].TimeUnixNano
+                        }
                     }
                 }
             }
@@ -109,14 +118,17 @@ public class MetricExponentialHistogramTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            ExponentialHistogram = new ExponentialHistogramFilter
+            Property = new PropertyFilter
             {
-                DataPoint = new ExponentialHistogramDataPointFilter
+                ExponentialHistogram = new ExponentialHistogramFilter
                 {
-                    Count = new UInt64Property
+                    DataPoint = new ExponentialHistogramDataPointFilter
                     {
-                        CompareAs = NumberCompareAsType.Equals,
-                        Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].ExponentialHistogram.DataPoints[0].Count
+                        Count = new UInt64Property
+                        {
+                            CompareAs = NumberCompareAsType.Equals,
+                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].ExponentialHistogram.DataPoints[0].Count
+                        }
                     }
                 }
             }
@@ -137,14 +149,17 @@ public class MetricExponentialHistogramTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            ExponentialHistogram = new ExponentialHistogramFilter
+            Property = new PropertyFilter
             {
-                DataPoint = new ExponentialHistogramDataPointFilter
+                ExponentialHistogram = new ExponentialHistogramFilter
                 {
-                    Sum = new DoubleProperty
+                    DataPoint = new ExponentialHistogramDataPointFilter
                     {
-                        CompareAs = NumberCompareAsType.Equals,
-                        Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].ExponentialHistogram.DataPoints[0].Sum
+                        Sum = new DoubleProperty
+                        {
+                            CompareAs = NumberCompareAsType.Equals,
+                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].ExponentialHistogram.DataPoints[0].Sum
+                        }
                     }
                 }
             }
@@ -165,14 +180,17 @@ public class MetricExponentialHistogramTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            ExponentialHistogram = new ExponentialHistogramFilter
+            Property = new PropertyFilter
             {
-                DataPoint = new ExponentialHistogramDataPointFilter
+                ExponentialHistogram = new ExponentialHistogramFilter
                 {
-                    Scale = new Int32Property
+                    DataPoint = new ExponentialHistogramDataPointFilter
                     {
-                        CompareAs = NumberCompareAsType.Equals,
-                        Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].ExponentialHistogram.DataPoints[0].Scale
+                        Scale = new Int32Property
+                        {
+                            CompareAs = NumberCompareAsType.Equals,
+                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].ExponentialHistogram.DataPoints[0].Scale
+                        }
                     }
                 }
             }
@@ -193,14 +211,17 @@ public class MetricExponentialHistogramTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            ExponentialHistogram = new ExponentialHistogramFilter
+            Property = new PropertyFilter
             {
-                DataPoint = new ExponentialHistogramDataPointFilter
+                ExponentialHistogram = new ExponentialHistogramFilter
                 {
-                    ZeroCount = new UInt64Property
+                    DataPoint = new ExponentialHistogramDataPointFilter
                     {
-                        CompareAs = NumberCompareAsType.Equals,
-                        Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].ExponentialHistogram.DataPoints[0].ZeroCount
+                        ZeroCount = new UInt64Property
+                        {
+                            CompareAs = NumberCompareAsType.Equals,
+                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].ExponentialHistogram.DataPoints[0].ZeroCount
+                        }
                     }
                 }
             }
@@ -221,16 +242,19 @@ public class MetricExponentialHistogramTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            ExponentialHistogram = new ExponentialHistogramFilter
+            Property = new PropertyFilter
             {
-                DataPoint = new ExponentialHistogramDataPointFilter
+                ExponentialHistogram = new ExponentialHistogramFilter
                 {
-                    Positive = new BucketFilter
+                    DataPoint = new ExponentialHistogramDataPointFilter
                     {
-                        Offset = new Int32Property
+                        Positive = new BucketFilter
                         {
-                            CompareAs = NumberCompareAsType.Equals,
-                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].ExponentialHistogram.DataPoints[0].Positive.Offset
+                            Offset = new Int32Property
+                            {
+                                CompareAs = NumberCompareAsType.Equals,
+                                Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].ExponentialHistogram.DataPoints[0].Positive.Offset
+                            }
                         }
                     }
                 }
@@ -252,16 +276,19 @@ public class MetricExponentialHistogramTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            ExponentialHistogram = new ExponentialHistogramFilter
+            Property = new PropertyFilter
             {
-                DataPoint = new ExponentialHistogramDataPointFilter
+                ExponentialHistogram = new ExponentialHistogramFilter
                 {
-                    Positive = new BucketFilter
+                    DataPoint = new ExponentialHistogramDataPointFilter
                     {
-                        BucketCount = new UInt64Property
+                        Positive = new BucketFilter
                         {
-                            CompareAs = NumberCompareAsType.Equals,
-                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].ExponentialHistogram.DataPoints[0].Positive.BucketCounts[0]
+                            BucketCount = new UInt64Property
+                            {
+                                CompareAs = NumberCompareAsType.Equals,
+                                Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].ExponentialHistogram.DataPoints[0].Positive.BucketCounts[0]
+                            }
                         }
                     }
                 }
@@ -283,16 +310,19 @@ public class MetricExponentialHistogramTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            ExponentialHistogram = new ExponentialHistogramFilter
+            Property = new PropertyFilter
             {
-                DataPoint = new ExponentialHistogramDataPointFilter
+                ExponentialHistogram = new ExponentialHistogramFilter
                 {
-                    Negative = new BucketFilter
+                    DataPoint = new ExponentialHistogramDataPointFilter
                     {
-                        Offset = new Int32Property
+                        Negative = new BucketFilter
                         {
-                            CompareAs = NumberCompareAsType.Equals,
-                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].ExponentialHistogram.DataPoints[0].Negative.Offset
+                            Offset = new Int32Property
+                            {
+                                CompareAs = NumberCompareAsType.Equals,
+                                Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].ExponentialHistogram.DataPoints[0].Negative.Offset
+                            }
                         }
                     }
                 }
@@ -314,16 +344,19 @@ public class MetricExponentialHistogramTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            ExponentialHistogram = new ExponentialHistogramFilter
+            Property = new PropertyFilter
             {
-                DataPoint = new ExponentialHistogramDataPointFilter
+                ExponentialHistogram = new ExponentialHistogramFilter
                 {
-                    Exemplar = new ExemplarFilter
+                    DataPoint = new ExponentialHistogramDataPointFilter
                     {
-                        TimeUnixNano = new UInt64Property
+                        Exemplar = new ExemplarFilter
                         {
-                            CompareAs = NumberCompareAsType.Equals,
-                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].ExponentialHistogram.DataPoints[0].Exemplars[0].TimeUnixNano
+                            TimeUnixNano = new UInt64Property
+                            {
+                                CompareAs = NumberCompareAsType.Equals,
+                                Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].ExponentialHistogram.DataPoints[0].Exemplars[0].TimeUnixNano
+                            }
                         }
                     }
                 }
@@ -345,14 +378,17 @@ public class MetricExponentialHistogramTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            ExponentialHistogram = new ExponentialHistogramFilter
+            Property = new PropertyFilter
             {
-                DataPoint = new ExponentialHistogramDataPointFilter
+                ExponentialHistogram = new ExponentialHistogramFilter
                 {
-                    Flags = new UInt32Property
+                    DataPoint = new ExponentialHistogramDataPointFilter
                     {
-                        CompareAs = NumberCompareAsType.Equals,
-                        Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].ExponentialHistogram.DataPoints[0].Flags
+                        Flags = new UInt32Property
+                        {
+                            CompareAs = NumberCompareAsType.Equals,
+                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].ExponentialHistogram.DataPoints[0].Flags
+                        }
                     }
                 }
             }
@@ -373,14 +409,17 @@ public class MetricExponentialHistogramTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            ExponentialHistogram = new ExponentialHistogramFilter
+            Property = new PropertyFilter
             {
-                DataPoint = new ExponentialHistogramDataPointFilter
+                ExponentialHistogram = new ExponentialHistogramFilter
                 {
-                    Min = new DoubleProperty
+                    DataPoint = new ExponentialHistogramDataPointFilter
                     {
-                        CompareAs = NumberCompareAsType.Equals,
-                        Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].ExponentialHistogram.DataPoints[0].Min
+                        Min = new DoubleProperty
+                        {
+                            CompareAs = NumberCompareAsType.Equals,
+                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].ExponentialHistogram.DataPoints[0].Min
+                        }
                     }
                 }
             }
@@ -401,14 +440,17 @@ public class MetricExponentialHistogramTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            ExponentialHistogram = new ExponentialHistogramFilter
+            Property = new PropertyFilter
             {
-                DataPoint = new ExponentialHistogramDataPointFilter
+                ExponentialHistogram = new ExponentialHistogramFilter
                 {
-                    Max = new DoubleProperty
+                    DataPoint = new ExponentialHistogramDataPointFilter
                     {
-                        CompareAs = NumberCompareAsType.Equals,
-                        Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].ExponentialHistogram.DataPoints[0].Max
+                        Max = new DoubleProperty
+                        {
+                            CompareAs = NumberCompareAsType.Equals,
+                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].ExponentialHistogram.DataPoints[0].Max
+                        }
                     }
                 }
             }
@@ -429,14 +471,17 @@ public class MetricExponentialHistogramTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            ExponentialHistogram = new ExponentialHistogramFilter
+            Property = new PropertyFilter
             {
-                DataPoint = new ExponentialHistogramDataPointFilter
+                ExponentialHistogram = new ExponentialHistogramFilter
                 {
-                    ZeroThreshold = new DoubleProperty
+                    DataPoint = new ExponentialHistogramDataPointFilter
                     {
-                        CompareAs = NumberCompareAsType.Equals,
-                        Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].ExponentialHistogram.DataPoints[0].ZeroThreshold
+                        ZeroThreshold = new DoubleProperty
+                        {
+                            CompareAs = NumberCompareAsType.Equals,
+                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].ExponentialHistogram.DataPoints[0].ZeroThreshold
+                        }
                     }
                 }
             }
@@ -457,12 +502,15 @@ public class MetricExponentialHistogramTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            ExponentialHistogram = new ExponentialHistogramFilter
+            Property = new PropertyFilter
             {
-                AggregationTemporality = new AggregationTemporalityProperty
+                ExponentialHistogram = new ExponentialHistogramFilter
                 {
-                    CompareAs = EnumCompareAsType.Equals,
-                    Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].ExponentialHistogram.AggregationTemporality
+                    AggregationTemporality = new AggregationTemporalityProperty
+                    {
+                        CompareAs = EnumCompareAsType.Equals,
+                        Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].ExponentialHistogram.AggregationTemporality
+                    }
                 }
             }
         };

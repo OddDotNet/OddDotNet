@@ -21,17 +21,20 @@ public class MetricHistogramTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            Histogram = new HistogramFilter
+            Property = new PropertyFilter
             {
-                DataPoint = new HistogramDataPointFilter
+                Histogram = new HistogramFilter
                 {
-                    Attribute = new KeyValueProperty
+                    DataPoint = new HistogramDataPointFilter
                     {
-                        Key = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Histogram.DataPoints[0].Attributes[0].Key,
-                        StringValue = new StringProperty
+                        Attribute = new KeyValueProperty
                         {
-                            CompareAs = StringCompareAsType.Equals,
-                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Histogram.DataPoints[0].Attributes[0].Value.StringValue
+                            Key = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Histogram.DataPoints[0].Attributes[0].Key,
+                            StringValue = new StringProperty
+                            {
+                                CompareAs = StringCompareAsType.Equals,
+                                Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Histogram.DataPoints[0].Attributes[0].Value.StringValue
+                            }
                         }
                     }
                 }
@@ -53,14 +56,17 @@ public class MetricHistogramTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            Histogram = new HistogramFilter
+            Property = new PropertyFilter
             {
-                DataPoint = new HistogramDataPointFilter
+                Histogram = new HistogramFilter
                 {
-                    StartTimeUnixNano = new UInt64Property
+                    DataPoint = new HistogramDataPointFilter
                     {
-                        CompareAs = NumberCompareAsType.Equals,
-                        Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Histogram.DataPoints[0].StartTimeUnixNano
+                        StartTimeUnixNano = new UInt64Property
+                        {
+                            CompareAs = NumberCompareAsType.Equals,
+                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Histogram.DataPoints[0].StartTimeUnixNano
+                        }
                     }
                 }
             }
@@ -81,14 +87,17 @@ public class MetricHistogramTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            Histogram = new HistogramFilter
+            Property = new PropertyFilter
             {
-                DataPoint = new HistogramDataPointFilter
+                Histogram = new HistogramFilter
                 {
-                    TimeUnixNano = new UInt64Property
+                    DataPoint = new HistogramDataPointFilter
                     {
-                        CompareAs = NumberCompareAsType.Equals,
-                        Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Histogram.DataPoints[0].TimeUnixNano
+                        TimeUnixNano = new UInt64Property
+                        {
+                            CompareAs = NumberCompareAsType.Equals,
+                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Histogram.DataPoints[0].TimeUnixNano
+                        }
                     }
                 }
             }
@@ -109,14 +118,17 @@ public class MetricHistogramTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            Histogram = new HistogramFilter
+            Property = new PropertyFilter
             {
-                DataPoint = new HistogramDataPointFilter
+                Histogram = new HistogramFilter
                 {
-                    Count = new UInt64Property
+                    DataPoint = new HistogramDataPointFilter
                     {
-                        CompareAs = NumberCompareAsType.Equals,
-                        Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Histogram.DataPoints[0].Count
+                        Count = new UInt64Property
+                        {
+                            CompareAs = NumberCompareAsType.Equals,
+                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Histogram.DataPoints[0].Count
+                        }
                     }
                 }
             }
@@ -137,14 +149,17 @@ public class MetricHistogramTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            Histogram = new HistogramFilter
+            Property = new PropertyFilter
             {
-                DataPoint = new HistogramDataPointFilter
+                Histogram = new HistogramFilter
                 {
-                    Sum = new DoubleProperty
+                    DataPoint = new HistogramDataPointFilter
                     {
-                        CompareAs = NumberCompareAsType.Equals,
-                        Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Histogram.DataPoints[0].Sum
+                        Sum = new DoubleProperty
+                        {
+                            CompareAs = NumberCompareAsType.Equals,
+                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Histogram.DataPoints[0].Sum
+                        }
                     }
                 }
             }
@@ -165,14 +180,17 @@ public class MetricHistogramTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            Histogram = new HistogramFilter
+            Property = new PropertyFilter
             {
-                DataPoint = new HistogramDataPointFilter
+                Histogram = new HistogramFilter
                 {
-                    BucketCount = new UInt64Property
+                    DataPoint = new HistogramDataPointFilter
                     {
-                        CompareAs = NumberCompareAsType.Equals,
-                        Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Histogram.DataPoints[0].BucketCounts[0]
+                        BucketCount = new UInt64Property
+                        {
+                            CompareAs = NumberCompareAsType.Equals,
+                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Histogram.DataPoints[0].BucketCounts[0]
+                        }
                     }
                 }
             }
@@ -193,14 +211,17 @@ public class MetricHistogramTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            Histogram = new HistogramFilter
+            Property = new PropertyFilter
             {
-                DataPoint = new HistogramDataPointFilter
+                Histogram = new HistogramFilter
                 {
-                    ExplicitBound = new DoubleProperty
+                    DataPoint = new HistogramDataPointFilter
                     {
-                        CompareAs = NumberCompareAsType.Equals,
-                        Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Histogram.DataPoints[0].ExplicitBounds[0]
+                        ExplicitBound = new DoubleProperty
+                        {
+                            CompareAs = NumberCompareAsType.Equals,
+                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Histogram.DataPoints[0].ExplicitBounds[0]
+                        }
                     }
                 }
             }
@@ -221,16 +242,19 @@ public class MetricHistogramTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            Histogram = new HistogramFilter
+            Property = new PropertyFilter
             {
-                DataPoint = new HistogramDataPointFilter
+                Histogram = new HistogramFilter
                 {
-                    Exemplar = new ExemplarFilter
+                    DataPoint = new HistogramDataPointFilter
                     {
-                        TimeUnixNano = new UInt64Property
+                        Exemplar = new ExemplarFilter
                         {
-                            CompareAs = NumberCompareAsType.Equals,
-                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Histogram.DataPoints[0].Exemplars[0].TimeUnixNano
+                            TimeUnixNano = new UInt64Property
+                            {
+                                CompareAs = NumberCompareAsType.Equals,
+                                Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Histogram.DataPoints[0].Exemplars[0].TimeUnixNano
+                            }
                         }
                     }
                 }
@@ -252,14 +276,17 @@ public class MetricHistogramTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            Histogram = new HistogramFilter
+            Property = new PropertyFilter
             {
-                DataPoint = new HistogramDataPointFilter
+                Histogram = new HistogramFilter
                 {
-                    Flags = new UInt32Property
+                    DataPoint = new HistogramDataPointFilter
                     {
-                        CompareAs = NumberCompareAsType.Equals,
-                        Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Histogram.DataPoints[0].Flags
+                        Flags = new UInt32Property
+                        {
+                            CompareAs = NumberCompareAsType.Equals,
+                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Histogram.DataPoints[0].Flags
+                        }
                     }
                 }
             }
@@ -280,14 +307,17 @@ public class MetricHistogramTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            Histogram = new HistogramFilter
+            Property = new PropertyFilter
             {
-                DataPoint = new HistogramDataPointFilter
+                Histogram = new HistogramFilter
                 {
-                    Min = new DoubleProperty
+                    DataPoint = new HistogramDataPointFilter
                     {
-                        CompareAs = NumberCompareAsType.Equals,
-                        Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Histogram.DataPoints[0].Min
+                        Min = new DoubleProperty
+                        {
+                            CompareAs = NumberCompareAsType.Equals,
+                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Histogram.DataPoints[0].Min
+                        }
                     }
                 }
             }
@@ -308,14 +338,17 @@ public class MetricHistogramTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            Histogram = new HistogramFilter
+            Property = new PropertyFilter
             {
-                DataPoint = new HistogramDataPointFilter
+                Histogram = new HistogramFilter
                 {
-                    Max = new DoubleProperty
+                    DataPoint = new HistogramDataPointFilter
                     {
-                        CompareAs = NumberCompareAsType.Equals,
-                        Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Histogram.DataPoints[0].Max
+                        Max = new DoubleProperty
+                        {
+                            CompareAs = NumberCompareAsType.Equals,
+                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Histogram.DataPoints[0].Max
+                        }
                     }
                 }
             }
@@ -336,12 +369,15 @@ public class MetricHistogramTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            Histogram = new HistogramFilter
+            Property = new PropertyFilter
             {
-                AggregationTemporality = new AggregationTemporalityProperty
+                Histogram = new HistogramFilter
                 {
-                    CompareAs = EnumCompareAsType.Equals,
-                    Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Histogram.AggregationTemporality
+                    AggregationTemporality = new AggregationTemporalityProperty
+                    {
+                        CompareAs = EnumCompareAsType.Equals,
+                        Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Histogram.AggregationTemporality
+                    }
                 }
             }
         };

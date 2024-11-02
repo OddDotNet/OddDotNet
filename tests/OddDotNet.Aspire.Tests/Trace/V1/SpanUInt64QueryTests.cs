@@ -13,36 +13,35 @@ public class SpanUInt64QueryTests : IClassFixture<AspireFixture>, IAsyncLifetime
     }
 
     [Theory]
-    [InlineData(1L, 1L, NumberCompareAsType.Equals, WherePropertyFilter.ValueOneofCase.StartTimeUnixNano, true)]
-    [InlineData(0L, 1L, NumberCompareAsType.Equals, WherePropertyFilter.ValueOneofCase.StartTimeUnixNano, false)]
-    [InlineData(0L, 1L, NumberCompareAsType.NotEquals, WherePropertyFilter.ValueOneofCase.StartTimeUnixNano,
+    [InlineData(1L, 1L, NumberCompareAsType.Equals, PropertyFilter.ValueOneofCase.StartTimeUnixNano, true)]
+    [InlineData(0L, 1L, NumberCompareAsType.Equals, PropertyFilter.ValueOneofCase.StartTimeUnixNano, false)]
+    [InlineData(0L, 1L, NumberCompareAsType.NotEquals, PropertyFilter.ValueOneofCase.StartTimeUnixNano,
         true)]
-    [InlineData(1L, 1L, NumberCompareAsType.NotEquals, WherePropertyFilter.ValueOneofCase.StartTimeUnixNano,
+    [InlineData(1L, 1L, NumberCompareAsType.NotEquals, PropertyFilter.ValueOneofCase.StartTimeUnixNano,
         false)]
     [InlineData(1L, 1L, NumberCompareAsType.GreaterThanEquals,
-        WherePropertyFilter.ValueOneofCase.StartTimeUnixNano, true)]
+        PropertyFilter.ValueOneofCase.StartTimeUnixNano, true)]
     [InlineData(1L, 2L, NumberCompareAsType.GreaterThanEquals,
-        WherePropertyFilter.ValueOneofCase.StartTimeUnixNano, true)]
+        PropertyFilter.ValueOneofCase.StartTimeUnixNano, true)]
     [InlineData(2L, 1L, NumberCompareAsType.GreaterThanEquals,
-        WherePropertyFilter.ValueOneofCase.StartTimeUnixNano, false)]
-    [InlineData(1L, 2L, NumberCompareAsType.GreaterThan, WherePropertyFilter.ValueOneofCase.StartTimeUnixNano,
+        PropertyFilter.ValueOneofCase.StartTimeUnixNano, false)]
+    [InlineData(1L, 2L, NumberCompareAsType.GreaterThan, PropertyFilter.ValueOneofCase.StartTimeUnixNano,
         true)]
-    [InlineData(1L, 1L, NumberCompareAsType.GreaterThan, WherePropertyFilter.ValueOneofCase.StartTimeUnixNano,
+    [InlineData(1L, 1L, NumberCompareAsType.GreaterThan, PropertyFilter.ValueOneofCase.StartTimeUnixNano,
         false)]
-    [InlineData(1L, 1L, NumberCompareAsType.LessThanEquals, WherePropertyFilter.ValueOneofCase.StartTimeUnixNano,
+    [InlineData(1L, 1L, NumberCompareAsType.LessThanEquals, PropertyFilter.ValueOneofCase.StartTimeUnixNano,
         true)]
-    [InlineData(2L, 1L, NumberCompareAsType.LessThanEquals, WherePropertyFilter.ValueOneofCase.StartTimeUnixNano,
+    [InlineData(2L, 1L, NumberCompareAsType.LessThanEquals, PropertyFilter.ValueOneofCase.StartTimeUnixNano,
         true)]
-    [InlineData(1L, 2L, NumberCompareAsType.LessThanEquals, WherePropertyFilter.ValueOneofCase.StartTimeUnixNano,
+    [InlineData(1L, 2L, NumberCompareAsType.LessThanEquals, PropertyFilter.ValueOneofCase.StartTimeUnixNano,
         false)]
-    [InlineData(2L, 1L, NumberCompareAsType.LessThan, WherePropertyFilter.ValueOneofCase.StartTimeUnixNano,
+    [InlineData(2L, 1L, NumberCompareAsType.LessThan, PropertyFilter.ValueOneofCase.StartTimeUnixNano,
         true)]
-    [InlineData(1L, 1L, NumberCompareAsType.LessThan, WherePropertyFilter.ValueOneofCase.StartTimeUnixNano,
+    [InlineData(1L, 1L, NumberCompareAsType.LessThan, PropertyFilter.ValueOneofCase.StartTimeUnixNano,
         false)]
-    [InlineData(1L, 1L, NumberCompareAsType.Equals, WherePropertyFilter.ValueOneofCase.EndTimeUnixNano, true)]
-    [InlineData(1L, 1L, NumberCompareAsType.Equals, WherePropertyFilter.ValueOneofCase.EventTimeUnixNano, true)]
+    [InlineData(1L, 1L, NumberCompareAsType.Equals, PropertyFilter.ValueOneofCase.EndTimeUnixNano, true)]
     public async Task ReturnSpansWithMatchingUInt64Property(ulong expected, ulong actual,
-        NumberCompareAsType compareAs, WherePropertyFilter.ValueOneofCase propertyToCheck,
+        NumberCompareAsType compareAs, PropertyFilter.ValueOneofCase propertyToCheck,
         bool shouldBeIncluded)
     {
         // Arrange
@@ -53,21 +52,17 @@ public class SpanUInt64QueryTests : IClassFixture<AspireFixture>, IAsyncLifetime
             CompareAs = compareAs,
             Compare = expected
         };
-        var whereSpanPropertyFilter = new WherePropertyFilter();
+        var whereSpanPropertyFilter = new PropertyFilter();
 
         switch (propertyToCheck)
         {
-            case WherePropertyFilter.ValueOneofCase.StartTimeUnixNano:
+            case PropertyFilter.ValueOneofCase.StartTimeUnixNano:
                 spanToFind.StartTimeUnixNano = actual;
                 whereSpanPropertyFilter.StartTimeUnixNano = uInt64Property;
                 break;
-            case WherePropertyFilter.ValueOneofCase.EndTimeUnixNano:
+            case PropertyFilter.ValueOneofCase.EndTimeUnixNano:
                 spanToFind.EndTimeUnixNano = actual;
                 whereSpanPropertyFilter.EndTimeUnixNano = uInt64Property;
-                break;
-            case WherePropertyFilter.ValueOneofCase.EventTimeUnixNano:
-                spanToFind.Events[0].TimeUnixNano = actual;
-                whereSpanPropertyFilter.EventTimeUnixNano = uInt64Property;
                 break;
         }
 
@@ -85,7 +80,7 @@ public class SpanUInt64QueryTests : IClassFixture<AspireFixture>, IAsyncLifetime
             Milliseconds = 1000
         };
 
-        var whereFilter = new WhereFilter()
+        var whereFilter = new Where()
         {
             Property = whereSpanPropertyFilter
         };

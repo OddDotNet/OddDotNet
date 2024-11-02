@@ -27,19 +27,22 @@ public class SpanQueryServiceTests : IAsyncLifetime
             var spanToFind = request.ResourceSpans[0].ScopeSpans[0].Spans[0];
             var codeToFind = spanToFind.Status.Code;
 
-            var take = new Take()
+            var take = new Take
             {
                 TakeFirst = new TakeFirst()
             };
 
-            var whereFilter = new WhereFilter()
+            var whereFilter = new Where
             {
-                Property = new WherePropertyFilter()
+                Property = new PropertyFilter
                 {
-                    StatusCode = new SpanStatusCodeProperty()
+                    Status = new StatusFilter
                     {
-                        CompareAs = EnumCompareAsType.Equals,
-                        Compare = codeToFind
+                        Code = new SpanStatusCodeProperty
+                        {
+                            CompareAs = EnumCompareAsType.Equals,
+                            Compare = codeToFind
+                        }
                     }
                 }
             };
@@ -66,9 +69,9 @@ public class SpanQueryServiceTests : IAsyncLifetime
                 TakeFirst = new TakeFirst()
             };
 
-            var whereFilter = new WhereFilter()
+            var whereFilter = new Where()
             {
-                Property = new WherePropertyFilter()
+                Property = new PropertyFilter()
                 {
                     Kind = new SpanKindProperty()
                     {

@@ -8,28 +8,28 @@ public class SpanDoubleQueryTests : IClassFixture<AspireFixture>, IAsyncLifetime
     private readonly AspireFixture _fixture;
 
     [Theory]
-    [InlineData(1.0, 1.0, NumberCompareAsType.Equals, WherePropertyFilter.ValueOneofCase.Attribute, true)]
-    [InlineData(0.0, 1.0, NumberCompareAsType.Equals, WherePropertyFilter.ValueOneofCase.Attribute, false)]
-    [InlineData(0.0, 1.0, NumberCompareAsType.NotEquals, WherePropertyFilter.ValueOneofCase.Attribute, true)]
-    [InlineData(1.0, 1.0, NumberCompareAsType.NotEquals, WherePropertyFilter.ValueOneofCase.Attribute, false)]
-    [InlineData(1.0, 1.0, NumberCompareAsType.GreaterThanEquals, WherePropertyFilter.ValueOneofCase.Attribute,
+    [InlineData(1.0, 1.0, NumberCompareAsType.Equals, PropertyFilter.ValueOneofCase.Attribute, true)]
+    [InlineData(0.0, 1.0, NumberCompareAsType.Equals, PropertyFilter.ValueOneofCase.Attribute, false)]
+    [InlineData(0.0, 1.0, NumberCompareAsType.NotEquals, PropertyFilter.ValueOneofCase.Attribute, true)]
+    [InlineData(1.0, 1.0, NumberCompareAsType.NotEquals, PropertyFilter.ValueOneofCase.Attribute, false)]
+    [InlineData(1.0, 1.0, NumberCompareAsType.GreaterThanEquals, PropertyFilter.ValueOneofCase.Attribute,
         true)]
-    [InlineData(1.0, 2.0, NumberCompareAsType.GreaterThanEquals, WherePropertyFilter.ValueOneofCase.Attribute,
+    [InlineData(1.0, 2.0, NumberCompareAsType.GreaterThanEquals, PropertyFilter.ValueOneofCase.Attribute,
         true)]
-    [InlineData(2.0, 1.0, NumberCompareAsType.GreaterThanEquals, WherePropertyFilter.ValueOneofCase.Attribute,
+    [InlineData(2.0, 1.0, NumberCompareAsType.GreaterThanEquals, PropertyFilter.ValueOneofCase.Attribute,
         false)]
-    [InlineData(1.0, 2.0, NumberCompareAsType.GreaterThan, WherePropertyFilter.ValueOneofCase.Attribute, true)]
-    [InlineData(1.0, 1.0, NumberCompareAsType.GreaterThan, WherePropertyFilter.ValueOneofCase.Attribute, false)]
-    [InlineData(1.0, 1.0, NumberCompareAsType.LessThanEquals, WherePropertyFilter.ValueOneofCase.Attribute,
+    [InlineData(1.0, 2.0, NumberCompareAsType.GreaterThan, PropertyFilter.ValueOneofCase.Attribute, true)]
+    [InlineData(1.0, 1.0, NumberCompareAsType.GreaterThan, PropertyFilter.ValueOneofCase.Attribute, false)]
+    [InlineData(1.0, 1.0, NumberCompareAsType.LessThanEquals, PropertyFilter.ValueOneofCase.Attribute,
         true)]
-    [InlineData(2.0, 1.0, NumberCompareAsType.LessThanEquals, WherePropertyFilter.ValueOneofCase.Attribute,
+    [InlineData(2.0, 1.0, NumberCompareAsType.LessThanEquals, PropertyFilter.ValueOneofCase.Attribute,
         true)]
-    [InlineData(1.0, 2.0, NumberCompareAsType.LessThanEquals, WherePropertyFilter.ValueOneofCase.Attribute,
+    [InlineData(1.0, 2.0, NumberCompareAsType.LessThanEquals, PropertyFilter.ValueOneofCase.Attribute,
         false)]
-    [InlineData(2.0, 1.0, NumberCompareAsType.LessThan, WherePropertyFilter.ValueOneofCase.Attribute, true)]
-    [InlineData(1.0, 1.0, NumberCompareAsType.LessThan, WherePropertyFilter.ValueOneofCase.Attribute, false)]
+    [InlineData(2.0, 1.0, NumberCompareAsType.LessThan, PropertyFilter.ValueOneofCase.Attribute, true)]
+    [InlineData(1.0, 1.0, NumberCompareAsType.LessThan, PropertyFilter.ValueOneofCase.Attribute, false)]
     public async Task ReturnSpansWithMatchingDoubleProperty(double expected, double actual,
-        NumberCompareAsType compareAs, WherePropertyFilter.ValueOneofCase propertyToCheck,
+        NumberCompareAsType compareAs, PropertyFilter.ValueOneofCase propertyToCheck,
         bool shouldBeIncluded)
     {
         // Arrange
@@ -40,11 +40,11 @@ public class SpanDoubleQueryTests : IClassFixture<AspireFixture>, IAsyncLifetime
             CompareAs = compareAs,
             Compare = expected
         };
-        var whereSpanPropertyFilter = new WherePropertyFilter();
+        var whereSpanPropertyFilter = new PropertyFilter();
 
         switch (propertyToCheck)
         {
-            case WherePropertyFilter.ValueOneofCase.Attribute:
+            case PropertyFilter.ValueOneofCase.Attribute:
                 spanToFind.Attributes[0].Value.DoubleValue = actual;
                 spanToFind.Attributes[0].Key = "test";
                 whereSpanPropertyFilter.Attribute = new KeyValueProperty()
@@ -66,7 +66,7 @@ public class SpanDoubleQueryTests : IClassFixture<AspireFixture>, IAsyncLifetime
             Milliseconds = 1000
         };
 
-        var whereFilter = new WhereFilter()
+        var whereFilter = new Where()
         {
             Property = whereSpanPropertyFilter
         };

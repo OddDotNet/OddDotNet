@@ -13,12 +13,12 @@ public class SpanBoolQueryTests : IClassFixture<AspireFixture>, IAsyncLifetime
     }
 
     [Theory]
-    [InlineData(true, true, BoolCompareAsType.Equals, WherePropertyFilter.ValueOneofCase.Attribute, true)]
-    [InlineData(false, true, BoolCompareAsType.Equals, WherePropertyFilter.ValueOneofCase.Attribute, false)]
-    [InlineData(false, true, BoolCompareAsType.NotEquals, WherePropertyFilter.ValueOneofCase.Attribute, true)]
-    [InlineData(true, true, BoolCompareAsType.NotEquals, WherePropertyFilter.ValueOneofCase.Attribute, false)]
+    [InlineData(true, true, BoolCompareAsType.Equals, PropertyFilter.ValueOneofCase.Attribute, true)]
+    [InlineData(false, true, BoolCompareAsType.Equals, PropertyFilter.ValueOneofCase.Attribute, false)]
+    [InlineData(false, true, BoolCompareAsType.NotEquals, PropertyFilter.ValueOneofCase.Attribute, true)]
+    [InlineData(true, true, BoolCompareAsType.NotEquals, PropertyFilter.ValueOneofCase.Attribute, false)]
     public async Task ReturnSpansWithMatchingBoolProperty(bool expected, bool actual,
-        BoolCompareAsType compareAs, WherePropertyFilter.ValueOneofCase propertyToCheck,
+        BoolCompareAsType compareAs, PropertyFilter.ValueOneofCase propertyToCheck,
         bool shouldBeIncluded)
     {
         // Arrange
@@ -29,11 +29,11 @@ public class SpanBoolQueryTests : IClassFixture<AspireFixture>, IAsyncLifetime
             CompareAs = compareAs,
             Compare = expected
         };
-        var whereSpanPropertyFilter = new WherePropertyFilter();
+        var whereSpanPropertyFilter = new PropertyFilter();
 
         switch (propertyToCheck)
         {
-            case WherePropertyFilter.ValueOneofCase.Attribute:
+            case PropertyFilter.ValueOneofCase.Attribute:
                 spanToFind.Attributes[0].Value.BoolValue = actual;
                 spanToFind.Attributes[0].Key = "test";
                 whereSpanPropertyFilter.Attribute = new KeyValueProperty() { Key = "test", BoolValue = boolProperty };
@@ -54,7 +54,7 @@ public class SpanBoolQueryTests : IClassFixture<AspireFixture>, IAsyncLifetime
             Milliseconds = 1000
         };
 
-        var whereFilter = new WhereFilter()
+        var whereFilter = new Where()
         {
             Property = whereSpanPropertyFilter
         };

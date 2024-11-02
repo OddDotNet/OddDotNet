@@ -221,13 +221,10 @@ public class MetricPropertyTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            Property = new PropertyFilter
+            InstrumentationScopeSchemaUrl = new StringProperty
             {
-                InstrumentationScopeSchemaUrl = new StringProperty
-                {
-                    CompareAs = StringCompareAsType.Equals,
-                    Compare = request.ResourceMetrics[0].ScopeMetrics[0].SchemaUrl
-                }
+                CompareAs = StringCompareAsType.Equals,
+                Compare = request.ResourceMetrics[0].ScopeMetrics[0].SchemaUrl
             }
         };
         
@@ -245,13 +242,10 @@ public class MetricPropertyTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            Property = new PropertyFilter
+            ResourceSchemaUrl = new StringProperty
             {
-                ResourceSchemaUrl = new StringProperty
-                {
-                    CompareAs = StringCompareAsType.Equals,
-                    Compare = request.ResourceMetrics[0].SchemaUrl
-                }
+                CompareAs = StringCompareAsType.Equals,
+                Compare = request.ResourceMetrics[0].SchemaUrl
             }
         };
         

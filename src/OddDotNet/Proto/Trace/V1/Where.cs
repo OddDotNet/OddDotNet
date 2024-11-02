@@ -1,13 +1,13 @@
 using OddDotNet.Filters;
 
-namespace OddDotNet.Proto.Metrics.V1;
+namespace OddDotNet.Proto.Trace.V1;
 
-public sealed partial class Where : IWhere<FlatMetric>
+public sealed partial class Where : IWhere<FlatSpan>
 {
-    public bool Matches(FlatMetric signal) => ValueCase switch
+    public bool Matches(FlatSpan signal) => ValueCase switch
     {
         ValueOneofCase.None => false,
-        ValueOneofCase.Property => Property.Matches(signal.Metric),
+        ValueOneofCase.Property => Property.Matches(signal.Span),
         ValueOneofCase.Or => Or.Matches(signal),
         ValueOneofCase.InstrumentationScope => InstrumentationScope.Matches(signal.InstrumentationScope),
         ValueOneofCase.Resource => Resource.Matches(signal.Resource),

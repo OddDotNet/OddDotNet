@@ -22,14 +22,17 @@ public class MetricSumTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            Sum = new SumFilter
+            Property = new PropertyFilter
             {
-                DataPoint = new NumberDataPointFilter
+                Sum = new SumFilter
                 {
-                    Flags = new UInt32Property
+                    DataPoint = new NumberDataPointFilter
                     {
-                        CompareAs = NumberCompareAsType.Equals,
-                        Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Sum.DataPoints[0].Flags
+                        Flags = new UInt32Property
+                        {
+                            CompareAs = NumberCompareAsType.Equals,
+                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Sum.DataPoints[0].Flags
+                        }
                     }
                 }
             }
@@ -50,12 +53,15 @@ public class MetricSumTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            Sum = new SumFilter
+            Property = new PropertyFilter
             {
-                AggregationTemporality = new AggregationTemporalityProperty
+                Sum = new SumFilter
                 {
-                    CompareAs = EnumCompareAsType.Equals,
-                    Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Sum.AggregationTemporality
+                    AggregationTemporality = new AggregationTemporalityProperty
+                    {
+                        CompareAs = EnumCompareAsType.Equals,
+                        Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Sum.AggregationTemporality
+                    }
                 }
             }
         };
@@ -75,12 +81,15 @@ public class MetricSumTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            Sum = new SumFilter
+            Property = new PropertyFilter
             {
-                IsMonotonic = new BoolProperty
+                Sum = new SumFilter
                 {
-                    CompareAs = BoolCompareAsType.Equals,
-                    Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Sum.IsMonotonic
+                    IsMonotonic = new BoolProperty
+                    {
+                        CompareAs = BoolCompareAsType.Equals,
+                        Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Sum.IsMonotonic
+                    }
                 }
             }
         };

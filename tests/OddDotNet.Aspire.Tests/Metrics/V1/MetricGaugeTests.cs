@@ -20,14 +20,17 @@ public class MetricGaugeTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            Gauge = new GaugeFilter
+            Property = new PropertyFilter
             {
-                DataPoint = new NumberDataPointFilter
+                Gauge = new GaugeFilter
                 {
-                    Flags = new UInt32Property
+                    DataPoint = new NumberDataPointFilter
                     {
-                        CompareAs = NumberCompareAsType.Equals,
-                        Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Gauge.DataPoints[0].Flags
+                        Flags = new UInt32Property
+                        {
+                            CompareAs = NumberCompareAsType.Equals,
+                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Gauge.DataPoints[0].Flags
+                        }
                     }
                 }
             }
@@ -47,17 +50,20 @@ public class MetricGaugeTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            Gauge = new GaugeFilter
+            Property = new PropertyFilter
             {
-                DataPoint = new NumberDataPointFilter
+                Gauge = new GaugeFilter
                 {
-                    Attribute = new KeyValueProperty
+                    DataPoint = new NumberDataPointFilter
                     {
-                        Key = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Gauge.DataPoints[0].Attributes[0].Key,
-                        StringValue = new StringProperty
+                        Attribute = new KeyValueProperty
                         {
-                            CompareAs = StringCompareAsType.Equals,
-                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Gauge.DataPoints[0].Attributes[0].Value.StringValue
+                            Key = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Gauge.DataPoints[0].Attributes[0].Key,
+                            StringValue = new StringProperty
+                            {
+                                CompareAs = StringCompareAsType.Equals,
+                                Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Gauge.DataPoints[0].Attributes[0].Value.StringValue
+                            }
                         }
                     }
                 }
@@ -78,14 +84,17 @@ public class MetricGaugeTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            Gauge = new GaugeFilter
+            Property = new PropertyFilter
             {
-                DataPoint = new NumberDataPointFilter
+                Gauge = new GaugeFilter
                 {
-                    StartTimeUnixNano = new UInt64Property
+                    DataPoint = new NumberDataPointFilter
                     {
-                        CompareAs = NumberCompareAsType.Equals,
-                        Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Gauge.DataPoints[0].StartTimeUnixNano
+                        StartTimeUnixNano = new UInt64Property
+                        {
+                            CompareAs = NumberCompareAsType.Equals,
+                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Gauge.DataPoints[0].StartTimeUnixNano
+                        }
                     }
                 }
             }
@@ -105,14 +114,17 @@ public class MetricGaugeTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            Gauge = new GaugeFilter
+            Property = new PropertyFilter
             {
-                DataPoint = new NumberDataPointFilter
+                Gauge = new GaugeFilter
                 {
-                    TimeUnixNano = new UInt64Property
+                    DataPoint = new NumberDataPointFilter
                     {
-                        CompareAs = NumberCompareAsType.Equals,
-                        Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Gauge.DataPoints[0].TimeUnixNano
+                        TimeUnixNano = new UInt64Property
+                        {
+                            CompareAs = NumberCompareAsType.Equals,
+                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Gauge.DataPoints[0].TimeUnixNano
+                        }
                     }
                 }
             }
@@ -132,14 +144,17 @@ public class MetricGaugeTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            Gauge = new GaugeFilter
+            Property = new PropertyFilter
             {
-                DataPoint = new NumberDataPointFilter
+                Gauge = new GaugeFilter
                 {
-                    ValueAsDouble = new DoubleProperty
+                    DataPoint = new NumberDataPointFilter
                     {
-                        CompareAs = NumberCompareAsType.Equals,
-                        Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Gauge.DataPoints[0].AsDouble
+                        ValueAsDouble = new DoubleProperty
+                        {
+                            CompareAs = NumberCompareAsType.Equals,
+                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Gauge.DataPoints[0].AsDouble
+                        }
                     }
                 }
             }
@@ -160,14 +175,17 @@ public class MetricGaugeTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            Gauge = new GaugeFilter
+            Property = new PropertyFilter
             {
-                DataPoint = new NumberDataPointFilter
+                Gauge = new GaugeFilter
                 {
-                    ValueAsInt = new Int64Property
+                    DataPoint = new NumberDataPointFilter
                     {
-                        CompareAs = NumberCompareAsType.Equals,
-                        Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Gauge.DataPoints[0].AsInt
+                        ValueAsInt = new Int64Property
+                        {
+                            CompareAs = NumberCompareAsType.Equals,
+                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Gauge.DataPoints[0].AsInt
+                        }
                     }
                 }
             }
@@ -187,19 +205,22 @@ public class MetricGaugeTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            Gauge = new GaugeFilter
+            Property = new PropertyFilter
             {
-                DataPoint = new NumberDataPointFilter
+                Gauge = new GaugeFilter
                 {
-                    Exemplar = new ExemplarFilter
+                    DataPoint = new NumberDataPointFilter
                     {
-                        FilteredAttribute = new KeyValueProperty
+                        Exemplar = new ExemplarFilter
                         {
-                            Key = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Gauge.DataPoints[0].Exemplars[0].FilteredAttributes[0].Key,
-                            StringValue = new StringProperty
+                            FilteredAttribute = new KeyValueProperty
                             {
-                                CompareAs = StringCompareAsType.Equals,
-                                Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Gauge.DataPoints[0].Exemplars[0].FilteredAttributes[0].Value.StringValue
+                                Key = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Gauge.DataPoints[0].Exemplars[0].FilteredAttributes[0].Key,
+                                StringValue = new StringProperty
+                                {
+                                    CompareAs = StringCompareAsType.Equals,
+                                    Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Gauge.DataPoints[0].Exemplars[0].FilteredAttributes[0].Value.StringValue
+                                }
                             }
                         }
                     }
@@ -221,16 +242,19 @@ public class MetricGaugeTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            Gauge = new GaugeFilter
+            Property = new PropertyFilter
             {
-                DataPoint = new NumberDataPointFilter
+                Gauge = new GaugeFilter
                 {
-                    Exemplar = new ExemplarFilter
+                    DataPoint = new NumberDataPointFilter
                     {
-                        TimeUnixNano = new UInt64Property
+                        Exemplar = new ExemplarFilter
                         {
-                            CompareAs = NumberCompareAsType.Equals,
-                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Gauge.DataPoints[0].Exemplars[0].TimeUnixNano
+                            TimeUnixNano = new UInt64Property
+                            {
+                                CompareAs = NumberCompareAsType.Equals,
+                                Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Gauge.DataPoints[0].Exemplars[0].TimeUnixNano
+                            }
                         }
                     }
                 }
@@ -251,16 +275,19 @@ public class MetricGaugeTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            Gauge = new GaugeFilter
+            Property = new PropertyFilter
             {
-                DataPoint = new NumberDataPointFilter
+                Gauge = new GaugeFilter
                 {
-                    Exemplar = new ExemplarFilter
+                    DataPoint = new NumberDataPointFilter
                     {
-                        ValueAsDouble = new DoubleProperty
+                        Exemplar = new ExemplarFilter
                         {
-                            CompareAs = NumberCompareAsType.Equals,
-                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Gauge.DataPoints[0].Exemplars[0].AsDouble
+                            ValueAsDouble = new DoubleProperty
+                            {
+                                CompareAs = NumberCompareAsType.Equals,
+                                Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Gauge.DataPoints[0].Exemplars[0].AsDouble
+                            }
                         }
                     }
                 }
@@ -281,16 +308,19 @@ public class MetricGaugeTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            Gauge = new GaugeFilter
+            Property = new PropertyFilter
             {
-                DataPoint = new NumberDataPointFilter
+                Gauge = new GaugeFilter
                 {
-                    Exemplar = new ExemplarFilter
+                    DataPoint = new NumberDataPointFilter
                     {
-                        ValueAsInt = new Int64Property
+                        Exemplar = new ExemplarFilter
                         {
-                            CompareAs = NumberCompareAsType.Equals,
-                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Gauge.DataPoints[0].Exemplars[0].AsInt
+                            ValueAsInt = new Int64Property
+                            {
+                                CompareAs = NumberCompareAsType.Equals,
+                                Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Gauge.DataPoints[0].Exemplars[0].AsInt
+                            }
                         }
                     }
                 }
@@ -311,16 +341,19 @@ public class MetricGaugeTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            Gauge = new GaugeFilter
+            Property = new PropertyFilter
             {
-                DataPoint = new NumberDataPointFilter
+                Gauge = new GaugeFilter
                 {
-                    Exemplar = new ExemplarFilter
+                    DataPoint = new NumberDataPointFilter
                     {
-                        SpanId = new ByteStringProperty
+                        Exemplar = new ExemplarFilter
                         {
-                            CompareAs = ByteStringCompareAsType.Equals,
-                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Gauge.DataPoints[0].Exemplars[0].SpanId
+                            SpanId = new ByteStringProperty
+                            {
+                                CompareAs = ByteStringCompareAsType.Equals,
+                                Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Gauge.DataPoints[0].Exemplars[0].SpanId
+                            }
                         }
                     }
                 }
@@ -341,16 +374,19 @@ public class MetricGaugeTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            Gauge = new GaugeFilter
+            Property = new PropertyFilter
             {
-                DataPoint = new NumberDataPointFilter
+                Gauge = new GaugeFilter
                 {
-                    Exemplar = new ExemplarFilter
+                    DataPoint = new NumberDataPointFilter
                     {
-                        TraceId = new ByteStringProperty
+                        Exemplar = new ExemplarFilter
                         {
-                            CompareAs = ByteStringCompareAsType.Equals,
-                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Gauge.DataPoints[0].Exemplars[0].TraceId
+                            TraceId = new ByteStringProperty
+                            {
+                                CompareAs = ByteStringCompareAsType.Equals,
+                                Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Gauge.DataPoints[0].Exemplars[0].TraceId
+                            }
                         }
                     }
                 }

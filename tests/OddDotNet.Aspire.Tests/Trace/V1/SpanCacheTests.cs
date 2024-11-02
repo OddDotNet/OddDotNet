@@ -21,9 +21,9 @@ public class SpanCacheTests : IAsyncLifetime
         var traceId = exportRequest.ResourceSpans[0].ScopeSpans[0].Spans[0].TraceId;
         var take = new Take { TakeFirst = new() };
         var duration = new Duration { Milliseconds = 1000 };
-        var traceIdFilter = new WhereFilter
+        var traceIdFilter = new Where
         {
-            Property = new WherePropertyFilter
+            Property = new PropertyFilter
             {
                 TraceId = new ByteStringProperty
                 {

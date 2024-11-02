@@ -21,17 +21,20 @@ public class MetricSummaryTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            Summary = new SummaryFilter
+            Property = new PropertyFilter
             {
-                DataPoint = new SummaryDataPointFilter
+                Summary = new SummaryFilter
                 {
-                    Attribute = new KeyValueProperty
+                    DataPoint = new SummaryDataPointFilter
                     {
-                        Key = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Summary.DataPoints[0].Attributes[0].Key,
-                        StringValue = new StringProperty
+                        Attribute = new KeyValueProperty
                         {
-                            CompareAs = StringCompareAsType.Equals,
-                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Summary.DataPoints[0].Attributes[0].Value.StringValue
+                            Key = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Summary.DataPoints[0].Attributes[0].Key,
+                            StringValue = new StringProperty
+                            {
+                                CompareAs = StringCompareAsType.Equals,
+                                Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Summary.DataPoints[0].Attributes[0].Value.StringValue
+                            }
                         }
                     }
                 }
@@ -53,14 +56,17 @@ public class MetricSummaryTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            Summary = new SummaryFilter
+            Property = new PropertyFilter
             {
-                DataPoint = new SummaryDataPointFilter
+                Summary = new SummaryFilter
                 {
-                    StartTimeUnixNano = new UInt64Property
+                    DataPoint = new SummaryDataPointFilter
                     {
-                        CompareAs = NumberCompareAsType.Equals,
-                        Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Summary.DataPoints[0].StartTimeUnixNano
+                        StartTimeUnixNano = new UInt64Property
+                        {
+                            CompareAs = NumberCompareAsType.Equals,
+                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Summary.DataPoints[0].StartTimeUnixNano
+                        }
                     }
                 }
             }
@@ -81,14 +87,17 @@ public class MetricSummaryTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            Summary = new SummaryFilter
+            Property = new PropertyFilter
             {
-                DataPoint = new SummaryDataPointFilter
+                Summary = new SummaryFilter
                 {
-                    TimeUnixNano = new UInt64Property
+                    DataPoint = new SummaryDataPointFilter
                     {
-                        CompareAs = NumberCompareAsType.Equals,
-                        Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Summary.DataPoints[0].TimeUnixNano
+                        TimeUnixNano = new UInt64Property
+                        {
+                            CompareAs = NumberCompareAsType.Equals,
+                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Summary.DataPoints[0].TimeUnixNano
+                        }
                     }
                 }
             }
@@ -109,14 +118,17 @@ public class MetricSummaryTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            Summary = new SummaryFilter
+            Property = new PropertyFilter
             {
-                DataPoint = new SummaryDataPointFilter
+                Summary = new SummaryFilter
                 {
-                    Count = new UInt64Property
+                    DataPoint = new SummaryDataPointFilter
                     {
-                        CompareAs = NumberCompareAsType.Equals,
-                        Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Summary.DataPoints[0].Count
+                        Count = new UInt64Property
+                        {
+                            CompareAs = NumberCompareAsType.Equals,
+                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Summary.DataPoints[0].Count
+                        }
                     }
                 }
             }
@@ -137,14 +149,17 @@ public class MetricSummaryTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            Summary = new SummaryFilter
+            Property = new PropertyFilter
             {
-                DataPoint = new SummaryDataPointFilter
+                Summary = new SummaryFilter
                 {
-                    Sum = new DoubleProperty
+                    DataPoint = new SummaryDataPointFilter
                     {
-                        CompareAs = NumberCompareAsType.Equals,
-                        Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Summary.DataPoints[0].Sum
+                        Sum = new DoubleProperty
+                        {
+                            CompareAs = NumberCompareAsType.Equals,
+                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Summary.DataPoints[0].Sum
+                        }
                     }
                 }
             }
@@ -165,16 +180,19 @@ public class MetricSummaryTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            Summary = new SummaryFilter
+            Property = new PropertyFilter
             {
-                DataPoint = new SummaryDataPointFilter
+                Summary = new SummaryFilter
                 {
-                    QuantileValue = new ValueAtQuantileFilter
+                    DataPoint = new SummaryDataPointFilter
                     {
-                        Quantile = new DoubleProperty
+                        QuantileValue = new ValueAtQuantileFilter
                         {
-                            CompareAs = NumberCompareAsType.Equals,
-                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Summary.DataPoints[0].QuantileValues[0].Quantile
+                            Quantile = new DoubleProperty
+                            {
+                                CompareAs = NumberCompareAsType.Equals,
+                                Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Summary.DataPoints[0].QuantileValues[0].Quantile
+                            }
                         }
                     }
                 }
@@ -196,16 +214,19 @@ public class MetricSummaryTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            Summary = new SummaryFilter
+            Property = new PropertyFilter
             {
-                DataPoint = new SummaryDataPointFilter
+                Summary = new SummaryFilter
                 {
-                    QuantileValue = new ValueAtQuantileFilter
+                    DataPoint = new SummaryDataPointFilter
                     {
-                        Value = new DoubleProperty
+                        QuantileValue = new ValueAtQuantileFilter
                         {
-                            CompareAs = NumberCompareAsType.Equals,
-                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Summary.DataPoints[0].QuantileValues[0].Value
+                            Value = new DoubleProperty
+                            {
+                                CompareAs = NumberCompareAsType.Equals,
+                                Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Summary.DataPoints[0].QuantileValues[0].Value
+                            }
                         }
                     }
                 }
@@ -227,14 +248,17 @@ public class MetricSummaryTests : IClassFixture<AspireFixture>
 
         var filter = new Where
         {
-            Summary = new SummaryFilter
+            Property = new PropertyFilter
             {
-                DataPoint = new SummaryDataPointFilter
+                Summary = new SummaryFilter
                 {
-                    Flags = new UInt32Property
+                    DataPoint = new SummaryDataPointFilter
                     {
-                        CompareAs = NumberCompareAsType.Equals,
-                        Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Summary.DataPoints[0].Flags
+                        Flags = new UInt32Property
+                        {
+                            CompareAs = NumberCompareAsType.Equals,
+                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Summary.DataPoints[0].Flags
+                        }
                     }
                 }
             }
