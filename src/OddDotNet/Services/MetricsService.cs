@@ -27,7 +27,7 @@ public class MetricsService : OpenTelemetry.Proto.Collector.Metrics.V1.MetricsSe
                         InstrumentationScope = scopeMetric.Scope,
                         Resource = resourceMetric.Resource,
                         ResourceSchemaUrl = resourceMetric.SchemaUrl,
-                        InstrumentationScopeSchemaUrl = resourceMetric.SchemaUrl
+                        InstrumentationScopeSchemaUrl = scopeMetric.SchemaUrl
                     };
                     _signals.Add(flatMetric);
                 }

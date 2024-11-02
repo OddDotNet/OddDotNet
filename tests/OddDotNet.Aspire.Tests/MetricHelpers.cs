@@ -32,6 +32,9 @@ public static class MetricHelpers
             case MetricType.ExponentialHistogram:
                 item.ExponentialHistogram = CreateExponentialHistogram();
                 break;
+            case MetricType.Summary:
+                item.Summary = CreateSummary();
+                break;
         }
 
         return item;
@@ -79,6 +82,45 @@ public static class MetricHelpers
         {
             DataPoints = { CreateExponentialHistogramDataPoint() },
             AggregationTemporality = faker.PickRandom<AggregationTemporality>(),
+        };
+
+        return item;
+    }
+
+    public static Summary CreateSummary()
+    {
+        var item = new Summary
+        {
+            DataPoints = { CreateSummaryDataPoint() }
+        };
+
+        return item;
+    }
+
+    public static SummaryDataPoint CreateSummaryDataPoint()
+    {
+        var faker = new Faker();
+        var item = new SummaryDataPoint
+        {
+            Attributes = { CommonHelpers.CreateKeyValue(faker.Random.String2(8), faker.Random.String2(8)) },
+            StartTimeUnixNano = faker.Random.ULong(),
+            TimeUnixNano = faker.Random.ULong(),
+            Count = faker.Random.ULong(),
+            Sum = faker.Random.Double(),
+            QuantileValues = { CreateValueAtQuantile() },
+            Flags = faker.Random.UInt()
+        };
+
+        return item;
+    }
+
+    public static SummaryDataPoint.Types.ValueAtQuantile CreateValueAtQuantile()
+    {
+        var faker = new Faker();
+        var item = new SummaryDataPoint.Types.ValueAtQuantile
+        {
+            Quantile = faker.Random.Double(),
+            Value = faker.Random.Double()
         };
 
         return item;

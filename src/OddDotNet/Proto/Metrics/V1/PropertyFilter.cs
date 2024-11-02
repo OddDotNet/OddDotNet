@@ -11,6 +11,8 @@ public sealed partial class PropertyFilter : IWhere<FlatMetric>
         ValueOneofCase.Description => StringFilter.Matches(signal.Metric.Description, Description),
         ValueOneofCase.Unit => StringFilter.Matches(signal.Metric.Unit, Unit),
         ValueOneofCase.Metadata => KeyValueFilter.Matches(signal.Metric.Metadata, Metadata),
+        ValueOneofCase.InstrumentationScopeSchemaUrl => StringFilter.Matches(signal.InstrumentationScopeSchemaUrl, InstrumentationScopeSchemaUrl),
+        ValueOneofCase.ResourceSchemaUrl => StringFilter.Matches(signal.ResourceSchemaUrl, ResourceSchemaUrl),
         _ => false
     };
 }
