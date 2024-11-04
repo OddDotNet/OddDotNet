@@ -35,8 +35,10 @@ public static class TraceHelpers
         var faker = new Faker();
         var item = new OtelSpanEvent()
         {
+            TimeUnixNano = faker.Random.ULong(),
             Name = faker.Random.String2(8),
-            Attributes = { CommonHelpers.CreateKeyValue(faker.Random.String2(8), faker.Random.String2(8)) }
+            Attributes = { CommonHelpers.CreateKeyValue(faker.Random.String2(8), faker.Random.String2(8)) },
+            DroppedAttributesCount = faker.Random.UInt()
         };
 
         return item;
@@ -51,7 +53,8 @@ public static class TraceHelpers
             SpanId = ByteString.CopyFrom(faker.Random.Bytes(8)),
             TraceState = faker.Random.String2(8),
             Attributes = { CommonHelpers.CreateKeyValue(faker.Random.String2(8), faker.Random.String2(8)) },
-            Flags = faker.Random.UInt()
+            Flags = faker.Random.UInt(),
+            DroppedAttributesCount = faker.Random.UInt()
         };
 
         return item;
