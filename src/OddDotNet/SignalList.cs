@@ -39,7 +39,7 @@ public class SignalList<TSignal> : ISignalList where TSignal : class, ISignal
     public async IAsyncEnumerable<TSignal> QueryAsync(Take? take, Duration? duration,
         IReadOnlyCollection<IWhere<TSignal>> filters, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        using var timeout = GetQueryTimeout(duration?.Milliseconds ?? 0);
+        using var timeout = GetQueryTimeout(duration?.Milliseconds ?? -1);
         using var cts = CancellationTokenSource.CreateLinkedTokenSource(timeout.Token, cancellationToken);
 
         Channel<TSignal> channel = _channels.AddChannel();
