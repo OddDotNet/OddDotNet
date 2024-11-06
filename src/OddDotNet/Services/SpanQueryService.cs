@@ -6,17 +6,17 @@ namespace OddDotNet.Services;
 
 public class SpanQueryService : OddDotNet.Proto.Trace.V1.SpanQueryService.SpanQueryServiceBase
 {
-    private readonly ISignalList<FlatSpan> _spans;
+    private readonly SignalList<FlatSpan> _signals;
 
-    public SpanQueryService(ISignalList<FlatSpan> spans)
+    public SpanQueryService(SignalList<FlatSpan> signals)
     {
-        _spans = spans;
+        _signals = signals;
     }
 
     public override async Task<SpanQueryResponse> Query(SpanQueryRequest request, ServerCallContext context)
     {
         var response = new SpanQueryResponse();
-        await foreach (FlatSpan span in _spans.QueryAsync(request).WithCancellation(context.CancellationToken)
+        await foreach (FlatSpan span in _signals.QueryAsync(request.Take, request.Duration, request.Filters).WithCancellation(context.CancellationToken)
                            .ConfigureAwait(false))
         {
             response.Spans.Add(span);
@@ -27,7 +27,7 @@ public class SpanQueryService : OddDotNet.Proto.Trace.V1.SpanQueryService.SpanQu
 
     public override Task<SpanResetResponse> Reset(SpanResetRequest request, ServerCallContext context)
     {
-        _spans.Reset(request);
+        _signals.Reset();
         return Task.FromResult<SpanResetResponse>(new());
     }
 }

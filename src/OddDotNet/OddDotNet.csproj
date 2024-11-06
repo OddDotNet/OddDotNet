@@ -10,7 +10,7 @@
     <!-- Internal proto definitions -->
     <ItemGroup>
         <Protobuf Include="submodules/OddDotProto/submodules/opentelemetry/**/*.proto" GrpcServices="Both" ProtoRoot="submodules/OddDotProto/submodules"/>
-        <Protobuf Include="submodules/OddDotProto/odddotproto/**/*.proto" GrpcServices="Both" ProtoRoot="submodules/OddDotProto/odddotproto/proto/trace/v1" AdditionalImportDirs="submodules/OddDotProto/submodules"/>
+        <Protobuf Include="submodules/OddDotProto/odddotproto/**/*.proto" GrpcServices="Both" ProtoRoot="submodules/OddDotProto" AdditionalImportDirs="submodules/OddDotProto/submodules"/>
     </ItemGroup>
 
     <ItemGroup>

@@ -1,6 +1,8 @@
 using OddDotNet;
+using OddDotNet.Proto.Metrics.V1;
 using OddDotNet.Proto.Trace.V1;
 using OddDotNet.Services;
+using MetricQueryService = OddDotNet.Services.MetricQueryService;
 using SpanQueryService = OddDotNet.Services.SpanQueryService;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,14 +14,16 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHealthChecks();
 
-builder.Services.AddScoped<ISignalList<FlatSpan>, SpanSignalList>().AddScoped<ISignalList, SpanSignalList>();
-builder.Services.AddScoped<IChannelManager<FlatSpan>, SpanChannelManager>();
+builder.Services.AddScoped<SignalList<FlatMetric>>().AddScoped<ISignalList, SignalList<FlatMetric>>();
+builder.Services.AddScoped<SignalList<FlatSpan>>().AddScoped<ISignalList, SignalList<FlatSpan>>();
+builder.Services.AddScoped<ChannelManager<FlatSpan>>();
+builder.Services.AddScoped<ChannelManager<FlatMetric>>();
 builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddHostedService<CacheCleanupBackgroundService>();
 
 builder.Services.Configure<OddSettings>(options =>
 {
-    // We allow single and double underscores ('_', '__'). Single underscores
+    // Allow single and double underscores ('_', '__'). Single underscores
     // don't automatically map, so check for them explicitly.
     // eg. ODD__CACHE__EXPIRATION and ODD_CACHE_EXPIRATION are both valid
     var cacheExpirationEnvVarValue = Environment.GetEnvironmentVariable(OddSettings.CacheExpirationEnvVarName);
@@ -43,6 +47,7 @@ app.MapWhen(context => context.Request.ContentType == "application/grpc", iab =>
             endpoints.MapGrpcService<MetricsService>();
             endpoints.MapGrpcService<TraceService>();
             endpoints.MapGrpcService<SpanQueryService>();
+            endpoints.MapGrpcService<MetricQueryService>();
         });
 });
 
