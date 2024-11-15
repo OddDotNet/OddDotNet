@@ -12,7 +12,7 @@ public static class Int64Filter
         NumberCompareAsType.GreaterThan => value > property.Compare,
         NumberCompareAsType.LessThanEquals => value <= property.Compare,
         NumberCompareAsType.LessThan => value < property.Compare,
-        NumberCompareAsType.None => false,
+        NumberCompareAsType.NoneUnspecified => false,
         _ => false
     };
 }

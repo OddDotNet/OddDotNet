@@ -9,7 +9,7 @@ public static class AggregationTemporalityFilter
     public static bool Matches(AggregationTemporality value, AggregationTemporalityProperty property) =>
         property.CompareAs switch
         {
-            EnumCompareAsType.None => false,
+            EnumCompareAsType.NoneUnspecified => false,
             EnumCompareAsType.Equals => value.Equals(property.Compare),
             EnumCompareAsType.NotEquals => !value.Equals(property.Compare),
             _ => false

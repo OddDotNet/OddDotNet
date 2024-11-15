@@ -1,7 +1,9 @@
 using OddDotNet;
+using OddDotNet.Proto.Logs.V1;
 using OddDotNet.Proto.Metrics.V1;
 using OddDotNet.Proto.Trace.V1;
 using OddDotNet.Services;
+using LogQueryService = OddDotNet.Services.LogQueryService;
 using MetricQueryService = OddDotNet.Services.MetricQueryService;
 using SpanQueryService = OddDotNet.Services.SpanQueryService;
 
@@ -16,8 +18,10 @@ builder.Services.AddHealthChecks();
 
 builder.Services.AddScoped<SignalList<FlatMetric>>().AddScoped<ISignalList, SignalList<FlatMetric>>();
 builder.Services.AddScoped<SignalList<FlatSpan>>().AddScoped<ISignalList, SignalList<FlatSpan>>();
+builder.Services.AddScoped<SignalList<FlatLog>>().AddScoped<ISignalList, SignalList<FlatLog>>();
 builder.Services.AddScoped<ChannelManager<FlatSpan>>();
 builder.Services.AddScoped<ChannelManager<FlatMetric>>();
+builder.Services.AddScoped<ChannelManager<FlatLog>>();
 builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddHostedService<CacheCleanupBackgroundService>();
 
@@ -48,6 +52,7 @@ app.MapWhen(context => context.Request.ContentType == "application/grpc", iab =>
             endpoints.MapGrpcService<TraceService>();
             endpoints.MapGrpcService<SpanQueryService>();
             endpoints.MapGrpcService<MetricQueryService>();
+            endpoints.MapGrpcService<LogQueryService>();
         });
 });
 
