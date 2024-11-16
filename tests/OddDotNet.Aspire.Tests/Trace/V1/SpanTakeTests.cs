@@ -103,14 +103,19 @@ public class SpanTakeTests : IAsyncLifetime
                 exportThree);
             
             var responseOne = await queryOneTask;
-            Assert.Single(responseOne.Spans);
+            Assert.Contains(responseOne.Spans, span => span.Span.SpanId == requestOne.ResourceSpans[0].ScopeSpans[0].Spans[0].SpanId);
+            Assert.DoesNotContain(responseOne.Spans, span => span.Span.SpanId == requestTwo.ResourceSpans[0].ScopeSpans[0].Spans[0].SpanId);
+            Assert.DoesNotContain(responseOne.Spans, span => span.Span.SpanId == requestThree.ResourceSpans[0].ScopeSpans[0].Spans[0].SpanId);
             
             var responseTwo = await queryTwoTask;
-            Assert.Equal(2, responseTwo.Spans.Count);
+            Assert.Contains(responseTwo.Spans, span => span.Span.SpanId == requestOne.ResourceSpans[0].ScopeSpans[0].Spans[0].SpanId);
+            Assert.Contains(responseTwo.Spans, span => span.Span.SpanId == requestTwo.ResourceSpans[0].ScopeSpans[0].Spans[0].SpanId);
+            Assert.DoesNotContain(responseTwo.Spans, span => span.Span.SpanId == requestThree.ResourceSpans[0].ScopeSpans[0].Spans[0].SpanId);
             
             var responseThree = await queryThreeTask;
-            Assert.Equal(3, responseThree.Spans.Count);
-            Assert.Equal(requestThree.ResourceSpans[0].ScopeSpans[0].Spans[0].SpanId, responseThree.Spans[2].Span.SpanId);
+            Assert.Contains(responseThree.Spans, span => span.Span.SpanId == requestOne.ResourceSpans[0].ScopeSpans[0].Spans[0].SpanId);
+            Assert.Contains(responseThree.Spans, span => span.Span.SpanId == requestTwo.ResourceSpans[0].ScopeSpans[0].Spans[0].SpanId);
+            Assert.Contains(responseThree.Spans, span => span.Span.SpanId == requestThree.ResourceSpans[0].ScopeSpans[0].Spans[0].SpanId);
         }
     }
     // Need a separate "AspireFixture" here as we need to modify the env vars of the project before starting.
