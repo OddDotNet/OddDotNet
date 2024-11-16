@@ -14,7 +14,8 @@ public class CommonHelpers
         var faker = new Faker();
         var item = new OtelResource()
         {
-            Attributes = { CreateKeyValue(faker.Random.String2(8), faker.Random.String2(8)) }
+            Attributes = { CreateKeyValue(faker.Random.String2(8), faker.Random.String2(8)) },
+            DroppedAttributesCount = faker.Random.UInt()
         };
 
         return item;
@@ -26,7 +27,7 @@ public class CommonHelpers
         var item = new OtelInstrumentationScope()
         {
             Name = faker.Random.String2(8),
-            Version = "1",
+            Version = faker.Random.String2(8),
             Attributes = { CreateKeyValue(faker.Random.String2(8), faker.Random.String2(8)) }
         };
         

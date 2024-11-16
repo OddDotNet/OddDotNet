@@ -8,7 +8,7 @@ public static class BoolFilter
     {
         BoolCompareAsType.Equals => value.Equals(property.Compare),
         BoolCompareAsType.NotEquals => !value.Equals(property.Compare),
-        BoolCompareAsType.None => false,
+        BoolCompareAsType.NoneUnspecified => false,
         _ => false
     };
 }

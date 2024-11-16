@@ -14,7 +14,7 @@ public static class StringFilter
             StringCompareAsType.NotContains => !value.Contains(property.Compare),
             StringCompareAsType.IsEmpty => string.IsNullOrEmpty(value),
             StringCompareAsType.IsNotEmpty => !string.IsNullOrEmpty(value),
-            StringCompareAsType.None => false,
+            StringCompareAsType.NoneUnspecified => false,
             _ => false
         };
     }

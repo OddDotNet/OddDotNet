@@ -11,7 +11,7 @@ public static class ByteStringFilter
         ByteStringCompareAsType.NotEquals => !value.Equals(property.Compare),
         ByteStringCompareAsType.Empty => value.IsEmpty,
         ByteStringCompareAsType.NotEmpty => !value.IsEmpty,
-        ByteStringCompareAsType.None => false,
+        ByteStringCompareAsType.NoneUnspecified => false,
         _ => false
     };
 }

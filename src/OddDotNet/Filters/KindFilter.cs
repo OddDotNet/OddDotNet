@@ -10,7 +10,7 @@ public static class KindFilter
     {
         EnumCompareAsType.Equals => value.Equals(property.Compare),
         EnumCompareAsType.NotEquals => !value.Equals(property.Compare),
-        EnumCompareAsType.None => false,
+        EnumCompareAsType.NoneUnspecified => false,
         _ => false
     };
 }
