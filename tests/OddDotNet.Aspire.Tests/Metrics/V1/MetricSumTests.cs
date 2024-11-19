@@ -1,6 +1,5 @@
 using OddDotNet.Proto.Common.V1;
 using OddDotNet.Proto.Metrics.V1;
-using OpenTelemetry.Proto.Metrics.V1;
 
 namespace OddDotNet.Aspire.Tests.Metrics.V1;
 

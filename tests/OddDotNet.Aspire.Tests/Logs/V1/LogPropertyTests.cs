@@ -1,5 +1,4 @@
 using Google.Protobuf;
-using OddDotNet.Filters;
 using OddDotNet.Proto.Common.V1;
 using OddDotNet.Proto.Logs.V1;
 using OddDotNet.Proto.Resource.V1;

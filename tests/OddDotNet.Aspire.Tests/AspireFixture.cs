@@ -1,7 +1,5 @@
 using Grpc.Net.Client;
 using Microsoft.Extensions.DependencyInjection;
-using OddDotNet.Proto.Logs.V1;
-using OddDotNet.Services;
 using LogQueryService = OddDotNet.Proto.Logs.V1.LogQueryService;
 using LogsService = OpenTelemetry.Proto.Collector.Logs.V1.LogsService;
 using MetricQueryService = OddDotNet.Proto.Metrics.V1.MetricQueryService;

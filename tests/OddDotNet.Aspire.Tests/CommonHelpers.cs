@@ -1,4 +1,3 @@
-using System.Collections;
 using Bogus;
 using Google.Protobuf;
 using OpenTelemetry.Proto.Common.V1;
