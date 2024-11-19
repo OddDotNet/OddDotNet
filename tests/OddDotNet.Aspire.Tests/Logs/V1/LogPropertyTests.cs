@@ -11,6 +11,11 @@ public class LogPropertyTests : IClassFixture<AspireFixture>
 {
     private readonly AspireFixture _fixture;
 
+    private readonly Duration _duration = new Duration
+    {
+        Milliseconds = 1000
+    };
+
     public LogPropertyTests(AspireFixture fixture)
     {
         _fixture = fixture;
@@ -34,7 +39,7 @@ public class LogPropertyTests : IClassFixture<AspireFixture>
             }
         };
         
-        var query = new LogQueryRequest { Filters = { filter } };
+        var query = new LogQueryRequest { Filters = { filter }, Duration = _duration };
         var response = await _fixture.LogQueryServiceClient.QueryAsync(query);
         Assert.Contains(response.Logs, log => log.Log.TraceId == request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].TraceId);
     }
@@ -57,7 +62,7 @@ public class LogPropertyTests : IClassFixture<AspireFixture>
             }
         };
         
-        var query = new LogQueryRequest { Filters = { filter } };
+        var query = new LogQueryRequest { Filters = { filter }, Duration = _duration };
         var response = await _fixture.LogQueryServiceClient.QueryAsync(query);
         Assert.Contains(response.Logs, log => log.Log.TraceId == request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].TraceId);
     }
@@ -93,7 +98,7 @@ public class LogPropertyTests : IClassFixture<AspireFixture>
             }
         };
         
-        var query = new LogQueryRequest { Filters = { filter, traceIdFilter } };
+        var query = new LogQueryRequest { Filters = { filter, traceIdFilter }, Duration = _duration };
         var response = await _fixture.LogQueryServiceClient.QueryAsync(query);
         Assert.Contains(response.Logs, log => log.Log.TraceId == request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].TraceId);
     }
@@ -129,7 +134,7 @@ public class LogPropertyTests : IClassFixture<AspireFixture>
             }
         };
         
-        var query = new LogQueryRequest { Filters = { filter, traceIdFilter } };
+        var query = new LogQueryRequest { Filters = { filter, traceIdFilter }, Duration = _duration };
         var response = await _fixture.LogQueryServiceClient.QueryAsync(query);
         Assert.Contains(response.Logs, log => log.Log.TraceId == request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].TraceId);
     }
@@ -155,7 +160,7 @@ public class LogPropertyTests : IClassFixture<AspireFixture>
             }
         };
         
-        var query = new LogQueryRequest { Filters = { filter } };
+        var query = new LogQueryRequest { Filters = { filter }, Duration = _duration };
         var response = await _fixture.LogQueryServiceClient.QueryAsync(query);
         Assert.Contains(response.Logs, log => log.Log.TraceId == request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].TraceId);
     }
@@ -185,7 +190,7 @@ public class LogPropertyTests : IClassFixture<AspireFixture>
             }
         };
         
-        var query = new LogQueryRequest { Filters = { filter } };
+        var query = new LogQueryRequest { Filters = { filter }, Duration = _duration };
         var response = await _fixture.LogQueryServiceClient.QueryAsync(query);
         Assert.Contains(response.Logs, log => log.Log.TraceId == request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].TraceId);
     }
@@ -215,7 +220,7 @@ public class LogPropertyTests : IClassFixture<AspireFixture>
             }
         };
         
-        var query = new LogQueryRequest { Filters = { filter } };
+        var query = new LogQueryRequest { Filters = { filter }, Duration = _duration };
         var response = await _fixture.LogQueryServiceClient.QueryAsync(query);
         Assert.Contains(response.Logs, log => log.Log.TraceId == request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].TraceId);
     }
@@ -245,7 +250,7 @@ public class LogPropertyTests : IClassFixture<AspireFixture>
             }
         };
         
-        var query = new LogQueryRequest { Filters = { filter } };
+        var query = new LogQueryRequest { Filters = { filter }, Duration = _duration };
         var response = await _fixture.LogQueryServiceClient.QueryAsync(query);
         Assert.Contains(response.Logs, log => log.Log.TraceId == request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].TraceId);
     }
@@ -275,7 +280,189 @@ public class LogPropertyTests : IClassFixture<AspireFixture>
             }
         };
         
-        var query = new LogQueryRequest { Filters = { filter } };
+        var query = new LogQueryRequest { Filters = { filter }, Duration = _duration };
+        var response = await _fixture.LogQueryServiceClient.QueryAsync(query);
+        Assert.Contains(response.Logs, log => log.Log.TraceId == request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].TraceId);
+    }
+    
+    [Fact]
+    public async Task ReturnLogsWithMatchingArrayBodyProperty()
+    {
+        var request = LogHelpers.CreateExportLogsServiceRequest();
+        request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Body = new AnyValue
+        {
+            ArrayValue = new ArrayValue
+            {
+                Values =
+                {
+                    new AnyValue
+                    {
+                        StringValue = "test"
+                    }
+                }
+            }
+        };
+        await _fixture.LogsServiceClient.ExportAsync(request);
+
+        var filter = new Where
+        {
+            Property = new PropertyFilter
+            {
+                Body = new AnyValueProperty
+                {
+                    ArrayValue = new AnyValueProperty
+                    {
+                        StringValue = new StringProperty
+                        {
+                            CompareAs = StringCompareAsType.Equals,
+                            Compare = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Body.ArrayValue.Values[0].StringValue
+                        }
+                    }
+                }
+            }
+        };
+        
+        var query = new LogQueryRequest { Filters = { filter }, Duration = _duration };
+        var response = await _fixture.LogQueryServiceClient.QueryAsync(query);
+        Assert.Contains(response.Logs, log => log.Log.TraceId == request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].TraceId);
+    }
+    
+    [Fact]
+    public async Task ReturnLogsWithMatchingKvListBodyProperty()
+    {
+        var request = LogHelpers.CreateExportLogsServiceRequest();
+        request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Body = new AnyValue
+        {
+            KvlistValue = new KeyValueList
+            {
+                Values =
+                {
+                    new KeyValue
+                    {
+                        Key = "key",
+                        Value = new AnyValue
+                        {
+                            StringValue = "test"
+                        }
+                    }
+                }
+            }
+        };
+        await _fixture.LogsServiceClient.ExportAsync(request);
+
+        var filter = new Where
+        {
+            Property = new PropertyFilter
+            {
+                Body = new AnyValueProperty
+                {
+                    KeyValue = new KeyValueProperty
+                    {
+                        Key = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Body.KvlistValue.Values[0].Key,
+                        Value = new AnyValueProperty
+                        {
+                            StringValue = new StringProperty
+                            {
+                                CompareAs = StringCompareAsType.Equals,
+                                Compare = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Body.KvlistValue.Values[0].Value.StringValue
+                            }
+                        }
+                    }
+                }
+            }
+        };
+        
+        var query = new LogQueryRequest { Filters = { filter }, Duration = _duration };
+        var response = await _fixture.LogQueryServiceClient.QueryAsync(query);
+        Assert.Contains(response.Logs, log => log.Log.TraceId == request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].TraceId);
+    }
+    
+    [Fact]
+    public async Task ReturnLogsWithComplexBodyProperty()
+    {
+        var request = LogHelpers.CreateExportLogsServiceRequest();
+        
+        // A Body, with a kvlist, which contains another kvlist, which contains
+        // another kv that is an ArrayValue, which contains two entries, a string
+        // and an int.
+        request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Body = new AnyValue
+        {
+            KvlistValue = new KeyValueList
+            {
+                Values =
+                {
+                    new KeyValue
+                    {
+                        Key = "key",
+                        Value = new AnyValue
+                        {
+                            KvlistValue = new KeyValueList
+                            {
+                                Values =
+                                {
+                                    new KeyValue
+                                    {
+                                        Key = "key2",
+                                        Value = new AnyValue
+                                        {
+                                            ArrayValue = new ArrayValue
+                                            {
+                                                Values =
+                                                {
+                                                    new AnyValue
+                                                    {
+                                                        StringValue = "test"
+                                                    },
+                                                    new AnyValue
+                                                    {
+                                                        IntValue = 123
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        };
+        await _fixture.LogsServiceClient.ExportAsync(request);
+
+        var filter = new Where
+        {
+            Property = new PropertyFilter
+            {
+                Body = new AnyValueProperty
+                {
+                    KeyValue = new KeyValueProperty
+                    {
+                        Key = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Body.KvlistValue.Values[0].Key,
+                        Value = new AnyValueProperty
+                        {
+                            KeyValue = new KeyValueProperty
+                            {
+                                Key = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Body.KvlistValue.Values[0].Value.KvlistValue.Values[0].Key,
+                                Value = new AnyValueProperty
+                                {
+                                    ArrayValue = new AnyValueProperty
+                                    {
+                                        Int64Value = new Int64Property
+                                        {
+                                            CompareAs = NumberCompareAsType.Equals,
+                                            Compare = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Body.KvlistValue.Values[0].Value.KvlistValue.Values[0].Value.ArrayValue.Values[1].IntValue
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        };
+        
+        var query = new LogQueryRequest { Filters = { filter }, Duration = _duration };
         var response = await _fixture.LogQueryServiceClient.QueryAsync(query);
         Assert.Contains(response.Logs, log => log.Log.TraceId == request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].TraceId);
     }
@@ -293,16 +480,19 @@ public class LogPropertyTests : IClassFixture<AspireFixture>
                 Attribute = new KeyValueProperty
                 {
                     Key = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes[0].Key,
-                    StringValue = new StringProperty
+                    Value = new AnyValueProperty
                     {
-                        CompareAs = StringCompareAsType.Equals,
-                        Compare = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes[0].Value.StringValue
+                        StringValue = new StringProperty
+                        {
+                            CompareAs = StringCompareAsType.Equals,
+                            Compare = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes[0].Value.StringValue
+                        }
                     }
                 }
             }
         };
         
-        var query = new LogQueryRequest { Filters = { filter } };
+        var query = new LogQueryRequest { Filters = { filter }, Duration = _duration };
         var response = await _fixture.LogQueryServiceClient.QueryAsync(query);
         Assert.Contains(response.Logs, log => log.Log.TraceId == request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].TraceId);
     }
@@ -322,16 +512,19 @@ public class LogPropertyTests : IClassFixture<AspireFixture>
                 Attribute = new KeyValueProperty
                 {
                     Key = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes[0].Key,
-                    ByteStringValue = new ByteStringProperty
+                    Value = new AnyValueProperty
                     {
-                        CompareAs = ByteStringCompareAsType.Equals,
-                        Compare = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes[0].Value.BytesValue
+                        ByteStringValue = new ByteStringProperty
+                        {
+                            CompareAs = ByteStringCompareAsType.Equals,
+                            Compare = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes[0].Value.BytesValue
+                        }
                     }
                 }
             }
         };
         
-        var query = new LogQueryRequest { Filters = { filter } };
+        var query = new LogQueryRequest { Filters = { filter }, Duration = _duration };
         var response = await _fixture.LogQueryServiceClient.QueryAsync(query);
         Assert.Contains(response.Logs, log => log.Log.TraceId == request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].TraceId);
     }
@@ -351,16 +544,19 @@ public class LogPropertyTests : IClassFixture<AspireFixture>
                 Attribute = new KeyValueProperty
                 {
                     Key = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes[0].Key,
-                    Int64Value = new Int64Property
+                    Value = new AnyValueProperty
                     {
-                        CompareAs = NumberCompareAsType.Equals,
-                        Compare = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes[0].Value.IntValue
+                        Int64Value = new Int64Property
+                        {
+                            CompareAs = NumberCompareAsType.Equals,
+                            Compare = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes[0].Value.IntValue
+                        }
                     }
                 }
             }
         };
         
-        var query = new LogQueryRequest { Filters = { filter } };
+        var query = new LogQueryRequest { Filters = { filter }, Duration = _duration };
         var response = await _fixture.LogQueryServiceClient.QueryAsync(query);
         Assert.Contains(response.Logs, log => log.Log.TraceId == request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].TraceId);
     }
@@ -380,16 +576,19 @@ public class LogPropertyTests : IClassFixture<AspireFixture>
                 Attribute = new KeyValueProperty
                 {
                     Key = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes[0].Key,
-                    BoolValue = new BoolProperty
+                    Value = new AnyValueProperty
                     {
-                        CompareAs = BoolCompareAsType.Equals,
-                        Compare = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes[0].Value.BoolValue
+                        BoolValue = new BoolProperty
+                        {
+                            CompareAs = BoolCompareAsType.Equals,
+                            Compare = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes[0].Value.BoolValue
+                        }
                     }
                 }
             }
         };
         
-        var query = new LogQueryRequest { Filters = { filter } };
+        var query = new LogQueryRequest { Filters = { filter }, Duration = _duration };
         var response = await _fixture.LogQueryServiceClient.QueryAsync(query);
         Assert.Contains(response.Logs, log => log.Log.TraceId == request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].TraceId);
     }
@@ -409,16 +608,95 @@ public class LogPropertyTests : IClassFixture<AspireFixture>
                 Attribute = new KeyValueProperty
                 {
                     Key = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes[0].Key,
-                    DoubleValue = new DoubleProperty
+                    Value = new AnyValueProperty
                     {
-                        CompareAs = NumberCompareAsType.Equals,
-                        Compare = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes[0].Value.DoubleValue
+                        DoubleValue = new DoubleProperty
+                        {
+                            CompareAs = NumberCompareAsType.Equals,
+                            Compare = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes[0].Value.DoubleValue
+                        }
                     }
                 }
             }
         };
         
-        var query = new LogQueryRequest { Filters = { filter } };
+        var query = new LogQueryRequest { Filters = { filter }, Duration = _duration };
+        var response = await _fixture.LogQueryServiceClient.QueryAsync(query);
+        Assert.Contains(response.Logs, log => log.Log.TraceId == request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].TraceId);
+    }
+    
+    [Fact]
+    public async Task ReturnLogsWithMatchingArrayAttributeProperty()
+    {
+        var request = LogHelpers.CreateExportLogsServiceRequest();
+        var attributes = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes;
+        attributes.Clear();
+        attributes.Add(CommonHelpers.CreateKeyValue("key", new ArrayValue { Values = { new AnyValue { StringValue = "test" } }}));
+        await _fixture.LogsServiceClient.ExportAsync(request);
+
+        var filter = new Where
+        {
+            Property = new PropertyFilter
+            {
+                Attribute = new KeyValueProperty
+                {
+                    Key = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes[0].Key,
+                    Value = new AnyValueProperty
+                    {
+                        ArrayValue = new AnyValueProperty
+                        {
+                            StringValue = new StringProperty
+                            {
+                                CompareAs = StringCompareAsType.Equals,
+                                Compare = attributes[0].Value.ArrayValue.Values[0].StringValue
+                            }
+                        }
+                    }
+                }
+            }
+        };
+        
+        var query = new LogQueryRequest { Filters = { filter }, Duration = _duration };
+        var response = await _fixture.LogQueryServiceClient.QueryAsync(query);
+        Assert.Contains(response.Logs, log => log.Log.TraceId == request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].TraceId);
+    }
+    
+    [Fact]
+    public async Task ReturnLogsWithMatchingKvlistAttributeProperty()
+    {
+        var request = LogHelpers.CreateExportLogsServiceRequest();
+        var attributes = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes;
+        attributes.Clear();
+        attributes.Add(CommonHelpers.CreateKeyValue("key", new KeyValueList { Values = { CommonHelpers.CreateKeyValue("key2", "test") }}));
+        await _fixture.LogsServiceClient.ExportAsync(request);
+
+        var filter = new Where
+        {
+            Property = new PropertyFilter
+            {
+                Attribute = new KeyValueProperty
+                {
+                    Key = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes[0].Key,
+                    Value = new AnyValueProperty
+                    {
+                        KeyValue = new KeyValueProperty
+                        {
+                            Key = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes[0].Value.KvlistValue.Values[0].Key,
+                            Value = new AnyValueProperty
+                            {
+                                StringValue = new StringProperty
+                                {
+                                    CompareAs = StringCompareAsType.Equals,
+                                    Compare = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes[0].Value.KvlistValue.Values[0].Value.StringValue
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        };
+        
+        var query = new LogQueryRequest { Filters = { filter }, Duration = _duration };
         var response = await _fixture.LogQueryServiceClient.QueryAsync(query);
         Assert.Contains(response.Logs, log => log.Log.TraceId == request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].TraceId);
     }
@@ -441,7 +719,7 @@ public class LogPropertyTests : IClassFixture<AspireFixture>
             }
         };
         
-        var query = new LogQueryRequest { Filters = { filter } };
+        var query = new LogQueryRequest { Filters = { filter }, Duration = _duration };
         var response = await _fixture.LogQueryServiceClient.QueryAsync(query);
         Assert.Contains(response.Logs, log => log.Log.TraceId == request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].TraceId);
     }
@@ -464,7 +742,7 @@ public class LogPropertyTests : IClassFixture<AspireFixture>
             }
         };
         
-        var query = new LogQueryRequest { Filters = { filter } };
+        var query = new LogQueryRequest { Filters = { filter }, Duration = _duration };
         var response = await _fixture.LogQueryServiceClient.QueryAsync(query);
         Assert.Contains(response.Logs, log => log.Log.TraceId == request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].TraceId);
     }
@@ -487,7 +765,7 @@ public class LogPropertyTests : IClassFixture<AspireFixture>
             }
         };
         
-        var query = new LogQueryRequest { Filters = { filter } };
+        var query = new LogQueryRequest { Filters = { filter }, Duration = _duration };
         var response = await _fixture.LogQueryServiceClient.QueryAsync(query);
         Assert.Contains(response.Logs, log => log.Log.TraceId == request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].TraceId);
     }
@@ -510,7 +788,7 @@ public class LogPropertyTests : IClassFixture<AspireFixture>
             }
         };
         
-        var query = new LogQueryRequest { Filters = { filter } };
+        var query = new LogQueryRequest { Filters = { filter }, Duration = _duration };
         var response = await _fixture.LogQueryServiceClient.QueryAsync(query);
         Assert.Contains(response.Logs, log => log.Log.TraceId == request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].TraceId);
     }
@@ -559,7 +837,7 @@ public class LogPropertyTests : IClassFixture<AspireFixture>
             }
         };
         
-        var query = new LogQueryRequest { Filters = { filter } };
+        var query = new LogQueryRequest { Filters = { filter }, Duration = _duration };
         var response = await _fixture.LogQueryServiceClient.QueryAsync(query);
         Assert.Contains(response.Logs, log => log.Log.TraceId == request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].TraceId);
     }
@@ -582,7 +860,7 @@ public class LogPropertyTests : IClassFixture<AspireFixture>
             }
         };
         
-        var query = new LogQueryRequest { Filters = { filter }};
+        var query = new LogQueryRequest { Filters = { filter }, Duration = _duration };
         var response = await _fixture.LogQueryServiceClient.QueryAsync(query);
         
         Assert.Contains(response.Logs, log => log.Log.TraceId == request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].TraceId);
@@ -601,16 +879,19 @@ public class LogPropertyTests : IClassFixture<AspireFixture>
                 Attribute = new KeyValueProperty
                 {
                     Key = request.ResourceLogs[0].ScopeLogs[0].Scope.Attributes[0].Key,
-                    StringValue = new StringProperty
+                    Value = new AnyValueProperty
                     {
-                        CompareAs = StringCompareAsType.Equals,
-                        Compare = request.ResourceLogs[0].ScopeLogs[0].Scope.Attributes[0].Value.StringValue
+                        StringValue = new StringProperty
+                        {
+                            CompareAs = StringCompareAsType.Equals,
+                            Compare = request.ResourceLogs[0].ScopeLogs[0].Scope.Attributes[0].Value.StringValue
+                        }
                     }
                 }
             }
         };
         
-        var query = new LogQueryRequest { Filters = { filter }};
+        var query = new LogQueryRequest { Filters = { filter }, Duration = _duration };
         var response = await _fixture.LogQueryServiceClient.QueryAsync(query);
         
         Assert.Contains(response.Logs, log => log.Log.TraceId == request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].TraceId);
@@ -634,7 +915,7 @@ public class LogPropertyTests : IClassFixture<AspireFixture>
             }
         };
         
-        var query = new LogQueryRequest { Filters = { filter }};
+        var query = new LogQueryRequest { Filters = { filter }, Duration = _duration };
         var response = await _fixture.LogQueryServiceClient.QueryAsync(query);
         
         Assert.Contains(response.Logs, log => log.Log.TraceId == request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].TraceId);
@@ -658,7 +939,7 @@ public class LogPropertyTests : IClassFixture<AspireFixture>
             }
         };
         
-        var query = new LogQueryRequest { Filters = { filter } };
+        var query = new LogQueryRequest { Filters = { filter }, Duration = _duration };
         var response = await _fixture.LogQueryServiceClient.QueryAsync(query);
         Assert.Contains(response.Logs, log => log.Log.TraceId == request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].TraceId);
     }
@@ -676,16 +957,19 @@ public class LogPropertyTests : IClassFixture<AspireFixture>
                 Attribute = new KeyValueProperty
                 {
                     Key = request.ResourceLogs[0].Resource.Attributes[0].Key,
-                    StringValue = new StringProperty
+                    Value = new AnyValueProperty
                     {
-                        CompareAs = StringCompareAsType.Equals,
-                        Compare = request.ResourceLogs[0].Resource.Attributes[0].Value.StringValue
+                        StringValue = new StringProperty
+                        {
+                            CompareAs = StringCompareAsType.Equals,
+                            Compare = request.ResourceLogs[0].Resource.Attributes[0].Value.StringValue
+                        }
                     }
                 }
             }
         };
         
-        var query = new LogQueryRequest { Filters = { filter }};
+        var query = new LogQueryRequest { Filters = { filter }, Duration = _duration };
         var response = await _fixture.LogQueryServiceClient.QueryAsync(query);
         
         Assert.Contains(response.Logs, log => log.Log.TraceId == request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].TraceId);
@@ -706,7 +990,7 @@ public class LogPropertyTests : IClassFixture<AspireFixture>
             }
         };
         
-        var query = new LogQueryRequest { Filters = { filter }};
+        var query = new LogQueryRequest { Filters = { filter }, Duration = _duration };
         var response = await _fixture.LogQueryServiceClient.QueryAsync(query);
         
         Assert.Contains(response.Logs, log => log.Log.TraceId == request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].TraceId);
@@ -727,7 +1011,7 @@ public class LogPropertyTests : IClassFixture<AspireFixture>
             }
         };
         
-        var query = new LogQueryRequest { Filters = { filter }};
+        var query = new LogQueryRequest { Filters = { filter }, Duration = _duration };
         var response = await _fixture.LogQueryServiceClient.QueryAsync(query);
         
         Assert.Contains(response.Logs, log => log.Log.TraceId == request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].TraceId);

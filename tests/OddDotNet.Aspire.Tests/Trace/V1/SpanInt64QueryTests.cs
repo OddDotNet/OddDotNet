@@ -49,7 +49,7 @@ public class SpanInt64QueryTests : IClassFixture<AspireFixture>, IAsyncLifetime
             case PropertyFilter.ValueOneofCase.Attribute:
                 spanToFind.Attributes[0].Value.IntValue = actual;
                 spanToFind.Attributes[0].Key = "test";
-                whereSpanPropertyFilter.Attribute = new KeyValueProperty() { Key = "test", Int64Value = int64Property };
+                whereSpanPropertyFilter.Attribute = new KeyValueProperty() { Key = "test", Value = new AnyValueProperty { Int64Value = int64Property }};
                 break;
         }
 

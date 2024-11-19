@@ -48,7 +48,7 @@ public class SpanDoubleQueryTests : IClassFixture<AspireFixture>, IAsyncLifetime
                 spanToFind.Attributes[0].Value.DoubleValue = actual;
                 spanToFind.Attributes[0].Key = "test";
                 whereSpanPropertyFilter.Attribute = new KeyValueProperty()
-                    { Key = "test", DoubleValue = doubleProperty };
+                    { Key = "test", Value = new AnyValueProperty { DoubleValue = doubleProperty }};
                 break;
         }
 

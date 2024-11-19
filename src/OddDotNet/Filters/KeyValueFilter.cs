@@ -12,20 +12,22 @@ public static class KeyValueFilter
         if (keyValue is not null)
         {
             // TODO add support for ArrayValue and KvListValue
-            return property.ValueCase switch
+            return property.Value.ValueCase switch
             {
-                KeyValueProperty.ValueOneofCase.StringValue => StringFilter.Matches(keyValue.Value.StringValue,
-                    property.StringValue),
-                KeyValueProperty.ValueOneofCase.ByteStringValue => ByteStringFilter.Matches(keyValue.Value.BytesValue, 
-                    property.ByteStringValue),
-                KeyValueProperty.ValueOneofCase.Int64Value => Int64Filter.Matches(keyValue.Value.IntValue, 
-                    property.Int64Value),
-                KeyValueProperty.ValueOneofCase.BoolValue => BoolFilter.Matches(keyValue.Value.BoolValue, 
-                    property.BoolValue),
-                KeyValueProperty.ValueOneofCase.DoubleValue => DoubleFilter.Matches(keyValue.Value.DoubleValue, 
-                    property.DoubleValue),
-                KeyValueProperty.ValueOneofCase.None => false,
-                _ => false
+                AnyValueProperty.ValueOneofCase.StringValue => keyValue.Value.HasStringValue && StringFilter.Matches(keyValue.Value.StringValue,
+                    property.Value.StringValue),
+                AnyValueProperty.ValueOneofCase.ByteStringValue => keyValue.Value.HasBytesValue && ByteStringFilter.Matches(keyValue.Value.BytesValue, 
+                    property.Value.ByteStringValue),
+                AnyValueProperty.ValueOneofCase.Int64Value => keyValue.Value.HasIntValue && Int64Filter.Matches(keyValue.Value.IntValue, 
+                    property.Value.Int64Value),
+                AnyValueProperty.ValueOneofCase.BoolValue => keyValue.Value.HasBoolValue && BoolFilter.Matches(keyValue.Value.BoolValue, 
+                    property.Value.BoolValue),
+                AnyValueProperty.ValueOneofCase.DoubleValue => keyValue.Value.HasDoubleValue && DoubleFilter.Matches(keyValue.Value.DoubleValue, 
+                    property.Value.DoubleValue),
+                AnyValueProperty.ValueOneofCase.ArrayValue => keyValue.Value.ArrayValue is not null && keyValue.Value.ArrayValue.Values.Any(value => AnyValueFilter.Matches(value, property.Value.ArrayValue)),
+                AnyValueProperty.ValueOneofCase.KeyValue => keyValue.Value.KvlistValue is not null && Matches(keyValue.Value.KvlistValue.Values, property.Value.KeyValue),
+                AnyValueProperty.ValueOneofCase.None => false,
+                // _ => false
             };
         }
 

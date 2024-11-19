@@ -119,7 +119,7 @@ public class SpanByteStringQueryTests : IClassFixture<AspireFixture>, IAsyncLife
                 spanToFind.Attributes[0].Value.BytesValue = ByteString.CopyFrom(actual);
                 spanToFind.Attributes[0].Key = "test";
                 whereSpanPropertyFilter.Attribute = new KeyValueProperty()
-                    { ByteStringValue = byteStringProperty, Key = "test" };
+                    { Value = new AnyValueProperty { ByteStringValue = byteStringProperty }, Key = "test" };
                 break;
         }
 

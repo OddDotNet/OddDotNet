@@ -61,7 +61,7 @@ public class SpanStringQueryTests : IClassFixture<AspireFixture>, IAsyncLifetime
             case PropertyFilter.ValueOneofCase.Attribute:
                 spanToFind.Attributes[0].Value.StringValue = actual;
                 spanToFind.Attributes[0].Key = "test";
-                whereSpanPropertyFilter.Attribute = new KeyValueProperty() { Key = "test", StringValue = stringProperty};
+                whereSpanPropertyFilter.Attribute = new KeyValueProperty() { Key = "test", Value = new AnyValueProperty { StringValue = stringProperty }};
                 break;
         }
         

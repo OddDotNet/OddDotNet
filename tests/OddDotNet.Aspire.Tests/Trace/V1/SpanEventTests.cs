@@ -87,10 +87,13 @@ public class SpanEventTests : IClassFixture<AspireFixture>
                     Attribute = new KeyValueProperty
                     {
                         Key = spanToFind.Events[0].Attributes[0].Key,
-                        StringValue = new StringProperty
+                        Value = new AnyValueProperty
                         {
-                            CompareAs = StringCompareAsType.Equals,
-                            Compare = spanToFind.Events[0].Attributes[0].Value.StringValue
+                            StringValue = new StringProperty
+                            {
+                                CompareAs = StringCompareAsType.Equals,
+                                Compare = spanToFind.Events[0].Attributes[0].Value.StringValue
+                            }
                         }
                     }
                 }

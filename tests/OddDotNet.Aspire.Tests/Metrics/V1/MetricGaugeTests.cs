@@ -59,10 +59,13 @@ public class MetricGaugeTests : IClassFixture<AspireFixture>
                         Attribute = new KeyValueProperty
                         {
                             Key = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Gauge.DataPoints[0].Attributes[0].Key,
-                            StringValue = new StringProperty
+                            Value = new AnyValueProperty
                             {
-                                CompareAs = StringCompareAsType.Equals,
-                                Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Gauge.DataPoints[0].Attributes[0].Value.StringValue
+                                StringValue = new StringProperty
+                                {
+                                    CompareAs = StringCompareAsType.Equals,
+                                    Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Gauge.DataPoints[0].Attributes[0].Value.StringValue
+                                }
                             }
                         }
                     }
@@ -216,10 +219,13 @@ public class MetricGaugeTests : IClassFixture<AspireFixture>
                             FilteredAttribute = new KeyValueProperty
                             {
                                 Key = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Gauge.DataPoints[0].Exemplars[0].FilteredAttributes[0].Key,
-                                StringValue = new StringProperty
+                                Value = new AnyValueProperty
                                 {
-                                    CompareAs = StringCompareAsType.Equals,
-                                    Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Gauge.DataPoints[0].Exemplars[0].FilteredAttributes[0].Value.StringValue
+                                    StringValue = new StringProperty
+                                    {
+                                        CompareAs = StringCompareAsType.Equals,
+                                        Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Gauge.DataPoints[0].Exemplars[0].FilteredAttributes[0].Value.StringValue
+                                    }
                                 }
                             }
                         }

@@ -30,10 +30,13 @@ public class MetricExponentialHistogramTests : IClassFixture<AspireFixture>
                         Attribute = new KeyValueProperty
                         {
                             Key = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].ExponentialHistogram.DataPoints[0].Attributes[0].Key,
-                            StringValue = new StringProperty
+                            Value = new AnyValueProperty
                             {
-                                CompareAs = StringCompareAsType.Equals,
-                                Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].ExponentialHistogram.DataPoints[0].Attributes[0].Value.StringValue
+                                StringValue = new StringProperty
+                                {
+                                    CompareAs = StringCompareAsType.Equals,
+                                    Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].ExponentialHistogram.DataPoints[0].Attributes[0].Value.StringValue
+                                }
                             }
                         }
                     }

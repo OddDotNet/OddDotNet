@@ -36,7 +36,7 @@ public class SpanBoolQueryTests : IClassFixture<AspireFixture>, IAsyncLifetime
             case PropertyFilter.ValueOneofCase.Attribute:
                 spanToFind.Attributes[0].Value.BoolValue = actual;
                 spanToFind.Attributes[0].Key = "test";
-                whereSpanPropertyFilter.Attribute = new KeyValueProperty() { Key = "test", BoolValue = boolProperty };
+                whereSpanPropertyFilter.Attribute = new KeyValueProperty() { Key = "test", Value = new AnyValueProperty { BoolValue = boolProperty }};
                 break;
         }
 
