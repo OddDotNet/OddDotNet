@@ -14,6 +14,7 @@ public sealed partial class NumberDataPointFilter : IWhere<NumberDataPoint>
         ValueOneofCase.TimeUnixNano => UInt64Filter.Matches(signal.TimeUnixNano, TimeUnixNano),
         ValueOneofCase.ValueAsDouble => DoubleFilter.Matches(signal.AsDouble, ValueAsDouble),
         ValueOneofCase.ValueAsInt => Int64Filter.Matches(signal.AsInt, ValueAsInt),
-        ValueOneofCase.Exemplar => signal.Exemplars.Any(exemplar => Exemplar.Matches(exemplar))
+        ValueOneofCase.Exemplar => signal.Exemplars.Any(exemplar => Exemplar.Matches(exemplar)),
+        _ => false
     };
 }

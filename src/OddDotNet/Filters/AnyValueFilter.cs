@@ -14,6 +14,7 @@ public static class AnyValueFilter
         AnyValueProperty.ValueOneofCase.BoolValue => value.HasBoolValue && BoolFilter.Matches(value.BoolValue, property.BoolValue),
         AnyValueProperty.ValueOneofCase.DoubleValue => value.HasDoubleValue && DoubleFilter.Matches(value.DoubleValue, property.DoubleValue),
         AnyValueProperty.ValueOneofCase.ArrayValue => value.ArrayValue is not null && value.ArrayValue.Values.Any(item => Matches(item, property.ArrayValue)),
-        AnyValueProperty.ValueOneofCase.KeyValue => value.KvlistValue is not null && KeyValueFilter.Matches(value.KvlistValue.Values, property.KeyValue)
+        AnyValueProperty.ValueOneofCase.KeyValue => value.KvlistValue is not null && KeyValueFilter.Matches(value.KvlistValue.Values, property.KeyValue),
+        _ => false
     };
 }

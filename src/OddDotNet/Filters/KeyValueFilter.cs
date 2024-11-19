@@ -11,7 +11,6 @@ public static class KeyValueFilter
         var keyValue = map.FirstOrDefault(kv => kv.Key == property.Key);
         if (keyValue is not null)
         {
-            // TODO add support for ArrayValue and KvListValue
             return property.Value.ValueCase switch
             {
                 AnyValueProperty.ValueOneofCase.StringValue => keyValue.Value.HasStringValue && StringFilter.Matches(keyValue.Value.StringValue,
@@ -27,7 +26,7 @@ public static class KeyValueFilter
                 AnyValueProperty.ValueOneofCase.ArrayValue => keyValue.Value.ArrayValue is not null && keyValue.Value.ArrayValue.Values.Any(value => AnyValueFilter.Matches(value, property.Value.ArrayValue)),
                 AnyValueProperty.ValueOneofCase.KeyValue => keyValue.Value.KvlistValue is not null && Matches(keyValue.Value.KvlistValue.Values, property.Value.KeyValue),
                 AnyValueProperty.ValueOneofCase.None => false,
-                // _ => false
+                _ => false
             };
         }
 

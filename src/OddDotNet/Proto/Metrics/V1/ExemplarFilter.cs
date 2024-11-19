@@ -13,6 +13,7 @@ public sealed partial class ExemplarFilter : IWhere<Exemplar>
         ValueOneofCase.ValueAsDouble => DoubleFilter.Matches(signal.AsDouble, ValueAsDouble),
         ValueOneofCase.ValueAsInt => Int64Filter.Matches(signal.AsInt, ValueAsInt),
         ValueOneofCase.SpanId => ByteStringFilter.Matches(signal.SpanId, SpanId),
-        ValueOneofCase.TraceId => ByteStringFilter.Matches(signal.TraceId, TraceId)
+        ValueOneofCase.TraceId => ByteStringFilter.Matches(signal.TraceId, TraceId),
+        _ => false
     };
 }

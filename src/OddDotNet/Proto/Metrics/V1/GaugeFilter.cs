@@ -7,6 +7,7 @@ public sealed partial class GaugeFilter : IWhere<Gauge>
     public bool Matches(Gauge signal) => ValueCase switch
     {
         ValueOneofCase.None => false,
-        ValueOneofCase.DataPoint => signal.DataPoints.Any(dataPoint => DataPoint.Matches(dataPoint))
+        ValueOneofCase.DataPoint => signal.DataPoints.Any(dataPoint => DataPoint.Matches(dataPoint)),
+        _ => false
     };
 }

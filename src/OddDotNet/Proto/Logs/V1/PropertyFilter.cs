@@ -17,6 +17,7 @@ public sealed partial class PropertyFilter : IWhere<LogRecord>
         ValueOneofCase.DroppedAttributesCount => UInt32Filter.Matches(signal.DroppedAttributesCount, DroppedAttributesCount),
         ValueOneofCase.Flags => UInt32Filter.Matches(signal.Flags, Flags),
         ValueOneofCase.TraceId => ByteStringFilter.Matches(signal.TraceId, TraceId),
-        ValueOneofCase.SpanId => ByteStringFilter.Matches(signal.SpanId, SpanId)
+        ValueOneofCase.SpanId => ByteStringFilter.Matches(signal.SpanId, SpanId),
+        _ => false
     };
 }

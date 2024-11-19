@@ -21,6 +21,7 @@ public sealed partial class ExponentialHistogramDataPointFilter : IWhere<Exponen
         ValueOneofCase.Exemplar => signal.Exemplars.Any(exemplar => Exemplar.Matches(exemplar)),
         ValueOneofCase.Min => DoubleFilter.Matches(signal.Min, Min),
         ValueOneofCase.Max => DoubleFilter.Matches(signal.Max, Max),
-        ValueOneofCase.ZeroThreshold => DoubleFilter.Matches(signal.ZeroThreshold, ZeroThreshold)
+        ValueOneofCase.ZeroThreshold => DoubleFilter.Matches(signal.ZeroThreshold, ZeroThreshold),
+        _ => false
     };
 }
