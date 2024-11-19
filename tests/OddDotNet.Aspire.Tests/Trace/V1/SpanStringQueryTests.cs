@@ -28,7 +28,7 @@ public class SpanStringQueryTests : IClassFixture<AspireFixture>, IAsyncLifetime
     [InlineData("test", "test", StringCompareAsType.IsEmpty, PropertyFilter.ValueOneofCase.Name, false)]
     [InlineData("test", "test", StringCompareAsType.IsNotEmpty, PropertyFilter.ValueOneofCase.Name, true)]
     [InlineData("", "", StringCompareAsType.IsNotEmpty, PropertyFilter.ValueOneofCase.Name, false)]
-    [InlineData("test", "test", StringCompareAsType.Equals, PropertyFilter.ValueOneofCase.Attribute, true)]
+    [InlineData("test", "test", StringCompareAsType.Equals, PropertyFilter.ValueOneofCase.Attributes, true)]
     [InlineData("test", "test", StringCompareAsType.Equals, PropertyFilter.ValueOneofCase.TraceState, true)]
     public async Task ReturnSpansWithMatchingStringProperty(string expected, string actual,
         StringCompareAsType compareAs, PropertyFilter.ValueOneofCase propertyToCheck,
@@ -58,10 +58,23 @@ public class SpanStringQueryTests : IClassFixture<AspireFixture>, IAsyncLifetime
                 spanToFind.TraceState = actual;
                 whereSpanPropertyFilter.TraceState = stringProperty;
                 break;
-            case PropertyFilter.ValueOneofCase.Attribute:
+            case PropertyFilter.ValueOneofCase.Attributes:
                 spanToFind.Attributes[0].Value.StringValue = actual;
                 spanToFind.Attributes[0].Key = "test";
-                whereSpanPropertyFilter.Attribute = new KeyValueProperty() { Key = "test", Value = new AnyValueProperty { StringValue = stringProperty }};
+                whereSpanPropertyFilter.Attributes = new KeyValueListProperty
+                {
+                    Values =
+                    {
+                        new KeyValueProperty
+                        {
+                            Key = "test",
+                            Value = new AnyValueProperty
+                            {
+                                StringValue = stringProperty
+                            }
+                        }
+                    }
+                };
                 break;
         }
         

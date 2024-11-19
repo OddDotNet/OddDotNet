@@ -95,15 +95,21 @@ public class MetricPropertyTests : IClassFixture<AspireFixture>
         {
             Property = new PropertyFilter
             {
-                Metadata = new KeyValueProperty
+                Metadata = new KeyValueListProperty
                 {
-                    Key = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Metadata[0].Key,
-                    Value = new AnyValueProperty
+                    Values =
                     {
-                        StringValue = new StringProperty
+                        new KeyValueProperty
                         {
-                            CompareAs = StringCompareAsType.Equals,
-                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Metadata[0].Value.StringValue
+                            Key = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Metadata[0].Key,
+                            Value = new AnyValueProperty
+                            {
+                                StringValue = new StringProperty
+                                {
+                                    CompareAs = StringCompareAsType.Equals,
+                                    Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Metadata[0].Value.StringValue
+                                }
+                            }
                         }
                     }
                 }
@@ -150,15 +156,21 @@ public class MetricPropertyTests : IClassFixture<AspireFixture>
         {
             InstrumentationScope = new InstrumentationScopeFilter
             {
-                Attribute = new KeyValueProperty
+                Attributes = new KeyValueListProperty
                 {
-                    Key = request.ResourceMetrics[0].ScopeMetrics[0].Scope.Attributes[0].Key,
-                    Value = new AnyValueProperty
+                    Values =
                     {
-                        StringValue = new StringProperty
+                        new KeyValueProperty
                         {
-                            CompareAs = StringCompareAsType.Equals,
-                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Scope.Attributes[0].Value.StringValue
+                            Key = request.ResourceMetrics[0].ScopeMetrics[0].Scope.Attributes[0].Key,
+                            Value = new AnyValueProperty
+                            {
+                                StringValue = new StringProperty
+                                {
+                                    CompareAs = StringCompareAsType.Equals,
+                                    Compare = request.ResourceMetrics[0].ScopeMetrics[0].Scope.Attributes[0].Value.StringValue
+                                }
+                            }
                         }
                     }
                 }
@@ -271,15 +283,21 @@ public class MetricPropertyTests : IClassFixture<AspireFixture>
         {
             Resource = new ResourceFilter
             {
-                Attribute = new KeyValueProperty
+                Attributes = new KeyValueListProperty
                 {
-                    Key = request.ResourceMetrics[0].Resource.Attributes[0].Key,
-                    Value = new AnyValueProperty
+                    Values =
                     {
-                        StringValue = new StringProperty
+                        new KeyValueProperty
                         {
-                            CompareAs = StringCompareAsType.Equals,
-                            Compare = request.ResourceMetrics[0].Resource.Attributes[0].Value.StringValue
+                            Key = request.ResourceMetrics[0].Resource.Attributes[0].Key,
+                            Value = new AnyValueProperty
+                            {
+                                StringValue = new StringProperty
+                                {
+                                    CompareAs = StringCompareAsType.Equals,
+                                    Compare = request.ResourceMetrics[0].Resource.Attributes[0].Value.StringValue
+                                }
+                            }
                         }
                     }
                 }

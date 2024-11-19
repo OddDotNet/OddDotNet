@@ -210,7 +210,7 @@ public class LogPropertyTests : IClassFixture<AspireFixture>
             {
                 Body = new AnyValueProperty
                 {
-                    Int64Value = new Int64Property
+                    IntValue = new Int64Property
                     {
                         CompareAs = NumberCompareAsType.Equals,
                         Compare = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Body.IntValue
@@ -302,19 +302,25 @@ public class LogPropertyTests : IClassFixture<AspireFixture>
             }
         };
         await _fixture.LogsServiceClient.ExportAsync(request);
-
+    
         var filter = new Where
         {
             Property = new PropertyFilter
             {
                 Body = new AnyValueProperty
                 {
-                    ArrayValue = new AnyValueProperty
+                    ArrayValue = new ArrayValueProperty
                     {
-                        StringValue = new StringProperty
+                        Values =
                         {
-                            CompareAs = StringCompareAsType.Equals,
-                            Compare = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Body.ArrayValue.Values[0].StringValue
+                            new AnyValueProperty
+                            {
+                                StringValue = new StringProperty
+                                {
+                                    CompareAs = StringCompareAsType.Equals,
+                                    Compare = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Body.ArrayValue.Values[0].StringValue
+                                }
+                            }
                         }
                     }
                 }
@@ -348,22 +354,28 @@ public class LogPropertyTests : IClassFixture<AspireFixture>
             }
         };
         await _fixture.LogsServiceClient.ExportAsync(request);
-
+    
         var filter = new Where
         {
             Property = new PropertyFilter
             {
                 Body = new AnyValueProperty
                 {
-                    KeyValue = new KeyValueProperty
+                    KvlistValue = new KeyValueListProperty
                     {
-                        Key = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Body.KvlistValue.Values[0].Key,
-                        Value = new AnyValueProperty
+                        Values =
                         {
-                            StringValue = new StringProperty
+                            new KeyValueProperty
                             {
-                                CompareAs = StringCompareAsType.Equals,
-                                Compare = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Body.KvlistValue.Values[0].Value.StringValue
+                                Key = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Body.KvlistValue.Values[0].Key,
+                                Value = new AnyValueProperty
+                                {
+                                    StringValue = new StringProperty
+                                    {
+                                        CompareAs = StringCompareAsType.Equals,
+                                        Compare = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Body.KvlistValue.Values[0].Value.StringValue
+                                    }
+                                }
                             }
                         }
                     }
@@ -428,29 +440,47 @@ public class LogPropertyTests : IClassFixture<AspireFixture>
             }
         };
         await _fixture.LogsServiceClient.ExportAsync(request);
-
+    
         var filter = new Where
         {
             Property = new PropertyFilter
             {
                 Body = new AnyValueProperty
                 {
-                    KeyValue = new KeyValueProperty
+                    KvlistValue = new KeyValueListProperty
                     {
-                        Key = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Body.KvlistValue.Values[0].Key,
-                        Value = new AnyValueProperty
+                        Values =
                         {
-                            KeyValue = new KeyValueProperty
+                            new KeyValueProperty
                             {
-                                Key = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Body.KvlistValue.Values[0].Value.KvlistValue.Values[0].Key,
+                                Key = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Body.KvlistValue.Values[0].Key,
                                 Value = new AnyValueProperty
                                 {
-                                    ArrayValue = new AnyValueProperty
+                                    KvlistValue = new KeyValueListProperty
                                     {
-                                        Int64Value = new Int64Property
+                                        Values =
                                         {
-                                            CompareAs = NumberCompareAsType.Equals,
-                                            Compare = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Body.KvlistValue.Values[0].Value.KvlistValue.Values[0].Value.ArrayValue.Values[1].IntValue
+                                            new KeyValueProperty
+                                            {
+                                                Key = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Body.KvlistValue.Values[0].Value.KvlistValue.Values[0].Key,
+                                                Value = new AnyValueProperty
+                                                {
+                                                    ArrayValue = new ArrayValueProperty
+                                                    {
+                                                        Values =
+                                                        {
+                                                            new AnyValueProperty
+                                                            {
+                                                                IntValue = new Int64Property
+                                                                {
+                                                                    CompareAs = NumberCompareAsType.Equals,
+                                                                    Compare = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Body.KvlistValue.Values[0].Value.KvlistValue.Values[0].Value.ArrayValue.Values[1].IntValue
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -476,15 +506,21 @@ public class LogPropertyTests : IClassFixture<AspireFixture>
         {
             Property = new PropertyFilter
             {
-                Attribute = new KeyValueProperty
+                Attributes = new KeyValueListProperty
                 {
-                    Key = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes[0].Key,
-                    Value = new AnyValueProperty
+                    Values =
                     {
-                        StringValue = new StringProperty
+                        new KeyValueProperty
                         {
-                            CompareAs = StringCompareAsType.Equals,
-                            Compare = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes[0].Value.StringValue
+                            Key = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes[0].Key,
+                            Value = new AnyValueProperty
+                            {
+                                StringValue = new StringProperty
+                                {
+                                    CompareAs = StringCompareAsType.Equals,
+                                    Compare = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes[0].Value.StringValue
+                                }
+                            }
                         }
                     }
                 }
@@ -508,15 +544,21 @@ public class LogPropertyTests : IClassFixture<AspireFixture>
         {
             Property = new PropertyFilter
             {
-                Attribute = new KeyValueProperty
+                Attributes = new KeyValueListProperty
                 {
-                    Key = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes[0].Key,
-                    Value = new AnyValueProperty
+                    Values =
                     {
-                        ByteStringValue = new ByteStringProperty
+                        new KeyValueProperty
                         {
-                            CompareAs = ByteStringCompareAsType.Equals,
-                            Compare = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes[0].Value.BytesValue
+                            Key = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes[0].Key,
+                            Value = new AnyValueProperty
+                            {
+                                ByteStringValue = new ByteStringProperty
+                                {
+                                    CompareAs = ByteStringCompareAsType.Equals,
+                                    Compare = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes[0].Value.BytesValue
+                                }
+                            }
                         }
                     }
                 }
@@ -540,15 +582,21 @@ public class LogPropertyTests : IClassFixture<AspireFixture>
         {
             Property = new PropertyFilter
             {
-                Attribute = new KeyValueProperty
+                Attributes = new KeyValueListProperty
                 {
-                    Key = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes[0].Key,
-                    Value = new AnyValueProperty
+                    Values =
                     {
-                        Int64Value = new Int64Property
+                        new KeyValueProperty
                         {
-                            CompareAs = NumberCompareAsType.Equals,
-                            Compare = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes[0].Value.IntValue
+                            Key = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes[0].Key,
+                            Value = new AnyValueProperty
+                            {
+                                IntValue = new Int64Property
+                                {
+                                    CompareAs = NumberCompareAsType.Equals,
+                                    Compare = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes[0].Value.IntValue
+                                }
+                            }
                         }
                     }
                 }
@@ -572,15 +620,21 @@ public class LogPropertyTests : IClassFixture<AspireFixture>
         {
             Property = new PropertyFilter
             {
-                Attribute = new KeyValueProperty
+                Attributes = new KeyValueListProperty
                 {
-                    Key = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes[0].Key,
-                    Value = new AnyValueProperty
+                    Values =
                     {
-                        BoolValue = new BoolProperty
+                        new KeyValueProperty
                         {
-                            CompareAs = BoolCompareAsType.Equals,
-                            Compare = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes[0].Value.BoolValue
+                            Key = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes[0].Key,
+                            Value = new AnyValueProperty
+                            {
+                                BoolValue = new BoolProperty
+                                {
+                                    CompareAs = BoolCompareAsType.Equals,
+                                    Compare = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes[0].Value.BoolValue
+                                }
+                            }
                         }
                     }
                 }
@@ -604,15 +658,21 @@ public class LogPropertyTests : IClassFixture<AspireFixture>
         {
             Property = new PropertyFilter
             {
-                Attribute = new KeyValueProperty
+                Attributes = new KeyValueListProperty
                 {
-                    Key = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes[0].Key,
-                    Value = new AnyValueProperty
+                    Values =
                     {
-                        DoubleValue = new DoubleProperty
+                        new KeyValueProperty
                         {
-                            CompareAs = NumberCompareAsType.Equals,
-                            Compare = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes[0].Value.DoubleValue
+                            Key = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes[0].Key,
+                            Value = new AnyValueProperty
+                            {
+                                DoubleValue = new DoubleProperty
+                                {
+                                    CompareAs = NumberCompareAsType.Equals,
+                                    Compare = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes[0].Value.DoubleValue
+                                }
+                            }
                         }
                     }
                 }
@@ -632,22 +692,34 @@ public class LogPropertyTests : IClassFixture<AspireFixture>
         attributes.Clear();
         attributes.Add(CommonHelpers.CreateKeyValue("key", new ArrayValue { Values = { new AnyValue { StringValue = "test" } }}));
         await _fixture.LogsServiceClient.ExportAsync(request);
-
+    
         var filter = new Where
         {
             Property = new PropertyFilter
             {
-                Attribute = new KeyValueProperty
+                Attributes = new KeyValueListProperty
                 {
-                    Key = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes[0].Key,
-                    Value = new AnyValueProperty
+                    Values =
                     {
-                        ArrayValue = new AnyValueProperty
+                        new KeyValueProperty
                         {
-                            StringValue = new StringProperty
+                            Key = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes[0].Key,
+                            Value = new AnyValueProperty
                             {
-                                CompareAs = StringCompareAsType.Equals,
-                                Compare = attributes[0].Value.ArrayValue.Values[0].StringValue
+                                ArrayValue = new ArrayValueProperty
+                                {
+                                    Values =
+                                    {
+                                        new AnyValueProperty
+                                        {
+                                            StringValue = new StringProperty
+                                            {
+                                                CompareAs = StringCompareAsType.Equals,
+                                                Compare = attributes[0].Value.ArrayValue.Values[0].StringValue
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -668,25 +740,37 @@ public class LogPropertyTests : IClassFixture<AspireFixture>
         attributes.Clear();
         attributes.Add(CommonHelpers.CreateKeyValue("key", new KeyValueList { Values = { CommonHelpers.CreateKeyValue("key2", "test") }}));
         await _fixture.LogsServiceClient.ExportAsync(request);
-
+    
         var filter = new Where
         {
             Property = new PropertyFilter
             {
-                Attribute = new KeyValueProperty
+                Attributes = new KeyValueListProperty
                 {
-                    Key = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes[0].Key,
-                    Value = new AnyValueProperty
+                    Values =
                     {
-                        KeyValue = new KeyValueProperty
+                        new KeyValueProperty
                         {
-                            Key = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes[0].Value.KvlistValue.Values[0].Key,
+                            Key = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes[0].Key,
                             Value = new AnyValueProperty
                             {
-                                StringValue = new StringProperty
+                                KvlistValue = new KeyValueListProperty
                                 {
-                                    CompareAs = StringCompareAsType.Equals,
-                                    Compare = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes[0].Value.KvlistValue.Values[0].Value.StringValue
+                                    Values =
+                                    {
+                                        new KeyValueProperty
+                                        {
+                                            Key = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes[0].Value.KvlistValue.Values[0].Key,
+                                            Value = new AnyValueProperty
+                                            {
+                                                StringValue = new StringProperty
+                                                {
+                                                    CompareAs = StringCompareAsType.Equals,
+                                                    Compare = request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].Attributes[0].Value.KvlistValue.Values[0].Value.StringValue
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -875,15 +959,21 @@ public class LogPropertyTests : IClassFixture<AspireFixture>
         {
             InstrumentationScope = new InstrumentationScopeFilter
             {
-                Attribute = new KeyValueProperty
+                Attributes = new KeyValueListProperty
                 {
-                    Key = request.ResourceLogs[0].ScopeLogs[0].Scope.Attributes[0].Key,
-                    Value = new AnyValueProperty
+                    Values =
                     {
-                        StringValue = new StringProperty
+                        new KeyValueProperty
                         {
-                            CompareAs = StringCompareAsType.Equals,
-                            Compare = request.ResourceLogs[0].ScopeLogs[0].Scope.Attributes[0].Value.StringValue
+                            Key = request.ResourceLogs[0].ScopeLogs[0].Scope.Attributes[0].Key,
+                            Value = new AnyValueProperty
+                            {
+                                StringValue = new StringProperty
+                                {
+                                    CompareAs = StringCompareAsType.Equals,
+                                    Compare = request.ResourceLogs[0].ScopeLogs[0].Scope.Attributes[0].Value.StringValue
+                                }
+                            }
                         }
                     }
                 }
@@ -953,15 +1043,21 @@ public class LogPropertyTests : IClassFixture<AspireFixture>
         {
             Resource = new ResourceFilter
             {
-                Attribute = new KeyValueProperty
+                Attributes = new KeyValueListProperty
                 {
-                    Key = request.ResourceLogs[0].Resource.Attributes[0].Key,
-                    Value = new AnyValueProperty
+                    Values =
                     {
-                        StringValue = new StringProperty
+                        new KeyValueProperty
                         {
-                            CompareAs = StringCompareAsType.Equals,
-                            Compare = request.ResourceLogs[0].Resource.Attributes[0].Value.StringValue
+                            Key = request.ResourceLogs[0].Resource.Attributes[0].Key,
+                            Value = new AnyValueProperty
+                            {
+                                StringValue = new StringProperty
+                                {
+                                    CompareAs = StringCompareAsType.Equals,
+                                    Compare = request.ResourceLogs[0].Resource.Attributes[0].Value.StringValue
+                                }
+                            }
                         }
                     }
                 }

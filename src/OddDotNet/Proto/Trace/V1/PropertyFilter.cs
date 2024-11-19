@@ -16,7 +16,7 @@ public sealed partial class PropertyFilter : IWhere<Span>
         ValueOneofCase.Kind => KindFilter.Matches(signal.Kind, Kind),
         ValueOneofCase.StartTimeUnixNano => UInt64Filter.Matches(signal.StartTimeUnixNano, StartTimeUnixNano),
         ValueOneofCase.EndTimeUnixNano => UInt64Filter.Matches(signal.EndTimeUnixNano, EndTimeUnixNano),
-        ValueOneofCase.Attribute => KeyValueFilter.Matches(signal.Attributes, Attribute),
+        ValueOneofCase.Attributes => KeyValueListFilter.Matches(signal.Attributes, Attributes),
         ValueOneofCase.DroppedAttributesCount => UInt32Filter.Matches(signal.DroppedAttributesCount, DroppedAttributesCount),
         ValueOneofCase.Event => signal.Events.Any(evt => Event.Matches(evt)),
         ValueOneofCase.DroppedEventsCount => UInt32Filter.Matches(signal.DroppedEventsCount, DroppedEventsCount),

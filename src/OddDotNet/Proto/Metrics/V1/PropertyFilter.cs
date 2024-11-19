@@ -16,7 +16,7 @@ public sealed partial class PropertyFilter : IWhere<Metric>
         ValueOneofCase.Histogram => Histogram.Matches(signal.Histogram),
         ValueOneofCase.ExponentialHistogram => ExponentialHistogram.Matches(signal.ExponentialHistogram),
         ValueOneofCase.Summary => Summary.Matches(signal.Summary),
-        ValueOneofCase.Metadata => KeyValueFilter.Matches(signal.Metadata, Metadata),
+        ValueOneofCase.Metadata => KeyValueListFilter.Matches(signal.Metadata, Metadata),
         _ => false
     };
 }

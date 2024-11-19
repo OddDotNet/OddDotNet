@@ -84,7 +84,7 @@ public class SpanByteStringQueryTests : IClassFixture<AspireFixture>, IAsyncLife
         new byte[] { 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A },
         new byte[] { 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41 },
         ByteStringCompareAsType.NotEquals,
-        PropertyFilter.ValueOneofCase.Attribute,
+        PropertyFilter.ValueOneofCase.Attributes,
         true)
     ]
     public async Task ReturnSpansWithMatchingByteStringProperty(byte[] expected, byte[] actual,
@@ -115,11 +115,23 @@ public class SpanByteStringQueryTests : IClassFixture<AspireFixture>, IAsyncLife
                 spanToFind.ParentSpanId = ByteString.CopyFrom(actual);
                 whereSpanPropertyFilter.ParentSpanId = byteStringProperty;
                 break;
-            case PropertyFilter.ValueOneofCase.Attribute:
+            case PropertyFilter.ValueOneofCase.Attributes:
                 spanToFind.Attributes[0].Value.BytesValue = ByteString.CopyFrom(actual);
                 spanToFind.Attributes[0].Key = "test";
-                whereSpanPropertyFilter.Attribute = new KeyValueProperty()
-                    { Value = new AnyValueProperty { ByteStringValue = byteStringProperty }, Key = "test" };
+                whereSpanPropertyFilter.Attributes = new KeyValueListProperty
+                {
+                    Values =
+                    {
+                        new KeyValueProperty
+                        {
+                            Key = "test",
+                            Value = new AnyValueProperty
+                            {
+                                ByteStringValue = byteStringProperty
+                            }
+                        }
+                    }
+                };
                 break;
         }
 

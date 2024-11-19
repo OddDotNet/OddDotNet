@@ -9,7 +9,7 @@ public sealed partial class NumberDataPointFilter : IWhere<NumberDataPoint>
     {
         ValueOneofCase.None => false,
         ValueOneofCase.Flags => UInt32Filter.Matches(signal.Flags, Flags),
-        ValueOneofCase.Attribute => KeyValueFilter.Matches(signal.Attributes, Attribute),
+        ValueOneofCase.Attributes => KeyValueListFilter.Matches(signal.Attributes, Attributes),
         ValueOneofCase.StartTimeUnixNano => UInt64Filter.Matches(signal.StartTimeUnixNano, StartTimeUnixNano),
         ValueOneofCase.TimeUnixNano => UInt64Filter.Matches(signal.TimeUnixNano, TimeUnixNano),
         ValueOneofCase.ValueAsDouble => DoubleFilter.Matches(signal.AsDouble, ValueAsDouble),

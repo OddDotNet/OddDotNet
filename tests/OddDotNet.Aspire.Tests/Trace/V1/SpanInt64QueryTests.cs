@@ -13,23 +13,23 @@ public class SpanInt64QueryTests : IClassFixture<AspireFixture>, IAsyncLifetime
     }
 
     [Theory]
-    [InlineData(1L, 1L, NumberCompareAsType.Equals, PropertyFilter.ValueOneofCase.Attribute, true)]
-    [InlineData(0L, 1L, NumberCompareAsType.Equals, PropertyFilter.ValueOneofCase.Attribute, false)]
-    [InlineData(0L, 1L, NumberCompareAsType.NotEquals, PropertyFilter.ValueOneofCase.Attribute, true)]
-    [InlineData(1L, 1L, NumberCompareAsType.NotEquals, PropertyFilter.ValueOneofCase.Attribute, false)]
-    [InlineData(1L, 1L, NumberCompareAsType.GreaterThanEquals, PropertyFilter.ValueOneofCase.Attribute,
+    [InlineData(1L, 1L, NumberCompareAsType.Equals, PropertyFilter.ValueOneofCase.Attributes, true)]
+    [InlineData(0L, 1L, NumberCompareAsType.Equals, PropertyFilter.ValueOneofCase.Attributes, false)]
+    [InlineData(0L, 1L, NumberCompareAsType.NotEquals, PropertyFilter.ValueOneofCase.Attributes, true)]
+    [InlineData(1L, 1L, NumberCompareAsType.NotEquals, PropertyFilter.ValueOneofCase.Attributes, false)]
+    [InlineData(1L, 1L, NumberCompareAsType.GreaterThanEquals, PropertyFilter.ValueOneofCase.Attributes,
         true)]
-    [InlineData(1L, 2L, NumberCompareAsType.GreaterThanEquals, PropertyFilter.ValueOneofCase.Attribute,
+    [InlineData(1L, 2L, NumberCompareAsType.GreaterThanEquals, PropertyFilter.ValueOneofCase.Attributes,
         true)]
-    [InlineData(2L, 1L, NumberCompareAsType.GreaterThanEquals, PropertyFilter.ValueOneofCase.Attribute,
+    [InlineData(2L, 1L, NumberCompareAsType.GreaterThanEquals, PropertyFilter.ValueOneofCase.Attributes,
         false)]
-    [InlineData(1L, 2L, NumberCompareAsType.GreaterThan, PropertyFilter.ValueOneofCase.Attribute, true)]
-    [InlineData(1L, 1L, NumberCompareAsType.GreaterThan, PropertyFilter.ValueOneofCase.Attribute, false)]
-    [InlineData(1L, 1L, NumberCompareAsType.LessThanEquals, PropertyFilter.ValueOneofCase.Attribute, true)]
-    [InlineData(2L, 1L, NumberCompareAsType.LessThanEquals, PropertyFilter.ValueOneofCase.Attribute, true)]
-    [InlineData(1L, 2L, NumberCompareAsType.LessThanEquals, PropertyFilter.ValueOneofCase.Attribute, false)]
-    [InlineData(2L, 1L, NumberCompareAsType.LessThan, PropertyFilter.ValueOneofCase.Attribute, true)]
-    [InlineData(1L, 1L, NumberCompareAsType.LessThan, PropertyFilter.ValueOneofCase.Attribute, false)]
+    [InlineData(1L, 2L, NumberCompareAsType.GreaterThan, PropertyFilter.ValueOneofCase.Attributes, true)]
+    [InlineData(1L, 1L, NumberCompareAsType.GreaterThan, PropertyFilter.ValueOneofCase.Attributes, false)]
+    [InlineData(1L, 1L, NumberCompareAsType.LessThanEquals, PropertyFilter.ValueOneofCase.Attributes, true)]
+    [InlineData(2L, 1L, NumberCompareAsType.LessThanEquals, PropertyFilter.ValueOneofCase.Attributes, true)]
+    [InlineData(1L, 2L, NumberCompareAsType.LessThanEquals, PropertyFilter.ValueOneofCase.Attributes, false)]
+    [InlineData(2L, 1L, NumberCompareAsType.LessThan, PropertyFilter.ValueOneofCase.Attributes, true)]
+    [InlineData(1L, 1L, NumberCompareAsType.LessThan, PropertyFilter.ValueOneofCase.Attributes, false)]
     public async Task ReturnSpansWithMatchingInt64Property(long expected, long actual,
         NumberCompareAsType compareAs, PropertyFilter.ValueOneofCase propertyToCheck,
         bool shouldBeIncluded)
@@ -46,10 +46,23 @@ public class SpanInt64QueryTests : IClassFixture<AspireFixture>, IAsyncLifetime
 
         switch (propertyToCheck)
         {
-            case PropertyFilter.ValueOneofCase.Attribute:
+            case PropertyFilter.ValueOneofCase.Attributes:
                 spanToFind.Attributes[0].Value.IntValue = actual;
                 spanToFind.Attributes[0].Key = "test";
-                whereSpanPropertyFilter.Attribute = new KeyValueProperty() { Key = "test", Value = new AnyValueProperty { Int64Value = int64Property }};
+                whereSpanPropertyFilter.Attributes = new KeyValueListProperty
+                {
+                    Values =
+                    {
+                        new KeyValueProperty
+                        {
+                            Key = "test",
+                            Value = new AnyValueProperty
+                            {
+                                IntValue = int64Property
+                            }
+                        }
+                    }
+                };
                 break;
         }
 

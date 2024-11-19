@@ -8,7 +8,7 @@ public sealed partial class ExponentialHistogramDataPointFilter : IWhere<Exponen
     public bool Matches(ExponentialHistogramDataPoint signal) => ValueCase switch
     {
         ValueOneofCase.None => false,
-        ValueOneofCase.Attribute => KeyValueFilter.Matches(signal.Attributes, Attribute),
+        ValueOneofCase.Attributes => KeyValueListFilter.Matches(signal.Attributes, Attributes),
         ValueOneofCase.StartTimeUnixNano => UInt64Filter.Matches(signal.StartTimeUnixNano, StartTimeUnixNano),
         ValueOneofCase.TimeUnixNano => UInt64Filter.Matches(signal.TimeUnixNano, TimeUnixNano),
         ValueOneofCase.Count => UInt64Filter.Matches(signal.Count, Count),

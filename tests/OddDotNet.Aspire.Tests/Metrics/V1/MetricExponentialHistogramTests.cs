@@ -27,15 +27,21 @@ public class MetricExponentialHistogramTests : IClassFixture<AspireFixture>
                 {
                     DataPoint = new ExponentialHistogramDataPointFilter
                     {
-                        Attribute = new KeyValueProperty
+                        Attributes = new KeyValueListProperty
                         {
-                            Key = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].ExponentialHistogram.DataPoints[0].Attributes[0].Key,
-                            Value = new AnyValueProperty
+                            Values =
                             {
-                                StringValue = new StringProperty
+                                new KeyValueProperty
                                 {
-                                    CompareAs = StringCompareAsType.Equals,
-                                    Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].ExponentialHistogram.DataPoints[0].Attributes[0].Value.StringValue
+                                    Key = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].ExponentialHistogram.DataPoints[0].Attributes[0].Key,
+                                    Value = new AnyValueProperty
+                                    {
+                                        StringValue = new StringProperty
+                                        {
+                                            CompareAs = StringCompareAsType.Equals,
+                                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].ExponentialHistogram.DataPoints[0].Attributes[0].Value.StringValue
+                                        }
+                                    }
                                 }
                             }
                         }

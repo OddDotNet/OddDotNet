@@ -10,7 +10,7 @@ public sealed partial class EventFilter : IWhere<Span.Types.Event>
         ValueOneofCase.None => false,
         ValueOneofCase.TimeUnixNano => UInt64Filter.Matches(signal.TimeUnixNano, TimeUnixNano),
         ValueOneofCase.Name => StringFilter.Matches(signal.Name, Name),
-        ValueOneofCase.Attribute => KeyValueFilter.Matches(signal.Attributes, Attribute),
+        ValueOneofCase.Attributes => KeyValueListFilter.Matches(signal.Attributes, Attributes),
         ValueOneofCase.DroppedAttributesCount => UInt32Filter.Matches(signal.DroppedAttributesCount, DroppedAttributesCount),
         _ => false
     };
