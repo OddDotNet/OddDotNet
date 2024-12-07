@@ -9,7 +9,7 @@ public sealed partial class InstrumentationScopeFilter : IWhere<InstrumentationS
     {
         ValueOneofCase.None => false,
         ValueOneofCase.Name => StringFilter.Matches(signal.Name, Name),
-        ValueOneofCase.Attribute => KeyValueFilter.Matches(signal.Attributes, Attribute),
+        ValueOneofCase.Attributes => KeyValueListFilter.Matches(signal.Attributes, Attributes),
         ValueOneofCase.Version => StringFilter.Matches(signal.Version, Version),
         ValueOneofCase.DroppedAttributesCount => UInt32Filter.Matches(signal.DroppedAttributesCount, DroppedAttributesCount),
         _ => false

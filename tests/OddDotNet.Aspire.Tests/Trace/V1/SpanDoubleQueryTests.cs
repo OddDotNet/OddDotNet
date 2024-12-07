@@ -8,26 +8,26 @@ public class SpanDoubleQueryTests : IClassFixture<AspireFixture>, IAsyncLifetime
     private readonly AspireFixture _fixture;
 
     [Theory]
-    [InlineData(1.0, 1.0, NumberCompareAsType.Equals, PropertyFilter.ValueOneofCase.Attribute, true)]
-    [InlineData(0.0, 1.0, NumberCompareAsType.Equals, PropertyFilter.ValueOneofCase.Attribute, false)]
-    [InlineData(0.0, 1.0, NumberCompareAsType.NotEquals, PropertyFilter.ValueOneofCase.Attribute, true)]
-    [InlineData(1.0, 1.0, NumberCompareAsType.NotEquals, PropertyFilter.ValueOneofCase.Attribute, false)]
-    [InlineData(1.0, 1.0, NumberCompareAsType.GreaterThanEquals, PropertyFilter.ValueOneofCase.Attribute,
+    [InlineData(1.0, 1.0, NumberCompareAsType.Equals, PropertyFilter.ValueOneofCase.Attributes, true)]
+    [InlineData(0.0, 1.0, NumberCompareAsType.Equals, PropertyFilter.ValueOneofCase.Attributes, false)]
+    [InlineData(0.0, 1.0, NumberCompareAsType.NotEquals, PropertyFilter.ValueOneofCase.Attributes, true)]
+    [InlineData(1.0, 1.0, NumberCompareAsType.NotEquals, PropertyFilter.ValueOneofCase.Attributes, false)]
+    [InlineData(1.0, 1.0, NumberCompareAsType.GreaterThanEquals, PropertyFilter.ValueOneofCase.Attributes,
         true)]
-    [InlineData(1.0, 2.0, NumberCompareAsType.GreaterThanEquals, PropertyFilter.ValueOneofCase.Attribute,
+    [InlineData(1.0, 2.0, NumberCompareAsType.GreaterThanEquals, PropertyFilter.ValueOneofCase.Attributes,
         true)]
-    [InlineData(2.0, 1.0, NumberCompareAsType.GreaterThanEquals, PropertyFilter.ValueOneofCase.Attribute,
+    [InlineData(2.0, 1.0, NumberCompareAsType.GreaterThanEquals, PropertyFilter.ValueOneofCase.Attributes,
         false)]
-    [InlineData(1.0, 2.0, NumberCompareAsType.GreaterThan, PropertyFilter.ValueOneofCase.Attribute, true)]
-    [InlineData(1.0, 1.0, NumberCompareAsType.GreaterThan, PropertyFilter.ValueOneofCase.Attribute, false)]
-    [InlineData(1.0, 1.0, NumberCompareAsType.LessThanEquals, PropertyFilter.ValueOneofCase.Attribute,
+    [InlineData(1.0, 2.0, NumberCompareAsType.GreaterThan, PropertyFilter.ValueOneofCase.Attributes, true)]
+    [InlineData(1.0, 1.0, NumberCompareAsType.GreaterThan, PropertyFilter.ValueOneofCase.Attributes, false)]
+    [InlineData(1.0, 1.0, NumberCompareAsType.LessThanEquals, PropertyFilter.ValueOneofCase.Attributes,
         true)]
-    [InlineData(2.0, 1.0, NumberCompareAsType.LessThanEquals, PropertyFilter.ValueOneofCase.Attribute,
+    [InlineData(2.0, 1.0, NumberCompareAsType.LessThanEquals, PropertyFilter.ValueOneofCase.Attributes,
         true)]
-    [InlineData(1.0, 2.0, NumberCompareAsType.LessThanEquals, PropertyFilter.ValueOneofCase.Attribute,
+    [InlineData(1.0, 2.0, NumberCompareAsType.LessThanEquals, PropertyFilter.ValueOneofCase.Attributes,
         false)]
-    [InlineData(2.0, 1.0, NumberCompareAsType.LessThan, PropertyFilter.ValueOneofCase.Attribute, true)]
-    [InlineData(1.0, 1.0, NumberCompareAsType.LessThan, PropertyFilter.ValueOneofCase.Attribute, false)]
+    [InlineData(2.0, 1.0, NumberCompareAsType.LessThan, PropertyFilter.ValueOneofCase.Attributes, true)]
+    [InlineData(1.0, 1.0, NumberCompareAsType.LessThan, PropertyFilter.ValueOneofCase.Attributes, false)]
     public async Task ReturnSpansWithMatchingDoubleProperty(double expected, double actual,
         NumberCompareAsType compareAs, PropertyFilter.ValueOneofCase propertyToCheck,
         bool shouldBeIncluded)
@@ -44,11 +44,23 @@ public class SpanDoubleQueryTests : IClassFixture<AspireFixture>, IAsyncLifetime
 
         switch (propertyToCheck)
         {
-            case PropertyFilter.ValueOneofCase.Attribute:
+            case PropertyFilter.ValueOneofCase.Attributes:
                 spanToFind.Attributes[0].Value.DoubleValue = actual;
                 spanToFind.Attributes[0].Key = "test";
-                whereSpanPropertyFilter.Attribute = new KeyValueProperty()
-                    { Key = "test", DoubleValue = doubleProperty };
+                whereSpanPropertyFilter.Attributes = new KeyValueListProperty
+                {
+                    Values =
+                    {
+                        new KeyValueProperty
+                        {
+                            Key = "test",
+                            Value = new AnyValueProperty
+                            {
+                                DoubleValue = doubleProperty
+                            }
+                        }
+                    }
+                };
                 break;
         }
 

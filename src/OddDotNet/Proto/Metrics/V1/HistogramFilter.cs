@@ -9,6 +9,7 @@ public sealed partial class HistogramFilter : IWhere<Histogram>
     {
         ValueOneofCase.None => false,
         ValueOneofCase.DataPoint => signal.DataPoints.Any(dataPoint => DataPoint.Matches(dataPoint)),
-        ValueOneofCase.AggregationTemporality => AggregationTemporalityFilter.Matches(signal.AggregationTemporality, AggregationTemporality)
+        ValueOneofCase.AggregationTemporality => AggregationTemporalityFilter.Matches(signal.AggregationTemporality, AggregationTemporality),
+        _ => false
     };
 }

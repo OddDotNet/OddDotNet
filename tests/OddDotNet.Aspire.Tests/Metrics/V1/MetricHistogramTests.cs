@@ -27,13 +27,22 @@ public class MetricHistogramTests : IClassFixture<AspireFixture>
                 {
                     DataPoint = new HistogramDataPointFilter
                     {
-                        Attribute = new KeyValueProperty
+                        Attributes = new KeyValueListProperty
                         {
-                            Key = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Histogram.DataPoints[0].Attributes[0].Key,
-                            StringValue = new StringProperty
+                            Values =
                             {
-                                CompareAs = StringCompareAsType.Equals,
-                                Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Histogram.DataPoints[0].Attributes[0].Value.StringValue
+                                new KeyValueProperty
+                                {
+                                    Key = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Histogram.DataPoints[0].Attributes[0].Key,
+                                    Value = new AnyValueProperty
+                                    {
+                                        StringValue = new StringProperty
+                                        {
+                                            CompareAs = StringCompareAsType.Equals,
+                                            Compare = request.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Histogram.DataPoints[0].Attributes[0].Value.StringValue
+                                        }
+                                    }
+                                }
                             }
                         }
                     }

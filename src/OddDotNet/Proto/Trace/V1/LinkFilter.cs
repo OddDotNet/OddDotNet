@@ -11,7 +11,7 @@ public sealed partial class LinkFilter : IWhere<Span.Types.Link>
         ValueOneofCase.TraceId => ByteStringFilter.Matches(signal.TraceId, TraceId),
         ValueOneofCase.SpanId => ByteStringFilter.Matches(signal.SpanId, SpanId),
         ValueOneofCase.TraceState => StringFilter.Matches(signal.TraceState, TraceState),
-        ValueOneofCase.Attribute => KeyValueFilter.Matches(signal.Attributes, Attribute),
+        ValueOneofCase.Attributes => KeyValueListFilter.Matches(signal.Attributes, Attributes),
         ValueOneofCase.DroppedAttributesCount => UInt32Filter.Matches(signal.DroppedAttributesCount, DroppedAttributesCount),
         ValueOneofCase.Flags => UInt32Filter.Matches(signal.Flags, Flags),
         _ => false

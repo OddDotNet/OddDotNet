@@ -43,6 +43,8 @@ public class CommonHelpers
             _ when value is double d => new OtelAnyValue(){ DoubleValue = d },
             _ when value is bool b => new OtelAnyValue(){ BoolValue = b },
             _ when value is ByteString b => new OtelAnyValue(){ BytesValue = b},
+            _ when value is ArrayValue a => new OtelAnyValue() { ArrayValue = a},
+            _ when value is KeyValueList kv => new OtelAnyValue() { KvlistValue = kv},
             _ => throw new NotImplementedException(), // TODO Is this the right exception?
         };
 

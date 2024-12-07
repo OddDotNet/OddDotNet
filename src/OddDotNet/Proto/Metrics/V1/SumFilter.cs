@@ -10,6 +10,7 @@ public sealed partial class SumFilter : IWhere<Sum>
         ValueOneofCase.None => false,
         ValueOneofCase.DataPoint => signal.DataPoints.Any(dataPoint => DataPoint.Matches(dataPoint)),
         ValueOneofCase.AggregationTemporality => AggregationTemporalityFilter.Matches(signal.AggregationTemporality, AggregationTemporality),
-        ValueOneofCase.IsMonotonic => BoolFilter.Matches(signal.IsMonotonic, IsMonotonic)
+        ValueOneofCase.IsMonotonic => BoolFilter.Matches(signal.IsMonotonic, IsMonotonic),
+        _ => false
     };
 }

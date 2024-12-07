@@ -13,10 +13,10 @@ public class SpanBoolQueryTests : IClassFixture<AspireFixture>, IAsyncLifetime
     }
 
     [Theory]
-    [InlineData(true, true, BoolCompareAsType.Equals, PropertyFilter.ValueOneofCase.Attribute, true)]
-    [InlineData(false, true, BoolCompareAsType.Equals, PropertyFilter.ValueOneofCase.Attribute, false)]
-    [InlineData(false, true, BoolCompareAsType.NotEquals, PropertyFilter.ValueOneofCase.Attribute, true)]
-    [InlineData(true, true, BoolCompareAsType.NotEquals, PropertyFilter.ValueOneofCase.Attribute, false)]
+    [InlineData(true, true, BoolCompareAsType.Equals, PropertyFilter.ValueOneofCase.Attributes, true)]
+    [InlineData(false, true, BoolCompareAsType.Equals, PropertyFilter.ValueOneofCase.Attributes, false)]
+    [InlineData(false, true, BoolCompareAsType.NotEquals, PropertyFilter.ValueOneofCase.Attributes, true)]
+    [InlineData(true, true, BoolCompareAsType.NotEquals, PropertyFilter.ValueOneofCase.Attributes, false)]
     public async Task ReturnSpansWithMatchingBoolProperty(bool expected, bool actual,
         BoolCompareAsType compareAs, PropertyFilter.ValueOneofCase propertyToCheck,
         bool shouldBeIncluded)
@@ -33,10 +33,23 @@ public class SpanBoolQueryTests : IClassFixture<AspireFixture>, IAsyncLifetime
 
         switch (propertyToCheck)
         {
-            case PropertyFilter.ValueOneofCase.Attribute:
+            case PropertyFilter.ValueOneofCase.Attributes:
                 spanToFind.Attributes[0].Value.BoolValue = actual;
                 spanToFind.Attributes[0].Key = "test";
-                whereSpanPropertyFilter.Attribute = new KeyValueProperty() { Key = "test", BoolValue = boolProperty };
+                whereSpanPropertyFilter.Attributes = new KeyValueListProperty
+                {
+                    Values =
+                    {
+                        new KeyValueProperty
+                        {
+                            Key = "test",
+                            Value = new AnyValueProperty
+                            {
+                                BoolValue = boolProperty
+                            }
+                        }
+                    }
+                };
                 break;
         }
 

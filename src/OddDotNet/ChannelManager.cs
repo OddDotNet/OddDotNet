@@ -1,6 +1,4 @@
 using System.Threading.Channels;
-using OddDotNet.Proto.Metrics.V1;
-using OddDotNet.Proto.Trace.V1;
 
 namespace OddDotNet;
 

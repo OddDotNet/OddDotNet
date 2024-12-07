@@ -13,10 +13,11 @@ public sealed partial class PropertyFilter : IWhere<LogRecord>
         ValueOneofCase.SeverityNumber => SeverityNumberFilter.Matches(signal.SeverityNumber, SeverityNumber),
         ValueOneofCase.SeverityText => StringFilter.Matches(signal.SeverityText, SeverityText),
         ValueOneofCase.Body => AnyValueFilter.Matches(signal.Body, Body),
-        ValueOneofCase.Attribute => KeyValueFilter.Matches(signal.Attributes, Attribute),
+        ValueOneofCase.Attributes => KeyValueListFilter.Matches(signal.Attributes, Attributes),
         ValueOneofCase.DroppedAttributesCount => UInt32Filter.Matches(signal.DroppedAttributesCount, DroppedAttributesCount),
         ValueOneofCase.Flags => UInt32Filter.Matches(signal.Flags, Flags),
         ValueOneofCase.TraceId => ByteStringFilter.Matches(signal.TraceId, TraceId),
-        ValueOneofCase.SpanId => ByteStringFilter.Matches(signal.SpanId, SpanId)
+        ValueOneofCase.SpanId => ByteStringFilter.Matches(signal.SpanId, SpanId),
+        _ => false
     };
 }

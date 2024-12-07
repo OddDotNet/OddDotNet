@@ -113,13 +113,22 @@ public class SpanLinkTests : IClassFixture<AspireFixture>
             {
                 Link = new LinkFilter
                 {
-                    Attribute = new KeyValueProperty
+                    Attributes = new KeyValueListProperty
                     {
-                        Key = spanToFind.Links[0].Attributes[0].Key,
-                        StringValue = new StringProperty
+                        Values =
                         {
-                            CompareAs = StringCompareAsType.Equals,
-                            Compare = spanToFind.Links[0].Attributes[0].Value.StringValue
+                            new KeyValueProperty
+                            {
+                                Key = spanToFind.Links[0].Attributes[0].Key,
+                                Value = new AnyValueProperty
+                                {
+                                    StringValue = new StringProperty
+                                    {
+                                        CompareAs = StringCompareAsType.Equals,
+                                        Compare = spanToFind.Links[0].Attributes[0].Value.StringValue
+                                    }
+                                }
+                            }
                         }
                     }
                 }

@@ -84,13 +84,22 @@ public class SpanEventTests : IClassFixture<AspireFixture>
             {
                 Event = new EventFilter
                 {
-                    Attribute = new KeyValueProperty
+                    Attributes = new KeyValueListProperty
                     {
-                        Key = spanToFind.Events[0].Attributes[0].Key,
-                        StringValue = new StringProperty
+                        Values =
                         {
-                            CompareAs = StringCompareAsType.Equals,
-                            Compare = spanToFind.Events[0].Attributes[0].Value.StringValue
+                            new KeyValueProperty
+                            {
+                                Key = spanToFind.Events[0].Attributes[0].Key,
+                                Value = new AnyValueProperty
+                                {
+                                    StringValue = new StringProperty
+                                    {
+                                        CompareAs = StringCompareAsType.Equals,
+                                        Compare = spanToFind.Events[0].Attributes[0].Value.StringValue
+                                    }
+                                }
+                            }
                         }
                     }
                 }

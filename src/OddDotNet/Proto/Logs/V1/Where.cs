@@ -12,6 +12,7 @@ public sealed partial class Where : IWhere<FlatLog>
         ValueOneofCase.InstrumentationScope => InstrumentationScope.Matches(signal.InstrumentationScope),
         ValueOneofCase.Resource => Resource.Matches(signal.Resource),
         ValueOneofCase.ResourceSchemaUrl => StringFilter.Matches(signal.ResourceSchemaUrl, ResourceSchemaUrl),
-        ValueOneofCase.InstrumentationScopeSchemaUrl => StringFilter.Matches(signal.InstrumentationScopeSchemaUrl, InstrumentationScopeSchemaUrl)
+        ValueOneofCase.InstrumentationScopeSchemaUrl => StringFilter.Matches(signal.InstrumentationScopeSchemaUrl, InstrumentationScopeSchemaUrl),
+        _ => false
     };
 }
