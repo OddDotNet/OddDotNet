@@ -23,4 +23,13 @@ public class MetricQueryService : OddDotNet.Proto.Metrics.V1.MetricQueryService.
 
         return response;
     }
+
+    public override async Task StreamQuery(MetricQueryRequest request, IServerStreamWriter<FlatMetric> responseStream, ServerCallContext context)
+    {
+        await foreach (FlatMetric metric in _signals.QueryAsync(request.Take, request.Duration, request.Filters)
+                           .WithCancellation(context.CancellationToken).ConfigureAwait(false))
+        {
+            await responseStream.WriteAsync(metric);
+        }
+    }
 }
