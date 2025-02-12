@@ -1,3 +1,5 @@
+using Aspire.Hosting;
+using Aspire.Hosting.ApplicationModel;
 using Grpc.Net.Client;
 using Microsoft.Extensions.DependencyInjection;
 using LogQueryService = OddDotNet.Proto.Logs.V1.LogQueryService;

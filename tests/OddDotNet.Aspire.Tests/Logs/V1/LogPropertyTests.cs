@@ -1,4 +1,5 @@
 using Google.Protobuf;
+using Grpc.Core;
 using OddDotNet.Proto.Common.V1;
 using OddDotNet.Proto.Logs.V1;
 using OddDotNet.Proto.Resource.V1;
@@ -874,6 +875,56 @@ public class LogPropertyTests : IClassFixture<AspireFixture>
         var query = new LogQueryRequest { Filters = { filter }, Duration = _duration };
         var response = await _fixture.LogQueryServiceClient.QueryAsync(query);
         Assert.Contains(response.Logs, log => log.Log.TraceId == request.ResourceLogs[0].ScopeLogs[0].LogRecords[0].TraceId);
+    }
+    
+    [Fact]
+    public async Task ReturnLogsAsStream()
+    {
+        var request1 = LogHelpers.CreateExportLogsServiceRequest();
+        var request2 = LogHelpers.CreateExportLogsServiceRequest();
+        await _fixture.LogsServiceClient.ExportAsync(request1);
+        await _fixture.LogsServiceClient.ExportAsync(request2);
+
+        var filter = new Where
+        {
+            Or = new OrFilter
+            {
+                Filters =
+                {
+                    new Where
+                    {
+                        Property = new PropertyFilter
+                        {
+                            SpanId = new ByteStringProperty
+                            {
+                                CompareAs = ByteStringCompareAsType.Equals,
+                                Compare = request1.ResourceLogs[0].ScopeLogs[0].LogRecords[0].SpanId
+                            }
+                        }
+                    },
+                    new Where
+                    {
+                        Property = new PropertyFilter
+                        {
+                            SpanId = new ByteStringProperty
+                            {
+                                CompareAs = ByteStringCompareAsType.Equals,
+                                Compare = request2.ResourceLogs[0].ScopeLogs[0].LogRecords[0].SpanId
+                            }
+                        }
+                    }
+                }
+            }
+        };
+        
+        var query = new LogQueryRequest { Filters = { filter }, Duration = _duration, Take = new Take{TakeAll = new TakeAll()}};
+        List<FlatLog> logs = new List<FlatLog>();
+        await foreach (FlatLog log in _fixture.LogQueryServiceClient.StreamQuery(query).ResponseStream.ReadAllAsync())
+        {
+            logs.Add(log);
+        }
+        
+        Assert.Equal(2, logs.Count);
     }
 
     [Fact]

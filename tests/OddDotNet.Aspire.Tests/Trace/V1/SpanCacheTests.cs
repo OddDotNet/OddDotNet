@@ -1,3 +1,5 @@
+using Aspire.Hosting;
+using Aspire.Hosting.ApplicationModel;
 using Grpc.Net.Client;
 using Microsoft.Extensions.DependencyInjection;
 using OddDotNet.Proto.Common.V1;

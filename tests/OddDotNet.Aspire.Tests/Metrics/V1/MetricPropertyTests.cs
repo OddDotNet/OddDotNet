@@ -1,3 +1,4 @@
+using Grpc.Core;
 using OddDotNet.Proto.Common.V1;
 using OddDotNet.Proto.Metrics.V1;
 using OddDotNet.Proto.Resource.V1;
@@ -35,6 +36,54 @@ public class MetricPropertyTests : IClassFixture<AspireFixture>
         var response = await _fixture.MetricQueryServiceClient.QueryAsync(query);
         
         Assert.Single(response.Metrics);
+    }
+    
+    [Fact]
+    public async Task ReturnMetricsAsStream()
+    {
+        var request1 = MetricHelpers.CreateExportMetricsServiceRequest();
+        var request2 = MetricHelpers.CreateExportMetricsServiceRequest();
+        await _fixture.MetricsServiceClient.ExportAsync(request1);
+        await _fixture.MetricsServiceClient.ExportAsync(request2);
+
+        var filter = new Where
+        {
+            Or = new OrFilter
+            {
+                Filters =
+                {
+                    new Where
+                    {
+                        Property = new PropertyFilter
+                        {
+                            Name = new StringProperty
+                            {
+                                CompareAs = StringCompareAsType.Equals,
+                                Compare = request1.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Name
+                            }
+                        }
+                    },
+                    new Where
+                    {
+                        Property = new PropertyFilter
+                        {
+                            Name = new StringProperty
+                            {
+                                CompareAs = StringCompareAsType.Equals,
+                                Compare = request2.ResourceMetrics[0].ScopeMetrics[0].Metrics[0].Name
+                            }
+                        }
+                    }
+                }
+            }
+        };
+        
+        var query = new MetricQueryRequest { Filters = { filter }, Take = new Take{TakeAll = new TakeAll()}, Duration = new Duration{Milliseconds = 1000} };
+        List<FlatMetric> metrics = new List<FlatMetric>();
+        await foreach (FlatMetric metric in _fixture.MetricQueryServiceClient.StreamQuery(query).ResponseStream.ReadAllAsync())
+            metrics.Add(metric);
+        
+        Assert.Equal(2, metrics.Count);
     }
     
     [Fact]
