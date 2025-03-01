@@ -1,3 +1,4 @@
+using Microsoft.OpenApi.Models;
 using OddDotNet;
 using OddDotNet.Proto.Logs.V1;
 using OddDotNet.Proto.Metrics.V1;
@@ -12,19 +13,34 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddGrpc();
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 builder.Services.AddHealthChecks();
 
+// OpenAPI
+// Not quite ready for prime-time, can't properly describe OpenTelemetry signals
+// builder.Services.AddOpenApi();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "OddDotNet", Version = "v1" });
+    c.CustomSchemaIds(x => x.FullName.Replace("+", "~"));
+});
+
+
+// SIGNALS
 builder.Services.AddScoped<SignalList<FlatMetric>>().AddScoped<ISignalList, SignalList<FlatMetric>>();
 builder.Services.AddScoped<SignalList<FlatSpan>>().AddScoped<ISignalList, SignalList<FlatSpan>>();
 builder.Services.AddScoped<SignalList<FlatLog>>().AddScoped<ISignalList, SignalList<FlatLog>>();
+
+// CHANNELS
 builder.Services.AddScoped<ChannelManager<FlatSpan>>();
 builder.Services.AddScoped<ChannelManager<FlatMetric>>();
 builder.Services.AddScoped<ChannelManager<FlatLog>>();
+
 builder.Services.AddSingleton(TimeProvider.System);
+
+// BACKGROUND
 builder.Services.AddHostedService<CacheCleanupBackgroundService>();
 
+// CONFIGURATION
 builder.Services.Configure<OddSettings>(options =>
 {
     // Allow single and double underscores ('_', '__'). Single underscores

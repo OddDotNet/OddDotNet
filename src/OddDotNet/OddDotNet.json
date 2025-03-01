@@ -1,0 +1,890 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "OddDotNet",
+    "version": "v1"
+  },
+  "paths": {
+    "/v1/query/logs": {
+      "post": {
+        "tags": [
+          "Query"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OddDotNet.Proto.Logs.V1.LogQueryRequest"
+              }
+            },
+            "application/x-protobuf": {
+              "schema": {
+                "$ref": "#/components/schemas/OddDotNet.Proto.Logs.V1.LogQueryRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OddDotNet.Proto.Logs.V1.LogQueryResponse"
+                }
+              },
+              "application/x-protobuf": {
+                "schema": {
+                  "$ref": "#/components/schemas/OddDotNet.Proto.Logs.V1.LogQueryResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "application/x-protobuf": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Microsoft.AspNetCore.Mvc.ProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": { }
+      },
+      "OddDotNet.Proto.Common.V1.AnyValueProperty": {
+        "type": "object",
+        "properties": {
+          "stringValue": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Common.V1.StringProperty"
+          },
+          "boolValue": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Common.V1.BoolProperty"
+          },
+          "intValue": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Common.V1.Int64Property"
+          },
+          "doubleValue": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Common.V1.DoubleProperty"
+          },
+          "arrayValue": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Common.V1.ArrayValueProperty"
+          },
+          "kvlistValue": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Common.V1.KeyValueListProperty"
+          },
+          "byteStringValue": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Common.V1.ByteStringProperty"
+          },
+          "valueCase": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Common.V1.AnyValueProperty~ValueOneofCase"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OddDotNet.Proto.Common.V1.AnyValueProperty~ValueOneofCase": {
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "OddDotNet.Proto.Common.V1.ArrayValueProperty": {
+        "type": "object",
+        "properties": {
+          "values": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OddDotNet.Proto.Common.V1.AnyValueProperty"
+            },
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OddDotNet.Proto.Common.V1.BoolCompareAsType": {
+        "enum": [
+          0,
+          1,
+          2
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "OddDotNet.Proto.Common.V1.BoolProperty": {
+        "type": "object",
+        "properties": {
+          "compareAs": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Common.V1.BoolCompareAsType"
+          },
+          "compare": {
+            "type": "boolean"
+          },
+          "hasCompare": {
+            "type": "boolean",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OddDotNet.Proto.Common.V1.ByteStringCompareAsType": {
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "OddDotNet.Proto.Common.V1.ByteStringProperty": {
+        "type": "object",
+        "properties": {
+          "compareAs": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Common.V1.ByteStringCompareAsType"
+          },
+          "compare": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "hasCompare": {
+            "type": "boolean",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OddDotNet.Proto.Common.V1.DoubleProperty": {
+        "type": "object",
+        "properties": {
+          "compareAs": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Common.V1.NumberCompareAsType"
+          },
+          "compare": {
+            "type": "number",
+            "format": "double"
+          },
+          "hasCompare": {
+            "type": "boolean",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OddDotNet.Proto.Common.V1.Duration": {
+        "type": "object",
+        "properties": {
+          "milliseconds": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OddDotNet.Proto.Common.V1.EnumCompareAsType": {
+        "enum": [
+          0,
+          1,
+          2
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "OddDotNet.Proto.Common.V1.InstrumentationScopeFilter": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Common.V1.StringProperty"
+          },
+          "attributes": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Common.V1.KeyValueListProperty"
+          },
+          "version": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Common.V1.StringProperty"
+          },
+          "droppedAttributesCount": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Common.V1.UInt32Property"
+          },
+          "valueCase": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Common.V1.InstrumentationScopeFilter~ValueOneofCase"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OddDotNet.Proto.Common.V1.InstrumentationScopeFilter~ValueOneofCase": {
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "OddDotNet.Proto.Common.V1.Int64Property": {
+        "type": "object",
+        "properties": {
+          "compareAs": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Common.V1.NumberCompareAsType"
+          },
+          "compare": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "hasCompare": {
+            "type": "boolean",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OddDotNet.Proto.Common.V1.KeyValueListProperty": {
+        "type": "object",
+        "properties": {
+          "values": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OddDotNet.Proto.Common.V1.KeyValueProperty"
+            },
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OddDotNet.Proto.Common.V1.KeyValueProperty": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "nullable": true
+          },
+          "value": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Common.V1.AnyValueProperty"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OddDotNet.Proto.Common.V1.NumberCompareAsType": {
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "OddDotNet.Proto.Common.V1.StringCompareAsType": {
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "OddDotNet.Proto.Common.V1.StringProperty": {
+        "type": "object",
+        "properties": {
+          "compareAs": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Common.V1.StringCompareAsType"
+          },
+          "compare": {
+            "type": "string",
+            "nullable": true
+          },
+          "hasCompare": {
+            "type": "boolean",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OddDotNet.Proto.Common.V1.Take": {
+        "type": "object",
+        "properties": {
+          "takeFirst": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Common.V1.TakeFirst"
+          },
+          "takeAll": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Common.V1.TakeAll"
+          },
+          "takeExact": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Common.V1.TakeExact"
+          },
+          "valueCase": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Common.V1.Take~ValueOneofCase"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OddDotNet.Proto.Common.V1.TakeAll": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "OddDotNet.Proto.Common.V1.TakeExact": {
+        "type": "object",
+        "properties": {
+          "count": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OddDotNet.Proto.Common.V1.TakeFirst": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "OddDotNet.Proto.Common.V1.Take~ValueOneofCase": {
+        "enum": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "OddDotNet.Proto.Common.V1.UInt32Property": {
+        "type": "object",
+        "properties": {
+          "compareAs": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Common.V1.NumberCompareAsType"
+          },
+          "compare": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "hasCompare": {
+            "type": "boolean",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OddDotNet.Proto.Common.V1.UInt64Property": {
+        "type": "object",
+        "properties": {
+          "compareAs": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Common.V1.NumberCompareAsType"
+          },
+          "compare": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "hasCompare": {
+            "type": "boolean",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OddDotNet.Proto.Logs.V1.FlatLog": {
+        "type": "object",
+        "properties": {
+          "log": {
+            "$ref": "#/components/schemas/OpenTelemetry.Proto.Logs.V1.LogRecord"
+          },
+          "resource": {
+            "$ref": "#/components/schemas/OpenTelemetry.Proto.Resource.V1.Resource"
+          },
+          "instrumentationScope": {
+            "$ref": "#/components/schemas/OpenTelemetry.Proto.Common.V1.InstrumentationScope"
+          },
+          "resourceSchemaUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "instrumentationScopeSchemaUrl": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OddDotNet.Proto.Logs.V1.LogQueryRequest": {
+        "type": "object",
+        "properties": {
+          "filters": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OddDotNet.Proto.Logs.V1.Where"
+            },
+            "nullable": true,
+            "readOnly": true
+          },
+          "take": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Common.V1.Take"
+          },
+          "duration": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Common.V1.Duration"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OddDotNet.Proto.Logs.V1.LogQueryResponse": {
+        "type": "object",
+        "properties": {
+          "logs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OddDotNet.Proto.Logs.V1.FlatLog"
+            },
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OddDotNet.Proto.Logs.V1.OrFilter": {
+        "type": "object",
+        "properties": {
+          "filters": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OddDotNet.Proto.Logs.V1.Where"
+            },
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OddDotNet.Proto.Logs.V1.PropertyFilter": {
+        "type": "object",
+        "properties": {
+          "timeUnixNano": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Common.V1.UInt64Property"
+          },
+          "observedTimeUnixNano": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Common.V1.UInt64Property"
+          },
+          "severityNumber": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Logs.V1.SeverityNumberProperty"
+          },
+          "severityText": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Common.V1.StringProperty"
+          },
+          "body": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Common.V1.AnyValueProperty"
+          },
+          "attributes": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Common.V1.KeyValueListProperty"
+          },
+          "droppedAttributesCount": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Common.V1.UInt32Property"
+          },
+          "flags": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Common.V1.UInt32Property"
+          },
+          "traceId": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Common.V1.ByteStringProperty"
+          },
+          "spanId": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Common.V1.ByteStringProperty"
+          },
+          "valueCase": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Logs.V1.PropertyFilter~ValueOneofCase"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OddDotNet.Proto.Logs.V1.PropertyFilter~ValueOneofCase": {
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "OddDotNet.Proto.Logs.V1.SeverityNumberProperty": {
+        "type": "object",
+        "properties": {
+          "compareAs": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Common.V1.EnumCompareAsType"
+          },
+          "compare": {
+            "$ref": "#/components/schemas/OpenTelemetry.Proto.Logs.V1.SeverityNumber"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OddDotNet.Proto.Logs.V1.Where": {
+        "type": "object",
+        "properties": {
+          "property": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Logs.V1.PropertyFilter"
+          },
+          "or": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Logs.V1.OrFilter"
+          },
+          "instrumentationScope": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Common.V1.InstrumentationScopeFilter"
+          },
+          "resource": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Resource.V1.ResourceFilter"
+          },
+          "instrumentationScopeSchemaUrl": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Common.V1.StringProperty"
+          },
+          "resourceSchemaUrl": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Common.V1.StringProperty"
+          },
+          "valueCase": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Logs.V1.Where~ValueOneofCase"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OddDotNet.Proto.Logs.V1.Where~ValueOneofCase": {
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "OddDotNet.Proto.Resource.V1.ResourceFilter": {
+        "type": "object",
+        "properties": {
+          "attributes": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Common.V1.KeyValueListProperty"
+          },
+          "droppedAttributesCount": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Common.V1.UInt32Property"
+          },
+          "valueCase": {
+            "$ref": "#/components/schemas/OddDotNet.Proto.Resource.V1.ResourceFilter~ValueOneofCase"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OddDotNet.Proto.Resource.V1.ResourceFilter~ValueOneofCase": {
+        "enum": [
+          0,
+          1,
+          2
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "OpenTelemetry.Proto.Common.V1.AnyValue": {
+        "type": "object",
+        "properties": {
+          "stringValue": {
+            "type": "string",
+            "nullable": true
+          },
+          "hasStringValue": {
+            "type": "boolean",
+            "readOnly": true
+          },
+          "boolValue": {
+            "type": "boolean"
+          },
+          "hasBoolValue": {
+            "type": "boolean",
+            "readOnly": true
+          },
+          "intValue": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "hasIntValue": {
+            "type": "boolean",
+            "readOnly": true
+          },
+          "doubleValue": {
+            "type": "number",
+            "format": "double"
+          },
+          "hasDoubleValue": {
+            "type": "boolean",
+            "readOnly": true
+          },
+          "arrayValue": {
+            "$ref": "#/components/schemas/OpenTelemetry.Proto.Common.V1.ArrayValue"
+          },
+          "kvlistValue": {
+            "$ref": "#/components/schemas/OpenTelemetry.Proto.Common.V1.KeyValueList"
+          },
+          "bytesValue": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "hasBytesValue": {
+            "type": "boolean",
+            "readOnly": true
+          },
+          "valueCase": {
+            "$ref": "#/components/schemas/OpenTelemetry.Proto.Common.V1.AnyValue~ValueOneofCase"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OpenTelemetry.Proto.Common.V1.AnyValue~ValueOneofCase": {
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "OpenTelemetry.Proto.Common.V1.ArrayValue": {
+        "type": "object",
+        "properties": {
+          "values": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OpenTelemetry.Proto.Common.V1.AnyValue"
+            },
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OpenTelemetry.Proto.Common.V1.InstrumentationScope": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "version": {
+            "type": "string",
+            "nullable": true
+          },
+          "attributes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OpenTelemetry.Proto.Common.V1.KeyValue"
+            },
+            "nullable": true,
+            "readOnly": true
+          },
+          "droppedAttributesCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OpenTelemetry.Proto.Common.V1.KeyValue": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "nullable": true
+          },
+          "value": {
+            "$ref": "#/components/schemas/OpenTelemetry.Proto.Common.V1.AnyValue"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OpenTelemetry.Proto.Common.V1.KeyValueList": {
+        "type": "object",
+        "properties": {
+          "values": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OpenTelemetry.Proto.Common.V1.KeyValue"
+            },
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OpenTelemetry.Proto.Logs.V1.LogRecord": {
+        "type": "object",
+        "properties": {
+          "timeUnixNano": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "observedTimeUnixNano": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "severityNumber": {
+            "$ref": "#/components/schemas/OpenTelemetry.Proto.Logs.V1.SeverityNumber"
+          },
+          "severityText": {
+            "type": "string",
+            "nullable": true
+          },
+          "body": {
+            "$ref": "#/components/schemas/OpenTelemetry.Proto.Common.V1.AnyValue"
+          },
+          "attributes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OpenTelemetry.Proto.Common.V1.KeyValue"
+            },
+            "nullable": true,
+            "readOnly": true
+          },
+          "droppedAttributesCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "flags": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "traceId": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "spanId": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OpenTelemetry.Proto.Logs.V1.SeverityNumber": {
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "OpenTelemetry.Proto.Resource.V1.Resource": {
+        "type": "object",
+        "properties": {
+          "attributes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OpenTelemetry.Proto.Common.V1.KeyValue"
+            },
+            "nullable": true,
+            "readOnly": true
+          },
+          "droppedAttributesCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}
