@@ -14,7 +14,9 @@ public class SignalList<TSignal> : ISignalList where TSignal : class, ISignal
 
     private static readonly Queue<Expirable<TSignal>> Signals = [];
     
-    private static readonly object Lock = new();
+    // ReSharper disable once StaticMemberInGenericType
+    // This is by design, each instance of the generic should have its own copy.
+    private static readonly Lock Lock = new();
     
     public SignalList(ChannelManager<TSignal> channels, TimeProvider timeProvider, ILogger<SignalList<TSignal>> logger,
         IOptions<OddSettings> oddSettings)
@@ -31,7 +33,6 @@ public class SignalList<TSignal> : ISignalList where TSignal : class, ISignal
         {
             DateTimeOffset expiresAt = _timeProvider.GetUtcNow().AddMilliseconds(_oddSettings.Cache.Expiration);
             Signals.Enqueue(new Expirable<TSignal>(signal, expiresAt));
-            
             _channels.NotifyChannels(signal);
         }
     }
