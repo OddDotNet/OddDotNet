@@ -12,9 +12,11 @@ public class SignalList<TSignal> : ISignalList where TSignal : class, ISignal
     private readonly OddSettings _oddSettings;
     private readonly ILogger<SignalList<TSignal>> _logger;
 
-    private static readonly List<Expirable<TSignal>> Signals = [];
+    private static readonly Queue<Expirable<TSignal>> Signals = [];
     
-    private static readonly object Lock = new();
+    // ReSharper disable once StaticMemberInGenericType
+    // This is by design, each instance of the generic should have its own copy.
+    private static readonly Lock Lock = new();
     
     public SignalList(ChannelManager<TSignal> channels, TimeProvider timeProvider, ILogger<SignalList<TSignal>> logger,
         IOptions<OddSettings> oddSettings)
@@ -30,8 +32,7 @@ public class SignalList<TSignal> : ISignalList where TSignal : class, ISignal
         lock (Lock)
         {
             DateTimeOffset expiresAt = _timeProvider.GetUtcNow().AddMilliseconds(_oddSettings.Cache.Expiration);
-            Signals.Add(new Expirable<TSignal>(signal, expiresAt));
-            
+            Signals.Enqueue(new Expirable<TSignal>(signal, expiresAt));
             _channels.NotifyChannels(signal);
         }
     }
@@ -97,7 +98,12 @@ public class SignalList<TSignal> : ISignalList where TSignal : class, ISignal
         lock (Lock)
         {
             DateTimeOffset currentTime = _timeProvider.GetUtcNow();
-            int numRemoved = Signals.RemoveAll(expirable => expirable.ExpireAt < currentTime);
+            int numRemoved = 0;
+            while (Signals.TryPeek(out var result) && result.ExpireAt < currentTime)
+            {
+                Signals.Dequeue();
+                numRemoved++;
+            }
             _logger.LogDebug("Removed {numRemoved} signals", numRemoved);
         }
     }
