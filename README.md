@@ -5,8 +5,7 @@ OddDotNet stands for Observability Driven Development (ODD) in .NET.
 ## Description
 OddDotNet is a test harness for ODD. It includes an OTLP receiver that supports grpc (with http/protobuf and http/json on the roadmap).
 
-This project is in active development. Please continue to check back often. Spans/Traces, Metrics, and LogRecords are all supported. Profiles are being actively developed. 
-are on the roadmap. 
+This project is in active development. Please continue to check back often. Spans/Traces, Metrics, and LogRecords are all supported. Profiles are being actively developed.
 
 ## Tools and Setup
 ### Git Submodules
