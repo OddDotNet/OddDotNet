@@ -40,7 +40,7 @@ public class AspireFixture : IAsyncLifetime
         var resourceNotificationService = _app.Services.GetRequiredService<ResourceNotificationService>();
         await _app.StartAsync();
 
-        await resourceNotificationService.WaitForResourceAsync("odd").WaitAsync(TimeSpan.FromSeconds(30));
+        await resourceNotificationService.WaitForResourceHealthyAsync("odd").WaitAsync(TimeSpan.FromSeconds(30));
 
         var endpoint = _app.GetEndpoint("odd", "grpc");
         var traceServiceChannel = GrpcChannel.ForAddress(endpoint.AbsoluteUri);
