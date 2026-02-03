@@ -1,0 +1,96 @@
+syntax = "proto3";
+
+package odddotnet.proto.appinsights.v1;
+
+option csharp_namespace = "OddDotNet.Proto.AppInsights.V1";
+option java_multiple_files = true;
+option java_package = "io.odddotnet.proto.appinsights.v1";
+option java_outer_classname = "CommonProto";
+option go_package = "go.odddotnet.io/proto/appinsights/v1";
+
+// Operation context for distributed tracing correlation
+message OperationContext {
+  string id = 1;          // Operation ID for correlation
+  string parent_id = 2;   // Parent operation ID
+  string name = 3;        // Operation name
+  string synthetic_source = 4;  // Synthetic traffic source identifier
+  string correlation_vector = 5; // Correlation vector for distributed tracing
+}
+
+// Cloud context identifying the service/instance
+message CloudContext {
+  string role_name = 1;      // Name of the role/service
+  string role_instance = 2;  // Instance identifier
+}
+
+// Device context for client telemetry
+message DeviceContext {
+  string id = 1;          // Device identifier
+  string type = 2;        // Device type (PC, Phone, etc.)
+  string os_version = 3;  // Operating system version
+  string model = 4;       // Device model
+  string oem_name = 5;    // Device manufacturer
+}
+
+// User context for user identification
+message UserContext {
+  string id = 1;                // Anonymous user ID
+  string authenticated_id = 2;  // Authenticated user ID
+  string account_id = 3;        // User account ID
+}
+
+// Session context for session tracking
+message SessionContext {
+  string id = 1;          // Session identifier
+  bool is_first = 2;      // Whether this is the first session
+}
+
+// Location context from IP geolocation
+message LocationContext {
+  string ip = 1;        // Client IP address
+  string country = 2;   // Country code/name
+  string province = 3;  // Province/state
+  string city = 4;      // City name
+}
+
+// Application context
+message ApplicationContext {
+  string version = 1;  // Application version
+}
+
+// Internal SDK context
+message InternalContext {
+  string sdk_version = 1;    // Application Insights SDK version
+  string agent_version = 2;  // Agent version
+  string node_name = 3;      // Node name in distributed systems
+}
+
+// Combined telemetry context containing all context types
+// This is the primary context object attached to telemetry
+message TelemetryContext {
+  OperationContext operation = 1;
+  CloudContext cloud = 2;
+  DeviceContext device = 3;
+  UserContext user = 4;
+  SessionContext session = 5;
+  LocationContext location = 6;
+  ApplicationContext application = 7;
+  InternalContext internal = 8;
+}
+
+// Base envelope fields shared by all telemetry items
+message TelemetryEnvelope {
+  string instrumentation_key = 1;  // App Insights instrumentation key
+  string time = 2;                 // ISO 8601 timestamp when telemetry was created
+  TelemetryContext context = 3;    // Full context for this telemetry item
+}
+
+// Severity levels matching App Insights SDK
+enum SeverityLevel {
+  SEVERITY_LEVEL_UNSPECIFIED = 0;
+  SEVERITY_LEVEL_VERBOSE = 1;
+  SEVERITY_LEVEL_INFORMATION = 2;
+  SEVERITY_LEVEL_WARNING = 3;
+  SEVERITY_LEVEL_ERROR = 4;
+  SEVERITY_LEVEL_CRITICAL = 5;
+}

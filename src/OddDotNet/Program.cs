@@ -3,9 +3,28 @@ using OddDotNet.Proto.Logs.V1;
 using OddDotNet.Proto.Metrics.V1;
 using OddDotNet.Proto.Trace.V1;
 using OddDotNet.Services;
+using OddDotNet.Services.AppInsights;
 using LogQueryService = OddDotNet.Services.LogQueryService;
 using MetricQueryService = OddDotNet.Services.MetricQueryService;
 using SpanQueryService = OddDotNet.Services.SpanQueryService;
+// App Insights type aliases to avoid conflicts with OTEL types
+using AiFlatRequest = OddDotNet.Proto.AppInsights.V1.FlatRequest;
+using AiFlatDependency = OddDotNet.Proto.AppInsights.V1.FlatDependency;
+using AiFlatException = OddDotNet.Proto.AppInsights.V1.FlatException;
+using AiFlatTrace = OddDotNet.Proto.AppInsights.V1.FlatTrace;
+using AiFlatEvent = OddDotNet.Proto.AppInsights.V1.FlatEvent;
+using AiFlatMetric = OddDotNet.Proto.AppInsights.V1.FlatMetric;
+using AiFlatPageView = OddDotNet.Proto.AppInsights.V1.FlatPageView;
+using AiFlatAvailability = OddDotNet.Proto.AppInsights.V1.FlatAvailability;
+// App Insights query service aliases
+using AiRequestQueryService = OddDotNet.Services.AppInsights.RequestQueryService;
+using AiDependencyQueryService = OddDotNet.Services.AppInsights.DependencyQueryService;
+using AiExceptionQueryService = OddDotNet.Services.AppInsights.ExceptionQueryService;
+using AiTraceQueryService = OddDotNet.Services.AppInsights.TraceQueryService;
+using AiEventQueryService = OddDotNet.Services.AppInsights.EventQueryService;
+using AiMetricQueryService = OddDotNet.Services.AppInsights.MetricQueryService;
+using AiPageViewQueryService = OddDotNet.Services.AppInsights.PageViewQueryService;
+using AiAvailabilityQueryService = OddDotNet.Services.AppInsights.AvailabilityQueryService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,12 +35,31 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHealthChecks();
 
+// OTEL SignalLists and ChannelManagers
 builder.Services.AddScoped<SignalList<FlatMetric>>().AddScoped<ISignalList, SignalList<FlatMetric>>();
 builder.Services.AddScoped<SignalList<FlatSpan>>().AddScoped<ISignalList, SignalList<FlatSpan>>();
 builder.Services.AddScoped<SignalList<FlatLog>>().AddScoped<ISignalList, SignalList<FlatLog>>();
 builder.Services.AddScoped<ChannelManager<FlatSpan>>();
 builder.Services.AddScoped<ChannelManager<FlatMetric>>();
 builder.Services.AddScoped<ChannelManager<FlatLog>>();
+
+// App Insights SignalLists and ChannelManagers
+builder.Services.AddScoped<SignalList<AiFlatRequest>>().AddScoped<ISignalList, SignalList<AiFlatRequest>>();
+builder.Services.AddScoped<SignalList<AiFlatDependency>>().AddScoped<ISignalList, SignalList<AiFlatDependency>>();
+builder.Services.AddScoped<SignalList<AiFlatException>>().AddScoped<ISignalList, SignalList<AiFlatException>>();
+builder.Services.AddScoped<SignalList<AiFlatTrace>>().AddScoped<ISignalList, SignalList<AiFlatTrace>>();
+builder.Services.AddScoped<SignalList<AiFlatEvent>>().AddScoped<ISignalList, SignalList<AiFlatEvent>>();
+builder.Services.AddScoped<SignalList<AiFlatMetric>>().AddScoped<ISignalList, SignalList<AiFlatMetric>>();
+builder.Services.AddScoped<SignalList<AiFlatPageView>>().AddScoped<ISignalList, SignalList<AiFlatPageView>>();
+builder.Services.AddScoped<SignalList<AiFlatAvailability>>().AddScoped<ISignalList, SignalList<AiFlatAvailability>>();
+builder.Services.AddScoped<ChannelManager<AiFlatRequest>>();
+builder.Services.AddScoped<ChannelManager<AiFlatDependency>>();
+builder.Services.AddScoped<ChannelManager<AiFlatException>>();
+builder.Services.AddScoped<ChannelManager<AiFlatTrace>>();
+builder.Services.AddScoped<ChannelManager<AiFlatEvent>>();
+builder.Services.AddScoped<ChannelManager<AiFlatMetric>>();
+builder.Services.AddScoped<ChannelManager<AiFlatPageView>>();
+builder.Services.AddScoped<ChannelManager<AiFlatAvailability>>();
 builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddHostedService<CacheCleanupBackgroundService>();
 
@@ -47,12 +85,23 @@ app.MapWhen(context => context.Request.ContentType == "application/grpc", iab =>
     iab.UseRouting()
         .UseEndpoints(endpoints =>
         {
+            // OTEL services
             endpoints.MapGrpcService<LogsService>();
             endpoints.MapGrpcService<MetricsService>();
             endpoints.MapGrpcService<TraceService>();
             endpoints.MapGrpcService<SpanQueryService>();
             endpoints.MapGrpcService<MetricQueryService>();
             endpoints.MapGrpcService<LogQueryService>();
+            
+            // App Insights query services
+            endpoints.MapGrpcService<AiRequestQueryService>();
+            endpoints.MapGrpcService<AiDependencyQueryService>();
+            endpoints.MapGrpcService<AiExceptionQueryService>();
+            endpoints.MapGrpcService<AiTraceQueryService>();
+            endpoints.MapGrpcService<AiEventQueryService>();
+            endpoints.MapGrpcService<AiMetricQueryService>();
+            endpoints.MapGrpcService<AiPageViewQueryService>();
+            endpoints.MapGrpcService<AiAvailabilityQueryService>();
         });
 });
 

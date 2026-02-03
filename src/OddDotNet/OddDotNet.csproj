@@ -11,6 +11,7 @@
     <ItemGroup>
         <Protobuf Include="submodules/OddDotProto/submodules/opentelemetry/**/*.proto" GrpcServices="Both" ProtoRoot="submodules/OddDotProto/submodules"/>
         <Protobuf Include="submodules/OddDotProto/odddotproto/**/*.proto" GrpcServices="Both" ProtoRoot="submodules/OddDotProto" AdditionalImportDirs="submodules/OddDotProto/submodules"/>
+        <Protobuf Include="appinsightsproto/**/*.proto" GrpcServices="Both" ProtoRoot="." AdditionalImportDirs="submodules/OddDotProto"/>
     </ItemGroup>
 
     <ItemGroup>

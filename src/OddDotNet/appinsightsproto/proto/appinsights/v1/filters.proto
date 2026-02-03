@@ -1,0 +1,351 @@
+syntax = "proto3";
+
+package odddotnet.proto.appinsights.v1;
+
+import "appinsightsproto/proto/appinsights/v1/common.proto";
+import "odddotproto/proto/common/v1/properties.proto";
+
+option csharp_namespace = "OddDotNet.Proto.AppInsights.V1";
+option java_multiple_files = true;
+option java_package = "io.odddotnet.proto.appinsights.v1";
+option java_outer_classname = "FiltersProto";
+option go_package = "go.odddotnet.io/proto/appinsights/v1";
+
+// ============================================================================
+// Common envelope/context filters shared by all telemetry types
+// ============================================================================
+
+message EnvelopeFilter {
+  oneof value {
+    odddotnet.proto.common.v1.StringProperty instrumentation_key = 1;
+    odddotnet.proto.common.v1.StringProperty time = 2;
+    ContextFilter context = 3;
+  }
+}
+
+message ContextFilter {
+  oneof value {
+    OperationContextFilter operation = 1;
+    CloudContextFilter cloud = 2;
+    DeviceContextFilter device = 3;
+    UserContextFilter user = 4;
+    SessionContextFilter session = 5;
+    LocationContextFilter location = 6;
+    ApplicationContextFilter application = 7;
+    InternalContextFilter internal = 8;
+  }
+}
+
+message OperationContextFilter {
+  oneof value {
+    odddotnet.proto.common.v1.StringProperty id = 1;
+    odddotnet.proto.common.v1.StringProperty parent_id = 2;
+    odddotnet.proto.common.v1.StringProperty name = 3;
+    odddotnet.proto.common.v1.StringProperty synthetic_source = 4;
+    odddotnet.proto.common.v1.StringProperty correlation_vector = 5;
+  }
+}
+
+message CloudContextFilter {
+  oneof value {
+    odddotnet.proto.common.v1.StringProperty role_name = 1;
+    odddotnet.proto.common.v1.StringProperty role_instance = 2;
+  }
+}
+
+message DeviceContextFilter {
+  oneof value {
+    odddotnet.proto.common.v1.StringProperty id = 1;
+    odddotnet.proto.common.v1.StringProperty type = 2;
+    odddotnet.proto.common.v1.StringProperty os_version = 3;
+  }
+}
+
+message UserContextFilter {
+  oneof value {
+    odddotnet.proto.common.v1.StringProperty id = 1;
+    odddotnet.proto.common.v1.StringProperty authenticated_id = 2;
+    odddotnet.proto.common.v1.StringProperty account_id = 3;
+  }
+}
+
+message SessionContextFilter {
+  oneof value {
+    odddotnet.proto.common.v1.StringProperty id = 1;
+    odddotnet.proto.common.v1.BoolProperty is_first = 2;
+  }
+}
+
+message LocationContextFilter {
+  oneof value {
+    odddotnet.proto.common.v1.StringProperty ip = 1;
+    odddotnet.proto.common.v1.StringProperty country = 2;
+    odddotnet.proto.common.v1.StringProperty province = 3;
+    odddotnet.proto.common.v1.StringProperty city = 4;
+  }
+}
+
+message ApplicationContextFilter {
+  oneof value {
+    odddotnet.proto.common.v1.StringProperty version = 1;
+  }
+}
+
+message InternalContextFilter {
+  oneof value {
+    odddotnet.proto.common.v1.StringProperty sdk_version = 1;
+    odddotnet.proto.common.v1.StringProperty agent_version = 2;
+    odddotnet.proto.common.v1.StringProperty node_name = 3;
+  }
+}
+
+// Custom property/measurement filters
+message PropertyMapFilter {
+  string key = 1;
+  odddotnet.proto.common.v1.StringProperty value = 2;
+}
+
+message MeasurementMapFilter {
+  string key = 1;
+  odddotnet.proto.common.v1.DoubleProperty value = 2;
+}
+
+// ============================================================================
+// Request telemetry filters
+// ============================================================================
+
+message RequestWhere {
+  oneof value {
+    RequestPropertyFilter property = 1;
+    RequestOrFilter or = 2;
+    EnvelopeFilter envelope = 3;
+  }
+}
+
+message RequestPropertyFilter {
+  oneof value {
+    odddotnet.proto.common.v1.StringProperty id = 1;
+    odddotnet.proto.common.v1.StringProperty name = 2;
+    odddotnet.proto.common.v1.StringProperty duration = 3;
+    odddotnet.proto.common.v1.StringProperty response_code = 4;
+    odddotnet.proto.common.v1.BoolProperty success = 5;
+    odddotnet.proto.common.v1.StringProperty url = 6;
+    odddotnet.proto.common.v1.StringProperty source = 7;
+    PropertyMapFilter properties = 8;
+    MeasurementMapFilter measurements = 9;
+  }
+}
+
+message RequestOrFilter {
+  repeated RequestWhere filters = 1;
+}
+
+// ============================================================================
+// Dependency telemetry filters
+// ============================================================================
+
+message DependencyWhere {
+  oneof value {
+    DependencyPropertyFilter property = 1;
+    DependencyOrFilter or = 2;
+    EnvelopeFilter envelope = 3;
+  }
+}
+
+message DependencyPropertyFilter {
+  oneof value {
+    odddotnet.proto.common.v1.StringProperty id = 1;
+    odddotnet.proto.common.v1.StringProperty name = 2;
+    odddotnet.proto.common.v1.StringProperty duration = 3;
+    odddotnet.proto.common.v1.StringProperty result_code = 4;
+    odddotnet.proto.common.v1.BoolProperty success = 5;
+    odddotnet.proto.common.v1.StringProperty data = 6;
+    odddotnet.proto.common.v1.StringProperty target = 7;
+    odddotnet.proto.common.v1.StringProperty type = 8;
+    PropertyMapFilter properties = 9;
+    MeasurementMapFilter measurements = 10;
+  }
+}
+
+message DependencyOrFilter {
+  repeated DependencyWhere filters = 1;
+}
+
+// ============================================================================
+// Exception telemetry filters
+// ============================================================================
+
+message ExceptionWhere {
+  oneof value {
+    ExceptionPropertyFilter property = 1;
+    ExceptionOrFilter or = 2;
+    EnvelopeFilter envelope = 3;
+  }
+}
+
+message ExceptionPropertyFilter {
+  oneof value {
+    odddotnet.proto.common.v1.StringProperty id = 1;
+    odddotnet.proto.common.v1.StringProperty problem_id = 2;
+    SeverityLevelProperty severity_level = 3;
+    ExceptionDetailsFilter exception_details = 4;
+    PropertyMapFilter properties = 5;
+    MeasurementMapFilter measurements = 6;
+  }
+}
+
+message ExceptionDetailsFilter {
+  oneof value {
+    odddotnet.proto.common.v1.StringProperty type_name = 1;
+    odddotnet.proto.common.v1.StringProperty message = 2;
+    odddotnet.proto.common.v1.StringProperty stack = 3;
+    odddotnet.proto.common.v1.Int32Property outer_id = 4;
+  }
+}
+
+message ExceptionOrFilter {
+  repeated ExceptionWhere filters = 1;
+}
+
+// ============================================================================
+// Trace telemetry filters
+// ============================================================================
+
+message TraceWhere {
+  oneof value {
+    TracePropertyFilter property = 1;
+    TraceOrFilter or = 2;
+    EnvelopeFilter envelope = 3;
+  }
+}
+
+message TracePropertyFilter {
+  oneof value {
+    odddotnet.proto.common.v1.StringProperty message = 1;
+    SeverityLevelProperty severity_level = 2;
+    PropertyMapFilter properties = 3;
+  }
+}
+
+message TraceOrFilter {
+  repeated TraceWhere filters = 1;
+}
+
+// ============================================================================
+// Event telemetry filters
+// ============================================================================
+
+message EventWhere {
+  oneof value {
+    EventPropertyFilter property = 1;
+    EventOrFilter or = 2;
+    EnvelopeFilter envelope = 3;
+  }
+}
+
+message EventPropertyFilter {
+  oneof value {
+    odddotnet.proto.common.v1.StringProperty name = 1;
+    PropertyMapFilter properties = 2;
+    MeasurementMapFilter measurements = 3;
+  }
+}
+
+message EventOrFilter {
+  repeated EventWhere filters = 1;
+}
+
+// ============================================================================
+// Metric telemetry filters
+// ============================================================================
+
+message MetricWhere {
+  oneof value {
+    MetricPropertyFilter property = 1;
+    MetricOrFilter or = 2;
+    EnvelopeFilter envelope = 3;
+  }
+}
+
+message MetricPropertyFilter {
+  oneof value {
+    odddotnet.proto.common.v1.StringProperty name = 1;
+    odddotnet.proto.common.v1.StringProperty metric_namespace = 2;
+    odddotnet.proto.common.v1.DoubleProperty metric_value = 3;
+    odddotnet.proto.common.v1.Int32Property count = 4;
+    odddotnet.proto.common.v1.DoubleProperty min = 5;
+    odddotnet.proto.common.v1.DoubleProperty max = 6;
+    odddotnet.proto.common.v1.DoubleProperty std_dev = 7;
+    PropertyMapFilter properties = 8;
+  }
+}
+
+message MetricOrFilter {
+  repeated MetricWhere filters = 1;
+}
+
+// ============================================================================
+// PageView telemetry filters
+// ============================================================================
+
+message PageViewWhere {
+  oneof value {
+    PageViewPropertyFilter property = 1;
+    PageViewOrFilter or = 2;
+    EnvelopeFilter envelope = 3;
+  }
+}
+
+message PageViewPropertyFilter {
+  oneof value {
+    odddotnet.proto.common.v1.StringProperty id = 1;
+    odddotnet.proto.common.v1.StringProperty name = 2;
+    odddotnet.proto.common.v1.StringProperty url = 3;
+    odddotnet.proto.common.v1.StringProperty duration = 4;
+    odddotnet.proto.common.v1.StringProperty referrer_uri = 5;
+    PropertyMapFilter properties = 6;
+    MeasurementMapFilter measurements = 7;
+  }
+}
+
+message PageViewOrFilter {
+  repeated PageViewWhere filters = 1;
+}
+
+// ============================================================================
+// Availability telemetry filters
+// ============================================================================
+
+message AvailabilityWhere {
+  oneof value {
+    AvailabilityPropertyFilter property = 1;
+    AvailabilityOrFilter or = 2;
+    EnvelopeFilter envelope = 3;
+  }
+}
+
+message AvailabilityPropertyFilter {
+  oneof value {
+    odddotnet.proto.common.v1.StringProperty id = 1;
+    odddotnet.proto.common.v1.StringProperty name = 2;
+    odddotnet.proto.common.v1.StringProperty duration = 3;
+    odddotnet.proto.common.v1.BoolProperty success = 4;
+    odddotnet.proto.common.v1.StringProperty run_location = 5;
+    odddotnet.proto.common.v1.StringProperty message = 6;
+    PropertyMapFilter properties = 7;
+    MeasurementMapFilter measurements = 8;
+  }
+}
+
+message AvailabilityOrFilter {
+  repeated AvailabilityWhere filters = 1;
+}
+
+// ============================================================================
+// Severity level filter (used by Exception and Trace)
+// ============================================================================
+
+message SeverityLevelProperty {
+  odddotnet.proto.common.v1.EnumCompareAsType compare_as = 1;
+  SeverityLevel compare = 2;
+}
