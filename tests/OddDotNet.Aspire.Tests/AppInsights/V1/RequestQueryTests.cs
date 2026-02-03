@@ -1,6 +1,6 @@
 using System.Text;
 using System.Text.Json;
-using OddDotNet.Proto.AppInsights.V1;
+using OddDotNet.Proto.AppInsights.V1.Request;
 using OddDotNet.Proto.Common.V1;
 using OddDotNet.Services.AppInsights;
 
@@ -36,9 +36,9 @@ public class RequestQueryTests : IClassFixture<AspireFixture>
         envelope.Data!.BaseData!.Id = uniqueId;
         await IngestRequest(envelope);
 
-        var filter = new RequestWhere
+        var filter = new Where
         {
-            Property = new RequestPropertyFilter
+            Property = new PropertyFilter
             {
                 Id = new StringProperty { Compare = uniqueId, CompareAs = StringCompareAsType.Equals }
             }
@@ -67,9 +67,9 @@ public class RequestQueryTests : IClassFixture<AspireFixture>
         envelope.Data!.BaseData!.Id = uniqueId;
         await IngestRequest(envelope);
 
-        var filter = new RequestWhere
+        var filter = new Where
         {
-            Property = new RequestPropertyFilter
+            Property = new PropertyFilter
             {
                 Id = new StringProperty { Compare = marker, CompareAs = StringCompareAsType.Contains }
             }
@@ -99,9 +99,9 @@ public class RequestQueryTests : IClassFixture<AspireFixture>
         envelope.Data!.BaseData!.Name = uniqueName;
         await IngestRequest(envelope);
 
-        var filter = new RequestWhere
+        var filter = new Where
         {
-            Property = new RequestPropertyFilter
+            Property = new PropertyFilter
             {
                 Name = new StringProperty { Compare = uniqueName, CompareAs = StringCompareAsType.Equals }
             }
@@ -131,16 +131,16 @@ public class RequestQueryTests : IClassFixture<AspireFixture>
         envelope.Data!.BaseData!.ResponseCode = "200";
         await IngestRequest(envelope);
 
-        var idFilter = new RequestWhere
+        var idFilter = new Where
         {
-            Property = new RequestPropertyFilter
+            Property = new PropertyFilter
             {
                 Id = new StringProperty { Compare = uniqueId, CompareAs = StringCompareAsType.Equals }
             }
         };
-        var successFilter = new RequestWhere
+        var successFilter = new Where
         {
-            Property = new RequestPropertyFilter
+            Property = new PropertyFilter
             {
                 Success = new BoolProperty { Compare = true, CompareAs = BoolCompareAsType.Equals }
             }
@@ -165,9 +165,9 @@ public class RequestQueryTests : IClassFixture<AspireFixture>
         // Arrange - use a non-existent ID
         var nonExistentId = $"non-existent-{Guid.NewGuid():N}";
 
-        var filter = new RequestWhere
+        var filter = new Where
         {
-            Property = new RequestPropertyFilter
+            Property = new PropertyFilter
             {
                 Id = new StringProperty { Compare = nonExistentId, CompareAs = StringCompareAsType.Equals }
             }

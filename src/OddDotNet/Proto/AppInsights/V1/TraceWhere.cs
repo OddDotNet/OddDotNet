@@ -1,9 +1,9 @@
 using OddDotNet.Filters;
 using OddDotNet.Filters.AppInsights;
 
-namespace OddDotNet.Proto.AppInsights.V1;
+namespace OddDotNet.Proto.AppInsights.V1.Trace;
 
-public sealed partial class TraceWhere : IWhere<FlatTrace>
+public sealed partial class Where : IWhere<FlatTrace>
 {
     public bool Matches(FlatTrace signal) => ValueCase switch
     {
@@ -15,9 +15,9 @@ public sealed partial class TraceWhere : IWhere<FlatTrace>
     };
 }
 
-public sealed partial class TracePropertyFilter
+public sealed partial class PropertyFilter
 {
-    public bool Matches(TraceTelemetry signal) => ValueCase switch
+    public bool Matches(V1.TraceTelemetry signal) => ValueCase switch
     {
         ValueOneofCase.None => false,
         ValueOneofCase.Message => StringFilter.Matches(signal.Message, Message),
@@ -27,7 +27,7 @@ public sealed partial class TracePropertyFilter
     };
 }
 
-public sealed partial class TraceOrFilter : IWhere<FlatTrace>
+public sealed partial class OrFilter : IWhere<FlatTrace>
 {
     public bool Matches(FlatTrace signal) => Filters.Any(filter => filter.Matches(signal));
 }

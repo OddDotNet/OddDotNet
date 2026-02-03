@@ -1,9 +1,9 @@
 using Grpc.Core;
-using OddDotNet.Proto.AppInsights.V1;
+using OddDotNet.Proto.AppInsights.V1.Dependency;
 
 namespace OddDotNet.Services.AppInsights;
 
-public class DependencyQueryService : Proto.AppInsights.V1.DependencyQueryService.DependencyQueryServiceBase
+public class DependencyQueryService : Proto.AppInsights.V1.Dependency.DependencyQueryService.DependencyQueryServiceBase
 {
     private readonly SignalList<FlatDependency> _signals;
 

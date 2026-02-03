@@ -1,9 +1,9 @@
 using OddDotNet.Filters;
 using OddDotNet.Filters.AppInsights;
 
-namespace OddDotNet.Proto.AppInsights.V1;
+namespace OddDotNet.Proto.AppInsights.V1.Dependency;
 
-public sealed partial class DependencyWhere : IWhere<FlatDependency>
+public sealed partial class Where : IWhere<FlatDependency>
 {
     public bool Matches(FlatDependency signal) => ValueCase switch
     {
@@ -15,9 +15,9 @@ public sealed partial class DependencyWhere : IWhere<FlatDependency>
     };
 }
 
-public sealed partial class DependencyPropertyFilter
+public sealed partial class PropertyFilter
 {
-    public bool Matches(DependencyTelemetry signal) => ValueCase switch
+    public bool Matches(V1.DependencyTelemetry signal) => ValueCase switch
     {
         ValueOneofCase.None => false,
         ValueOneofCase.Id => StringFilter.Matches(signal.Id, Id),
@@ -34,7 +34,7 @@ public sealed partial class DependencyPropertyFilter
     };
 }
 
-public sealed partial class DependencyOrFilter : IWhere<FlatDependency>
+public sealed partial class OrFilter : IWhere<FlatDependency>
 {
     public bool Matches(FlatDependency signal) => Filters.Any(filter => filter.Matches(signal));
 }

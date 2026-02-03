@@ -1,9 +1,9 @@
 using OddDotNet.Filters;
 using OddDotNet.Filters.AppInsights;
 
-namespace OddDotNet.Proto.AppInsights.V1;
+namespace OddDotNet.Proto.AppInsights.V1.Availability;
 
-public sealed partial class AvailabilityWhere : IWhere<FlatAvailability>
+public sealed partial class Where : IWhere<FlatAvailability>
 {
     public bool Matches(FlatAvailability signal) => ValueCase switch
     {
@@ -15,9 +15,9 @@ public sealed partial class AvailabilityWhere : IWhere<FlatAvailability>
     };
 }
 
-public sealed partial class AvailabilityPropertyFilter
+public sealed partial class PropertyFilter
 {
-    public bool Matches(AvailabilityTelemetry signal) => ValueCase switch
+    public bool Matches(V1.AvailabilityTelemetry signal) => ValueCase switch
     {
         ValueOneofCase.None => false,
         ValueOneofCase.Id => StringFilter.Matches(signal.Id, Id),
@@ -32,7 +32,7 @@ public sealed partial class AvailabilityPropertyFilter
     };
 }
 
-public sealed partial class AvailabilityOrFilter : IWhere<FlatAvailability>
+public sealed partial class OrFilter : IWhere<FlatAvailability>
 {
     public bool Matches(FlatAvailability signal) => Filters.Any(filter => filter.Matches(signal));
 }

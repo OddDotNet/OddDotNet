@@ -1,6 +1,7 @@
 using System.Text;
 using System.Text.Json;
 using OddDotNet.Proto.AppInsights.V1;
+using OddDotNet.Proto.AppInsights.V1.Exception;
 using OddDotNet.Proto.Common.V1;
 using OddDotNet.Services.AppInsights;
 
@@ -36,9 +37,9 @@ public class ExceptionQueryTests : IClassFixture<AspireFixture>
         envelope.Data!.BaseData!.ProblemId = uniqueProblemId;
         await IngestException(envelope);
 
-        var filter = new ExceptionWhere
+        var filter = new Where
         {
-            Property = new ExceptionPropertyFilter
+            Property = new PropertyFilter
             {
                 ProblemId = new StringProperty { Compare = uniqueProblemId, CompareAs = StringCompareAsType.Equals }
             }
@@ -67,9 +68,9 @@ public class ExceptionQueryTests : IClassFixture<AspireFixture>
         envelope.Data!.BaseData!.ProblemId = uniqueProblemId;
         await IngestException(envelope);
 
-        var filter = new ExceptionWhere
+        var filter = new Where
         {
-            Property = new ExceptionPropertyFilter
+            Property = new PropertyFilter
             {
                 ProblemId = new StringProperty { Compare = marker, CompareAs = StringCompareAsType.Contains }
             }
@@ -98,16 +99,16 @@ public class ExceptionQueryTests : IClassFixture<AspireFixture>
         envelope.Data!.BaseData!.SeverityLevel = 3; // Error
         await IngestException(envelope);
 
-        var problemIdFilter = new ExceptionWhere
+        var problemIdFilter = new Where
         {
-            Property = new ExceptionPropertyFilter
+            Property = new PropertyFilter
             {
                 ProblemId = new StringProperty { Compare = uniqueProblemId, CompareAs = StringCompareAsType.Equals }
             }
         };
-        var severityFilter = new ExceptionWhere
+        var severityFilter = new Where
         {
-            Property = new ExceptionPropertyFilter
+            Property = new PropertyFilter
             {
                 SeverityLevel = new SeverityLevelProperty { Compare = SeverityLevel.Error, CompareAs = EnumCompareAsType.Equals }
             }
@@ -147,16 +148,16 @@ public class ExceptionQueryTests : IClassFixture<AspireFixture>
         };
         await IngestException(envelope);
 
-        var problemIdFilter = new ExceptionWhere
+        var problemIdFilter = new Where
         {
-            Property = new ExceptionPropertyFilter
+            Property = new PropertyFilter
             {
                 ProblemId = new StringProperty { Compare = uniqueProblemId, CompareAs = StringCompareAsType.Equals }
             }
         };
-        var typeFilter = new ExceptionWhere
+        var typeFilter = new Where
         {
-            Property = new ExceptionPropertyFilter
+            Property = new PropertyFilter
             {
                 ExceptionDetails = new ExceptionDetailsFilter
                 {
@@ -199,16 +200,16 @@ public class ExceptionQueryTests : IClassFixture<AspireFixture>
         };
         await IngestException(envelope);
 
-        var problemIdFilter = new ExceptionWhere
+        var problemIdFilter = new Where
         {
-            Property = new ExceptionPropertyFilter
+            Property = new PropertyFilter
             {
                 ProblemId = new StringProperty { Compare = uniqueProblemId, CompareAs = StringCompareAsType.Equals }
             }
         };
-        var messageFilter = new ExceptionWhere
+        var messageFilter = new Where
         {
-            Property = new ExceptionPropertyFilter
+            Property = new PropertyFilter
             {
                 ExceptionDetails = new ExceptionDetailsFilter
                 {
@@ -236,9 +237,9 @@ public class ExceptionQueryTests : IClassFixture<AspireFixture>
         // Arrange - use a non-existent problem ID
         var nonExistentProblemId = $"non-existent-exc-{Guid.NewGuid():N}";
 
-        var filter = new ExceptionWhere
+        var filter = new Where
         {
-            Property = new ExceptionPropertyFilter
+            Property = new PropertyFilter
             {
                 ProblemId = new StringProperty { Compare = nonExistentProblemId, CompareAs = StringCompareAsType.Equals }
             }

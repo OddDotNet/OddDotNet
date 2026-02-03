@@ -1,6 +1,6 @@
 using System.Text;
 using System.Text.Json;
-using OddDotNet.Proto.AppInsights.V1;
+using OddDotNet.Proto.AppInsights.V1.Dependency;
 using OddDotNet.Proto.Common.V1;
 using OddDotNet.Services.AppInsights;
 
@@ -36,9 +36,9 @@ public class DependencyQueryTests : IClassFixture<AspireFixture>
         envelope.Data!.BaseData!.Id = uniqueId;
         await IngestDependency(envelope);
 
-        var filter = new DependencyWhere
+        var filter = new Where
         {
-            Property = new DependencyPropertyFilter
+            Property = new PropertyFilter
             {
                 Id = new StringProperty { Compare = uniqueId, CompareAs = StringCompareAsType.Equals }
             }
@@ -67,9 +67,9 @@ public class DependencyQueryTests : IClassFixture<AspireFixture>
         envelope.Data!.BaseData!.Id = uniqueId;
         await IngestDependency(envelope);
 
-        var filter = new DependencyWhere
+        var filter = new Where
         {
-            Property = new DependencyPropertyFilter
+            Property = new PropertyFilter
             {
                 Id = new StringProperty { Compare = marker, CompareAs = StringCompareAsType.Contains }
             }
@@ -99,9 +99,9 @@ public class DependencyQueryTests : IClassFixture<AspireFixture>
         envelope.Data!.BaseData!.Name = uniqueName;
         await IngestDependency(envelope);
 
-        var filter = new DependencyWhere
+        var filter = new Where
         {
-            Property = new DependencyPropertyFilter
+            Property = new PropertyFilter
             {
                 Name = new StringProperty { Compare = uniqueName, CompareAs = StringCompareAsType.Equals }
             }
@@ -131,16 +131,16 @@ public class DependencyQueryTests : IClassFixture<AspireFixture>
         envelope.Data!.BaseData!.ResultCode = "200";
         await IngestDependency(envelope);
 
-        var idFilter = new DependencyWhere
+        var idFilter = new Where
         {
-            Property = new DependencyPropertyFilter
+            Property = new PropertyFilter
             {
                 Id = new StringProperty { Compare = uniqueId, CompareAs = StringCompareAsType.Equals }
             }
         };
-        var successFilter = new DependencyWhere
+        var successFilter = new Where
         {
-            Property = new DependencyPropertyFilter
+            Property = new PropertyFilter
             {
                 Success = new BoolProperty { Compare = true, CompareAs = BoolCompareAsType.Equals }
             }
@@ -170,16 +170,16 @@ public class DependencyQueryTests : IClassFixture<AspireFixture>
         envelope.Data!.BaseData!.Type = dependencyType;
         await IngestDependency(envelope);
 
-        var idFilter = new DependencyWhere
+        var idFilter = new Where
         {
-            Property = new DependencyPropertyFilter
+            Property = new PropertyFilter
             {
                 Id = new StringProperty { Compare = uniqueId, CompareAs = StringCompareAsType.Equals }
             }
         };
-        var typeFilter = new DependencyWhere
+        var typeFilter = new Where
         {
-            Property = new DependencyPropertyFilter
+            Property = new PropertyFilter
             {
                 Type = new StringProperty { Compare = dependencyType, CompareAs = StringCompareAsType.Equals }
             }
@@ -209,16 +209,16 @@ public class DependencyQueryTests : IClassFixture<AspireFixture>
         envelope.Data!.BaseData!.Target = target;
         await IngestDependency(envelope);
 
-        var idFilter = new DependencyWhere
+        var idFilter = new Where
         {
-            Property = new DependencyPropertyFilter
+            Property = new PropertyFilter
             {
                 Id = new StringProperty { Compare = uniqueId, CompareAs = StringCompareAsType.Equals }
             }
         };
-        var targetFilter = new DependencyWhere
+        var targetFilter = new Where
         {
-            Property = new DependencyPropertyFilter
+            Property = new PropertyFilter
             {
                 Target = new StringProperty { Compare = target, CompareAs = StringCompareAsType.Equals }
             }
@@ -249,16 +249,16 @@ public class DependencyQueryTests : IClassFixture<AspireFixture>
         envelope.Data!.BaseData!.Success = false;
         await IngestDependency(envelope);
 
-        var idFilter = new DependencyWhere
+        var idFilter = new Where
         {
-            Property = new DependencyPropertyFilter
+            Property = new PropertyFilter
             {
                 Id = new StringProperty { Compare = uniqueId, CompareAs = StringCompareAsType.Equals }
             }
         };
-        var resultCodeFilter = new DependencyWhere
+        var resultCodeFilter = new Where
         {
-            Property = new DependencyPropertyFilter
+            Property = new PropertyFilter
             {
                 ResultCode = new StringProperty { Compare = resultCode, CompareAs = StringCompareAsType.Equals }
             }
@@ -283,9 +283,9 @@ public class DependencyQueryTests : IClassFixture<AspireFixture>
         // Arrange - use a non-existent ID
         var nonExistentId = $"non-existent-dep-{Guid.NewGuid():N}";
 
-        var filter = new DependencyWhere
+        var filter = new Where
         {
-            Property = new DependencyPropertyFilter
+            Property = new PropertyFilter
             {
                 Id = new StringProperty { Compare = nonExistentId, CompareAs = StringCompareAsType.Equals }
             }

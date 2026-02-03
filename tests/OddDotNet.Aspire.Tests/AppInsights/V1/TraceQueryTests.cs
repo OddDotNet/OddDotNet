@@ -1,6 +1,7 @@
 using System.Text;
 using System.Text.Json;
 using OddDotNet.Proto.AppInsights.V1;
+using OddDotNet.Proto.AppInsights.V1.Trace;
 using OddDotNet.Proto.Common.V1;
 using OddDotNet.Services.AppInsights;
 
@@ -36,9 +37,9 @@ public class TraceQueryTests : IClassFixture<AspireFixture>
         envelope.Data!.BaseData!.Message = uniqueMessage;
         await IngestTrace(envelope);
 
-        var filter = new TraceWhere
+        var filter = new Where
         {
-            Property = new TracePropertyFilter
+            Property = new PropertyFilter
             {
                 Message = new StringProperty { Compare = uniqueMessage, CompareAs = StringCompareAsType.Equals }
             }
@@ -67,9 +68,9 @@ public class TraceQueryTests : IClassFixture<AspireFixture>
         envelope.Data!.BaseData!.Message = uniqueMessage;
         await IngestTrace(envelope);
 
-        var filter = new TraceWhere
+        var filter = new Where
         {
-            Property = new TracePropertyFilter
+            Property = new PropertyFilter
             {
                 Message = new StringProperty { Compare = marker, CompareAs = StringCompareAsType.Contains }
             }
@@ -98,16 +99,16 @@ public class TraceQueryTests : IClassFixture<AspireFixture>
         envelope.Data!.BaseData!.SeverityLevel = 2; // Warning
         await IngestTrace(envelope);
 
-        var messageFilter = new TraceWhere
+        var messageFilter = new Where
         {
-            Property = new TracePropertyFilter
+            Property = new PropertyFilter
             {
                 Message = new StringProperty { Compare = uniqueMessage, CompareAs = StringCompareAsType.Equals }
             }
         };
-        var severityFilter = new TraceWhere
+        var severityFilter = new Where
         {
-            Property = new TracePropertyFilter
+            Property = new PropertyFilter
             {
                 SeverityLevel = new SeverityLevelProperty { Compare = SeverityLevel.Warning, CompareAs = EnumCompareAsType.Equals }
             }
@@ -132,9 +133,9 @@ public class TraceQueryTests : IClassFixture<AspireFixture>
         // Arrange - use a non-existent message
         var nonExistentMessage = $"non-existent-trace-{Guid.NewGuid():N}";
 
-        var filter = new TraceWhere
+        var filter = new Where
         {
-            Property = new TracePropertyFilter
+            Property = new PropertyFilter
             {
                 Message = new StringProperty { Compare = nonExistentMessage, CompareAs = StringCompareAsType.Equals }
             }

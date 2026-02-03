@@ -8,14 +8,14 @@ using LogQueryService = OddDotNet.Services.LogQueryService;
 using MetricQueryService = OddDotNet.Services.MetricQueryService;
 using SpanQueryService = OddDotNet.Services.SpanQueryService;
 // App Insights type aliases to avoid conflicts with OTEL types
-using AiFlatRequest = OddDotNet.Proto.AppInsights.V1.FlatRequest;
-using AiFlatDependency = OddDotNet.Proto.AppInsights.V1.FlatDependency;
-using AiFlatException = OddDotNet.Proto.AppInsights.V1.FlatException;
-using AiFlatTrace = OddDotNet.Proto.AppInsights.V1.FlatTrace;
-using AiFlatEvent = OddDotNet.Proto.AppInsights.V1.FlatEvent;
-using AiFlatMetric = OddDotNet.Proto.AppInsights.V1.FlatMetric;
-using AiFlatPageView = OddDotNet.Proto.AppInsights.V1.FlatPageView;
-using AiFlatAvailability = OddDotNet.Proto.AppInsights.V1.FlatAvailability;
+using AiFlatRequest = OddDotNet.Proto.AppInsights.V1.Request.FlatRequest;
+using AiFlatDependency = OddDotNet.Proto.AppInsights.V1.Dependency.FlatDependency;
+using AiFlatException = OddDotNet.Proto.AppInsights.V1.Exception.FlatException;
+using AiFlatTrace = OddDotNet.Proto.AppInsights.V1.Trace.FlatTrace;
+using AiFlatEvent = OddDotNet.Proto.AppInsights.V1.Event.FlatEvent;
+using AiFlatMetric = OddDotNet.Proto.AppInsights.V1.Metric.FlatMetric;
+using AiFlatPageView = OddDotNet.Proto.AppInsights.V1.PageView.FlatPageView;
+using AiFlatAvailability = OddDotNet.Proto.AppInsights.V1.Availability.FlatAvailability;
 // App Insights query service aliases
 using AiRequestQueryService = OddDotNet.Services.AppInsights.RequestQueryService;
 using AiDependencyQueryService = OddDotNet.Services.AppInsights.DependencyQueryService;
@@ -36,30 +36,30 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddHealthChecks();
 
 // OTEL SignalLists and ChannelManagers
-builder.Services.AddScoped<SignalList<FlatMetric>>().AddScoped<ISignalList, SignalList<FlatMetric>>();
-builder.Services.AddScoped<SignalList<FlatSpan>>().AddScoped<ISignalList, SignalList<FlatSpan>>();
-builder.Services.AddScoped<SignalList<FlatLog>>().AddScoped<ISignalList, SignalList<FlatLog>>();
-builder.Services.AddScoped<ChannelManager<FlatSpan>>();
-builder.Services.AddScoped<ChannelManager<FlatMetric>>();
-builder.Services.AddScoped<ChannelManager<FlatLog>>();
+builder.Services.AddSingleton<SignalList<FlatMetric>>().AddSingleton<ISignalList>(sp => sp.GetRequiredService<SignalList<FlatMetric>>());
+builder.Services.AddSingleton<SignalList<FlatSpan>>().AddSingleton<ISignalList>(sp => sp.GetRequiredService<SignalList<FlatSpan>>());
+builder.Services.AddSingleton<SignalList<FlatLog>>().AddSingleton<ISignalList>(sp => sp.GetRequiredService<SignalList<FlatLog>>());
+builder.Services.AddSingleton<ChannelManager<FlatSpan>>();
+builder.Services.AddSingleton<ChannelManager<FlatMetric>>();
+builder.Services.AddSingleton<ChannelManager<FlatLog>>();
 
 // App Insights SignalLists and ChannelManagers
-builder.Services.AddScoped<SignalList<AiFlatRequest>>().AddScoped<ISignalList, SignalList<AiFlatRequest>>();
-builder.Services.AddScoped<SignalList<AiFlatDependency>>().AddScoped<ISignalList, SignalList<AiFlatDependency>>();
-builder.Services.AddScoped<SignalList<AiFlatException>>().AddScoped<ISignalList, SignalList<AiFlatException>>();
-builder.Services.AddScoped<SignalList<AiFlatTrace>>().AddScoped<ISignalList, SignalList<AiFlatTrace>>();
-builder.Services.AddScoped<SignalList<AiFlatEvent>>().AddScoped<ISignalList, SignalList<AiFlatEvent>>();
-builder.Services.AddScoped<SignalList<AiFlatMetric>>().AddScoped<ISignalList, SignalList<AiFlatMetric>>();
-builder.Services.AddScoped<SignalList<AiFlatPageView>>().AddScoped<ISignalList, SignalList<AiFlatPageView>>();
-builder.Services.AddScoped<SignalList<AiFlatAvailability>>().AddScoped<ISignalList, SignalList<AiFlatAvailability>>();
-builder.Services.AddScoped<ChannelManager<AiFlatRequest>>();
-builder.Services.AddScoped<ChannelManager<AiFlatDependency>>();
-builder.Services.AddScoped<ChannelManager<AiFlatException>>();
-builder.Services.AddScoped<ChannelManager<AiFlatTrace>>();
-builder.Services.AddScoped<ChannelManager<AiFlatEvent>>();
-builder.Services.AddScoped<ChannelManager<AiFlatMetric>>();
-builder.Services.AddScoped<ChannelManager<AiFlatPageView>>();
-builder.Services.AddScoped<ChannelManager<AiFlatAvailability>>();
+builder.Services.AddSingleton<SignalList<AiFlatRequest>>().AddSingleton<ISignalList>(sp => sp.GetRequiredService<SignalList<AiFlatRequest>>());
+builder.Services.AddSingleton<SignalList<AiFlatDependency>>().AddSingleton<ISignalList>(sp => sp.GetRequiredService<SignalList<AiFlatDependency>>());
+builder.Services.AddSingleton<SignalList<AiFlatException>>().AddSingleton<ISignalList>(sp => sp.GetRequiredService<SignalList<AiFlatException>>());
+builder.Services.AddSingleton<SignalList<AiFlatTrace>>().AddSingleton<ISignalList>(sp => sp.GetRequiredService<SignalList<AiFlatTrace>>());
+builder.Services.AddSingleton<SignalList<AiFlatEvent>>().AddSingleton<ISignalList>(sp => sp.GetRequiredService<SignalList<AiFlatEvent>>());
+builder.Services.AddSingleton<SignalList<AiFlatMetric>>().AddSingleton<ISignalList>(sp => sp.GetRequiredService<SignalList<AiFlatMetric>>());
+builder.Services.AddSingleton<SignalList<AiFlatPageView>>().AddSingleton<ISignalList>(sp => sp.GetRequiredService<SignalList<AiFlatPageView>>());
+builder.Services.AddSingleton<SignalList<AiFlatAvailability>>().AddSingleton<ISignalList>(sp => sp.GetRequiredService<SignalList<AiFlatAvailability>>());
+builder.Services.AddSingleton<ChannelManager<AiFlatRequest>>();
+builder.Services.AddSingleton<ChannelManager<AiFlatDependency>>();
+builder.Services.AddSingleton<ChannelManager<AiFlatException>>();
+builder.Services.AddSingleton<ChannelManager<AiFlatTrace>>();
+builder.Services.AddSingleton<ChannelManager<AiFlatEvent>>();
+builder.Services.AddSingleton<ChannelManager<AiFlatMetric>>();
+builder.Services.AddSingleton<ChannelManager<AiFlatPageView>>();
+builder.Services.AddSingleton<ChannelManager<AiFlatAvailability>>();
 builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddHostedService<CacheCleanupBackgroundService>();
 

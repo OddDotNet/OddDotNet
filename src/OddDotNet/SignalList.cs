@@ -91,6 +91,25 @@ public class SignalList<TSignal> : ISignalList where TSignal : class, ISignal
             Signals.Clear();
         }
     }
+
+    public int Count
+    {
+        get
+        {
+            lock (Lock)
+            {
+                return Signals.Count;
+            }
+        }
+    }
+
+    public IReadOnlyList<TSignal> GetAll()
+    {
+        lock (Lock)
+        {
+            return Signals.Select(e => e.Signal).ToList();
+        }
+    }
     
     public void Prune()
     {

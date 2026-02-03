@@ -1,6 +1,6 @@
 using System.Text;
 using System.Text.Json;
-using OddDotNet.Proto.AppInsights.V1;
+using OddDotNet.Proto.AppInsights.V1.PageView;
 using OddDotNet.Proto.Common.V1;
 using OddDotNet.Services.AppInsights;
 
@@ -36,9 +36,9 @@ public class PageViewQueryTests : IClassFixture<AspireFixture>
         envelope.Data!.BaseData!.Id = uniqueId;
         await IngestPageView(envelope);
 
-        var filter = new PageViewWhere
+        var filter = new Where
         {
-            Property = new PageViewPropertyFilter
+            Property = new PropertyFilter
             {
                 Id = new StringProperty { Compare = uniqueId, CompareAs = StringCompareAsType.Equals }
             }
@@ -68,9 +68,9 @@ public class PageViewQueryTests : IClassFixture<AspireFixture>
         envelope.Data!.BaseData!.Name = uniqueName;
         await IngestPageView(envelope);
 
-        var filter = new PageViewWhere
+        var filter = new Where
         {
-            Property = new PageViewPropertyFilter
+            Property = new PropertyFilter
             {
                 Name = new StringProperty { Compare = uniqueName, CompareAs = StringCompareAsType.Equals }
             }
@@ -101,16 +101,16 @@ public class PageViewQueryTests : IClassFixture<AspireFixture>
         envelope.Data!.BaseData!.Url = uniqueUrl;
         await IngestPageView(envelope);
 
-        var idFilter = new PageViewWhere
+        var idFilter = new Where
         {
-            Property = new PageViewPropertyFilter
+            Property = new PropertyFilter
             {
                 Id = new StringProperty { Compare = uniqueId, CompareAs = StringCompareAsType.Equals }
             }
         };
-        var urlFilter = new PageViewWhere
+        var urlFilter = new Where
         {
-            Property = new PageViewPropertyFilter
+            Property = new PropertyFilter
             {
                 Url = new StringProperty { Compare = marker, CompareAs = StringCompareAsType.Contains }
             }
@@ -140,16 +140,16 @@ public class PageViewQueryTests : IClassFixture<AspireFixture>
         envelope.Data!.BaseData!.ReferrerUri = referrerUri;
         await IngestPageView(envelope);
 
-        var idFilter = new PageViewWhere
+        var idFilter = new Where
         {
-            Property = new PageViewPropertyFilter
+            Property = new PropertyFilter
             {
                 Id = new StringProperty { Compare = uniqueId, CompareAs = StringCompareAsType.Equals }
             }
         };
-        var referrerFilter = new PageViewWhere
+        var referrerFilter = new Where
         {
-            Property = new PageViewPropertyFilter
+            Property = new PropertyFilter
             {
                 ReferrerUri = new StringProperty { Compare = referrerUri, CompareAs = StringCompareAsType.Equals }
             }
@@ -174,9 +174,9 @@ public class PageViewQueryTests : IClassFixture<AspireFixture>
         // Arrange - use a non-existent ID
         var nonExistentId = $"non-existent-pv-{Guid.NewGuid():N}";
 
-        var filter = new PageViewWhere
+        var filter = new Where
         {
-            Property = new PageViewPropertyFilter
+            Property = new PropertyFilter
             {
                 Id = new StringProperty { Compare = nonExistentId, CompareAs = StringCompareAsType.Equals }
             }

@@ -1,9 +1,9 @@
 using Grpc.Core;
-using OddDotNet.Proto.AppInsights.V1;
+using OddDotNet.Proto.AppInsights.V1.Trace;
 
 namespace OddDotNet.Services.AppInsights;
 
-public class TraceQueryService : Proto.AppInsights.V1.TraceQueryService.TraceQueryServiceBase
+public class TraceQueryService : Proto.AppInsights.V1.Trace.TraceQueryService.TraceQueryServiceBase
 {
     private readonly SignalList<FlatTrace> _signals;
 

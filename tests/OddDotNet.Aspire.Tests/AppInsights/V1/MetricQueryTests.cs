@@ -1,6 +1,6 @@
 using System.Text;
 using System.Text.Json;
-using OddDotNet.Proto.AppInsights.V1;
+using OddDotNet.Proto.AppInsights.V1.Metric;
 using OddDotNet.Proto.Common.V1;
 using OddDotNet.Services.AppInsights;
 
@@ -36,9 +36,9 @@ public class MetricQueryTests : IClassFixture<AspireFixture>
         envelope.Data!.BaseData!.Metrics![0].Name = uniqueName;
         await IngestMetric(envelope);
 
-        var filter = new MetricWhere
+        var filter = new Where
         {
-            Property = new MetricPropertyFilter
+            Property = new PropertyFilter
             {
                 Name = new StringProperty { Compare = uniqueName, CompareAs = StringCompareAsType.Equals }
             }
@@ -67,9 +67,9 @@ public class MetricQueryTests : IClassFixture<AspireFixture>
         envelope.Data!.BaseData!.Metrics![0].Name = uniqueName;
         await IngestMetric(envelope);
 
-        var filter = new MetricWhere
+        var filter = new Where
         {
-            Property = new MetricPropertyFilter
+            Property = new PropertyFilter
             {
                 Name = new StringProperty { Compare = marker, CompareAs = StringCompareAsType.Contains }
             }
@@ -99,16 +99,16 @@ public class MetricQueryTests : IClassFixture<AspireFixture>
         envelope.Data!.BaseData!.Metrics![0].Namespace = metricNamespace;
         await IngestMetric(envelope);
 
-        var nameFilter = new MetricWhere
+        var nameFilter = new Where
         {
-            Property = new MetricPropertyFilter
+            Property = new PropertyFilter
             {
                 Name = new StringProperty { Compare = uniqueName, CompareAs = StringCompareAsType.Equals }
             }
         };
-        var namespaceFilter = new MetricWhere
+        var namespaceFilter = new Where
         {
-            Property = new MetricPropertyFilter
+            Property = new PropertyFilter
             {
                 MetricNamespace = new StringProperty { Compare = metricNamespace, CompareAs = StringCompareAsType.Equals }
             }
@@ -133,9 +133,9 @@ public class MetricQueryTests : IClassFixture<AspireFixture>
         // Arrange - use a non-existent name
         var nonExistentName = $"non-existent-metric-{Guid.NewGuid():N}";
 
-        var filter = new MetricWhere
+        var filter = new Where
         {
-            Property = new MetricPropertyFilter
+            Property = new PropertyFilter
             {
                 Name = new StringProperty { Compare = nonExistentName, CompareAs = StringCompareAsType.Equals }
             }

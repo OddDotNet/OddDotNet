@@ -10,14 +10,14 @@ using SpanQueryService = OddDotNet.Proto.Trace.V1.SpanQueryService;
 using TraceService = OpenTelemetry.Proto.Collector.Trace.V1.TraceService;
 
 // App Insights Query Service aliases
-using AiRequestQueryService = OddDotNet.Proto.AppInsights.V1.RequestQueryService;
-using AiDependencyQueryService = OddDotNet.Proto.AppInsights.V1.DependencyQueryService;
-using AiExceptionQueryService = OddDotNet.Proto.AppInsights.V1.ExceptionQueryService;
-using AiTraceQueryService = OddDotNet.Proto.AppInsights.V1.TraceQueryService;
-using AiEventQueryService = OddDotNet.Proto.AppInsights.V1.EventQueryService;
-using AiMetricQueryService = OddDotNet.Proto.AppInsights.V1.MetricQueryService;
-using AiPageViewQueryService = OddDotNet.Proto.AppInsights.V1.PageViewQueryService;
-using AiAvailabilityQueryService = OddDotNet.Proto.AppInsights.V1.AvailabilityQueryService;
+using AiRequestQueryService = OddDotNet.Proto.AppInsights.V1.Request.RequestQueryService;
+using AiDependencyQueryService = OddDotNet.Proto.AppInsights.V1.Dependency.DependencyQueryService;
+using AiExceptionQueryService = OddDotNet.Proto.AppInsights.V1.Exception.ExceptionQueryService;
+using AiTraceQueryService = OddDotNet.Proto.AppInsights.V1.Trace.TraceQueryService;
+using AiEventQueryService = OddDotNet.Proto.AppInsights.V1.Event.EventQueryService;
+using AiMetricQueryService = OddDotNet.Proto.AppInsights.V1.Metric.MetricQueryService;
+using AiPageViewQueryService = OddDotNet.Proto.AppInsights.V1.PageView.PageViewQueryService;
+using AiAvailabilityQueryService = OddDotNet.Proto.AppInsights.V1.Availability.AvailabilityQueryService;
 
 namespace OddDotNet.Aspire.Tests;
 

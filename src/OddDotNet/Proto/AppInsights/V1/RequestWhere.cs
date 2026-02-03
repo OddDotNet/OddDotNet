@@ -1,9 +1,9 @@
 using OddDotNet.Filters;
 using OddDotNet.Filters.AppInsights;
 
-namespace OddDotNet.Proto.AppInsights.V1;
+namespace OddDotNet.Proto.AppInsights.V1.Request;
 
-public sealed partial class RequestWhere : IWhere<FlatRequest>
+public sealed partial class Where : IWhere<FlatRequest>
 {
     public bool Matches(FlatRequest signal) => ValueCase switch
     {
@@ -15,9 +15,9 @@ public sealed partial class RequestWhere : IWhere<FlatRequest>
     };
 }
 
-public sealed partial class RequestPropertyFilter
+public sealed partial class PropertyFilter
 {
-    public bool Matches(RequestTelemetry signal) => ValueCase switch
+    public bool Matches(V1.RequestTelemetry signal) => ValueCase switch
     {
         ValueOneofCase.None => false,
         ValueOneofCase.Id => StringFilter.Matches(signal.Id, Id),
@@ -33,7 +33,7 @@ public sealed partial class RequestPropertyFilter
     };
 }
 
-public sealed partial class RequestOrFilter : IWhere<FlatRequest>
+public sealed partial class OrFilter : IWhere<FlatRequest>
 {
     public bool Matches(FlatRequest signal) => Filters.Any(filter => filter.Matches(signal));
 }

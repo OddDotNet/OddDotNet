@@ -1,9 +1,9 @@
 using OddDotNet.Filters;
 using OddDotNet.Filters.AppInsights;
 
-namespace OddDotNet.Proto.AppInsights.V1;
+namespace OddDotNet.Proto.AppInsights.V1.Metric;
 
-public sealed partial class MetricWhere : IWhere<FlatMetric>
+public sealed partial class Where : IWhere<FlatMetric>
 {
     public bool Matches(FlatMetric signal) => ValueCase switch
     {
@@ -15,9 +15,9 @@ public sealed partial class MetricWhere : IWhere<FlatMetric>
     };
 }
 
-public sealed partial class MetricPropertyFilter
+public sealed partial class PropertyFilter
 {
-    public bool Matches(MetricTelemetry signal) => ValueCase switch
+    public bool Matches(V1.MetricTelemetry signal) => ValueCase switch
     {
         ValueOneofCase.None => false,
         ValueOneofCase.Name => StringFilter.Matches(signal.Name, Name),
@@ -32,7 +32,7 @@ public sealed partial class MetricPropertyFilter
     };
 }
 
-public sealed partial class MetricOrFilter : IWhere<FlatMetric>
+public sealed partial class OrFilter : IWhere<FlatMetric>
 {
     public bool Matches(FlatMetric signal) => Filters.Any(filter => filter.Matches(signal));
 }

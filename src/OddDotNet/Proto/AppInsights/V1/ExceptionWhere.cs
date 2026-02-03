@@ -1,9 +1,9 @@
 using OddDotNet.Filters;
 using OddDotNet.Filters.AppInsights;
 
-namespace OddDotNet.Proto.AppInsights.V1;
+namespace OddDotNet.Proto.AppInsights.V1.Exception;
 
-public sealed partial class ExceptionWhere : IWhere<FlatException>
+public sealed partial class Where : IWhere<FlatException>
 {
     public bool Matches(FlatException signal) => ValueCase switch
     {
@@ -15,9 +15,9 @@ public sealed partial class ExceptionWhere : IWhere<FlatException>
     };
 }
 
-public sealed partial class ExceptionPropertyFilter
+public sealed partial class PropertyFilter
 {
-    public bool Matches(ExceptionTelemetry signal) => ValueCase switch
+    public bool Matches(V1.ExceptionTelemetry signal) => ValueCase switch
     {
         ValueOneofCase.None => false,
         ValueOneofCase.Id => StringFilter.Matches(signal.Id, Id),
@@ -32,7 +32,7 @@ public sealed partial class ExceptionPropertyFilter
 
 public sealed partial class ExceptionDetailsFilter
 {
-    public bool Matches(ExceptionDetails details) => ValueCase switch
+    public bool Matches(V1.ExceptionDetails details) => ValueCase switch
     {
         ValueOneofCase.None => false,
         ValueOneofCase.TypeName => StringFilter.Matches(details.TypeName, TypeName),
@@ -43,7 +43,7 @@ public sealed partial class ExceptionDetailsFilter
     };
 }
 
-public sealed partial class ExceptionOrFilter : IWhere<FlatException>
+public sealed partial class OrFilter : IWhere<FlatException>
 {
     public bool Matches(FlatException signal) => Filters.Any(filter => filter.Matches(signal));
 }

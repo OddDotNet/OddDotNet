@@ -2,9 +2,48 @@ using System.Net;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
-using OddDotNet.Proto.AppInsights.V1;
 using OddDotNet.Proto.Common.V1;
 using OddDotNet.Services.AppInsights;
+
+// Request types
+using RequestWhere = OddDotNet.Proto.AppInsights.V1.Request.Where;
+using RequestPropertyFilter = OddDotNet.Proto.AppInsights.V1.Request.PropertyFilter;
+using RequestQueryRequest = OddDotNet.Proto.AppInsights.V1.Request.RequestQueryRequest;
+
+// Dependency types
+using DependencyWhere = OddDotNet.Proto.AppInsights.V1.Dependency.Where;
+using DependencyPropertyFilter = OddDotNet.Proto.AppInsights.V1.Dependency.PropertyFilter;
+using DependencyQueryRequest = OddDotNet.Proto.AppInsights.V1.Dependency.DependencyQueryRequest;
+
+// Exception types
+using ExceptionWhere = OddDotNet.Proto.AppInsights.V1.Exception.Where;
+using ExceptionPropertyFilter = OddDotNet.Proto.AppInsights.V1.Exception.PropertyFilter;
+using ExceptionQueryRequest = OddDotNet.Proto.AppInsights.V1.Exception.ExceptionQueryRequest;
+
+// Trace types
+using TraceWhere = OddDotNet.Proto.AppInsights.V1.Trace.Where;
+using TracePropertyFilter = OddDotNet.Proto.AppInsights.V1.Trace.PropertyFilter;
+using TraceQueryRequest = OddDotNet.Proto.AppInsights.V1.Trace.TraceQueryRequest;
+
+// Event types
+using EventWhere = OddDotNet.Proto.AppInsights.V1.Event.Where;
+using EventPropertyFilter = OddDotNet.Proto.AppInsights.V1.Event.PropertyFilter;
+using EventQueryRequest = OddDotNet.Proto.AppInsights.V1.Event.EventQueryRequest;
+
+// Metric types
+using MetricWhere = OddDotNet.Proto.AppInsights.V1.Metric.Where;
+using MetricPropertyFilter = OddDotNet.Proto.AppInsights.V1.Metric.PropertyFilter;
+using MetricQueryRequest = OddDotNet.Proto.AppInsights.V1.Metric.MetricQueryRequest;
+
+// PageView types
+using PageViewWhere = OddDotNet.Proto.AppInsights.V1.PageView.Where;
+using PageViewPropertyFilter = OddDotNet.Proto.AppInsights.V1.PageView.PropertyFilter;
+using PageViewQueryRequest = OddDotNet.Proto.AppInsights.V1.PageView.PageViewQueryRequest;
+
+// Availability types
+using AvailabilityWhere = OddDotNet.Proto.AppInsights.V1.Availability.Where;
+using AvailabilityPropertyFilter = OddDotNet.Proto.AppInsights.V1.Availability.PropertyFilter;
+using AvailabilityQueryRequest = OddDotNet.Proto.AppInsights.V1.Availability.AvailabilityQueryRequest;
 
 namespace OddDotNet.Aspire.Tests.AppInsights.V1;
 

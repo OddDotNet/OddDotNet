@@ -1,9 +1,9 @@
 using Grpc.Core;
-using OddDotNet.Proto.AppInsights.V1;
+using OddDotNet.Proto.AppInsights.V1.PageView;
 
 namespace OddDotNet.Services.AppInsights;
 
-public class PageViewQueryService : Proto.AppInsights.V1.PageViewQueryService.PageViewQueryServiceBase
+public class PageViewQueryService : Proto.AppInsights.V1.PageView.PageViewQueryService.PageViewQueryServiceBase
 {
     private readonly SignalList<FlatPageView> _signals;
 

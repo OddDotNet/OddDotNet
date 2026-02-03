@@ -1,5 +1,13 @@
 using Bogus;
 using OddDotNet.Proto.AppInsights.V1;
+using OddDotNet.Proto.AppInsights.V1.Availability;
+using OddDotNet.Proto.AppInsights.V1.Dependency;
+using OddDotNet.Proto.AppInsights.V1.Event;
+using OddDotNet.Proto.AppInsights.V1.Exception;
+using OddDotNet.Proto.AppInsights.V1.Metric;
+using OddDotNet.Proto.AppInsights.V1.PageView;
+using OddDotNet.Proto.AppInsights.V1.Request;
+using OddDotNet.Proto.AppInsights.V1.Trace;
 using OddDotNet.Services.AppInsights;
 
 namespace OddDotNet.Aspire.Tests;

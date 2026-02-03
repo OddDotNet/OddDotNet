@@ -1,9 +1,9 @@
 using Grpc.Core;
-using OddDotNet.Proto.AppInsights.V1;
+using OddDotNet.Proto.AppInsights.V1.Event;
 
 namespace OddDotNet.Services.AppInsights;
 
-public class EventQueryService : Proto.AppInsights.V1.EventQueryService.EventQueryServiceBase
+public class EventQueryService : Proto.AppInsights.V1.Event.EventQueryService.EventQueryServiceBase
 {
     private readonly SignalList<FlatEvent> _signals;
 

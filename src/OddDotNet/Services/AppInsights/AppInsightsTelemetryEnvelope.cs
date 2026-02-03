@@ -1,6 +1,57 @@
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace OddDotNet.Services.AppInsights;
+
+/// <summary>
+/// Converts severityLevel from string ("Information", "Warning", etc.) or int to int
+/// </summary>
+public class SeverityLevelConverter : JsonConverter<int?>
+{
+    private static readonly Dictionary<string, int> SeverityMap = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ["Verbose"] = 0,
+        ["Information"] = 1,
+        ["Warning"] = 2,
+        ["Error"] = 3,
+        ["Critical"] = 4
+    };
+
+    public override int? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        if (reader.TokenType == JsonTokenType.Null)
+            return null;
+
+        if (reader.TokenType == JsonTokenType.Number)
+            return reader.GetInt32();
+
+        if (reader.TokenType == JsonTokenType.String)
+        {
+            var stringValue = reader.GetString();
+            if (string.IsNullOrEmpty(stringValue))
+                return null;
+
+            if (SeverityMap.TryGetValue(stringValue, out var level))
+                return level;
+
+            // Try parsing as int string
+            if (int.TryParse(stringValue, out var parsed))
+                return parsed;
+
+            return null;
+        }
+
+        return null;
+    }
+
+    public override void Write(Utf8JsonWriter writer, int? value, JsonSerializerOptions options)
+    {
+        if (value.HasValue)
+            writer.WriteNumberValue(value.Value);
+        else
+            writer.WriteNullValue();
+    }
+}
 
 /// <summary>
 /// Represents the App Insights telemetry envelope structure sent to /v2/track
@@ -90,6 +141,7 @@ public class AppInsightsBaseData
     public List<AppInsightsExceptionDetails>? Exceptions { get; set; }
     
     [JsonPropertyName("severityLevel")]
+    [JsonConverter(typeof(SeverityLevelConverter))]
     public int? SeverityLevel { get; set; }
     
     // Trace-specific fields

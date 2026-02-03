@@ -1,9 +1,9 @@
 using OddDotNet.Filters;
 using OddDotNet.Filters.AppInsights;
 
-namespace OddDotNet.Proto.AppInsights.V1;
+namespace OddDotNet.Proto.AppInsights.V1.PageView;
 
-public sealed partial class PageViewWhere : IWhere<FlatPageView>
+public sealed partial class Where : IWhere<FlatPageView>
 {
     public bool Matches(FlatPageView signal) => ValueCase switch
     {
@@ -15,9 +15,9 @@ public sealed partial class PageViewWhere : IWhere<FlatPageView>
     };
 }
 
-public sealed partial class PageViewPropertyFilter
+public sealed partial class PropertyFilter
 {
-    public bool Matches(PageViewTelemetry signal) => ValueCase switch
+    public bool Matches(V1.PageViewTelemetry signal) => ValueCase switch
     {
         ValueOneofCase.None => false,
         ValueOneofCase.Id => StringFilter.Matches(signal.Id, Id),
@@ -31,7 +31,7 @@ public sealed partial class PageViewPropertyFilter
     };
 }
 
-public sealed partial class PageViewOrFilter : IWhere<FlatPageView>
+public sealed partial class OrFilter : IWhere<FlatPageView>
 {
     public bool Matches(FlatPageView signal) => Filters.Any(filter => filter.Matches(signal));
 }

@@ -1,9 +1,9 @@
 using OddDotNet.Filters;
 using OddDotNet.Filters.AppInsights;
 
-namespace OddDotNet.Proto.AppInsights.V1;
+namespace OddDotNet.Proto.AppInsights.V1.Event;
 
-public sealed partial class EventWhere : IWhere<FlatEvent>
+public sealed partial class Where : IWhere<FlatEvent>
 {
     public bool Matches(FlatEvent signal) => ValueCase switch
     {
@@ -15,9 +15,9 @@ public sealed partial class EventWhere : IWhere<FlatEvent>
     };
 }
 
-public sealed partial class EventPropertyFilter
+public sealed partial class PropertyFilter
 {
-    public bool Matches(EventTelemetry signal) => ValueCase switch
+    public bool Matches(V1.EventTelemetry signal) => ValueCase switch
     {
         ValueOneofCase.None => false,
         ValueOneofCase.Name => StringFilter.Matches(signal.Name, Name),
@@ -27,7 +27,7 @@ public sealed partial class EventPropertyFilter
     };
 }
 
-public sealed partial class EventOrFilter : IWhere<FlatEvent>
+public sealed partial class OrFilter : IWhere<FlatEvent>
 {
     public bool Matches(FlatEvent signal) => Filters.Any(filter => filter.Matches(signal));
 }

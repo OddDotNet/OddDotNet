@@ -1,9 +1,9 @@
 using Grpc.Core;
-using OddDotNet.Proto.AppInsights.V1;
+using OddDotNet.Proto.AppInsights.V1.Exception;
 
 namespace OddDotNet.Services.AppInsights;
 
-public class ExceptionQueryService : Proto.AppInsights.V1.ExceptionQueryService.ExceptionQueryServiceBase
+public class ExceptionQueryService : Proto.AppInsights.V1.Exception.ExceptionQueryService.ExceptionQueryServiceBase
 {
     private readonly SignalList<FlatException> _signals;
 

@@ -1,6 +1,6 @@
 using System.Text;
 using System.Text.Json;
-using OddDotNet.Proto.AppInsights.V1;
+using OddDotNet.Proto.AppInsights.V1.Availability;
 using OddDotNet.Proto.Common.V1;
 using OddDotNet.Services.AppInsights;
 
@@ -36,9 +36,9 @@ public class AvailabilityQueryTests : IClassFixture<AspireFixture>
         envelope.Data!.BaseData!.Id = uniqueId;
         await IngestAvailability(envelope);
 
-        var filter = new AvailabilityWhere
+        var filter = new Where
         {
-            Property = new AvailabilityPropertyFilter
+            Property = new PropertyFilter
             {
                 Id = new StringProperty { Compare = uniqueId, CompareAs = StringCompareAsType.Equals }
             }
@@ -68,9 +68,9 @@ public class AvailabilityQueryTests : IClassFixture<AspireFixture>
         envelope.Data!.BaseData!.Name = uniqueName;
         await IngestAvailability(envelope);
 
-        var filter = new AvailabilityWhere
+        var filter = new Where
         {
-            Property = new AvailabilityPropertyFilter
+            Property = new PropertyFilter
             {
                 Name = new StringProperty { Compare = uniqueName, CompareAs = StringCompareAsType.Equals }
             }
@@ -100,16 +100,16 @@ public class AvailabilityQueryTests : IClassFixture<AspireFixture>
         envelope.Data!.BaseData!.Message = "Connection timeout";
         await IngestAvailability(envelope);
 
-        var idFilter = new AvailabilityWhere
+        var idFilter = new Where
         {
-            Property = new AvailabilityPropertyFilter
+            Property = new PropertyFilter
             {
                 Id = new StringProperty { Compare = uniqueId, CompareAs = StringCompareAsType.Equals }
             }
         };
-        var successFilter = new AvailabilityWhere
+        var successFilter = new Where
         {
-            Property = new AvailabilityPropertyFilter
+            Property = new PropertyFilter
             {
                 Success = new BoolProperty { Compare = false, CompareAs = BoolCompareAsType.Equals }
             }
@@ -139,16 +139,16 @@ public class AvailabilityQueryTests : IClassFixture<AspireFixture>
         envelope.Data!.BaseData!.RunLocation = runLocation;
         await IngestAvailability(envelope);
 
-        var idFilter = new AvailabilityWhere
+        var idFilter = new Where
         {
-            Property = new AvailabilityPropertyFilter
+            Property = new PropertyFilter
             {
                 Id = new StringProperty { Compare = uniqueId, CompareAs = StringCompareAsType.Equals }
             }
         };
-        var locationFilter = new AvailabilityWhere
+        var locationFilter = new Where
         {
-            Property = new AvailabilityPropertyFilter
+            Property = new PropertyFilter
             {
                 RunLocation = new StringProperty { Compare = runLocation, CompareAs = StringCompareAsType.Equals }
             }
@@ -180,16 +180,16 @@ public class AvailabilityQueryTests : IClassFixture<AspireFixture>
         envelope.Data!.BaseData!.Message = message;
         await IngestAvailability(envelope);
 
-        var idFilter = new AvailabilityWhere
+        var idFilter = new Where
         {
-            Property = new AvailabilityPropertyFilter
+            Property = new PropertyFilter
             {
                 Id = new StringProperty { Compare = uniqueId, CompareAs = StringCompareAsType.Equals }
             }
         };
-        var messageFilter = new AvailabilityWhere
+        var messageFilter = new Where
         {
-            Property = new AvailabilityPropertyFilter
+            Property = new PropertyFilter
             {
                 Message = new StringProperty { Compare = marker, CompareAs = StringCompareAsType.Contains }
             }
@@ -214,9 +214,9 @@ public class AvailabilityQueryTests : IClassFixture<AspireFixture>
         // Arrange - use a non-existent ID
         var nonExistentId = $"non-existent-avail-{Guid.NewGuid():N}";
 
-        var filter = new AvailabilityWhere
+        var filter = new Where
         {
-            Property = new AvailabilityPropertyFilter
+            Property = new PropertyFilter
             {
                 Id = new StringProperty { Compare = nonExistentId, CompareAs = StringCompareAsType.Equals }
             }

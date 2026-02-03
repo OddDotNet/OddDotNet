@@ -1,6 +1,7 @@
 using System.Text;
 using System.Text.Json;
 using OddDotNet.Proto.AppInsights.V1;
+using OddDotNet.Proto.AppInsights.V1.Request;
 using OddDotNet.Proto.Common.V1;
 using OddDotNet.Services.AppInsights;
 
@@ -41,14 +42,14 @@ public class ContextQueryTests : IClassFixture<AspireFixture>
         envelope.Tags!["ai.operation.id"] = uniqueOperationId;
         await IngestRequest(envelope);
 
-        var idFilter = new RequestWhere
+        var idFilter = new Where
         {
-            Property = new RequestPropertyFilter
+            Property = new PropertyFilter
             {
                 Id = new StringProperty { Compare = uniqueRequestId, CompareAs = StringCompareAsType.Equals }
             }
         };
-        var operationFilter = new RequestWhere
+        var operationFilter = new Where
         {
             Envelope = new EnvelopeFilter
             {
@@ -86,14 +87,14 @@ public class ContextQueryTests : IClassFixture<AspireFixture>
         envelope.Tags!["ai.operation.name"] = uniqueOperationName;
         await IngestRequest(envelope);
 
-        var idFilter = new RequestWhere
+        var idFilter = new Where
         {
-            Property = new RequestPropertyFilter
+            Property = new PropertyFilter
             {
                 Id = new StringProperty { Compare = uniqueRequestId, CompareAs = StringCompareAsType.Equals }
             }
         };
-        var operationFilter = new RequestWhere
+        var operationFilter = new Where
         {
             Envelope = new EnvelopeFilter
             {
@@ -135,14 +136,14 @@ public class ContextQueryTests : IClassFixture<AspireFixture>
         envelope.Tags!["ai.cloud.roleName"] = uniqueRoleName;
         await IngestRequest(envelope);
 
-        var idFilter = new RequestWhere
+        var idFilter = new Where
         {
-            Property = new RequestPropertyFilter
+            Property = new PropertyFilter
             {
                 Id = new StringProperty { Compare = uniqueRequestId, CompareAs = StringCompareAsType.Equals }
             }
         };
-        var cloudFilter = new RequestWhere
+        var cloudFilter = new Where
         {
             Envelope = new EnvelopeFilter
             {
@@ -180,14 +181,14 @@ public class ContextQueryTests : IClassFixture<AspireFixture>
         envelope.Tags!["ai.cloud.roleInstance"] = uniqueRoleInstance;
         await IngestRequest(envelope);
 
-        var idFilter = new RequestWhere
+        var idFilter = new Where
         {
-            Property = new RequestPropertyFilter
+            Property = new PropertyFilter
             {
                 Id = new StringProperty { Compare = uniqueRequestId, CompareAs = StringCompareAsType.Equals }
             }
         };
-        var cloudFilter = new RequestWhere
+        var cloudFilter = new Where
         {
             Envelope = new EnvelopeFilter
             {
@@ -229,14 +230,14 @@ public class ContextQueryTests : IClassFixture<AspireFixture>
         envelope.Tags!["ai.user.id"] = uniqueUserId;
         await IngestRequest(envelope);
 
-        var idFilter = new RequestWhere
+        var idFilter = new Where
         {
-            Property = new RequestPropertyFilter
+            Property = new PropertyFilter
             {
                 Id = new StringProperty { Compare = uniqueRequestId, CompareAs = StringCompareAsType.Equals }
             }
         };
-        var userFilter = new RequestWhere
+        var userFilter = new Where
         {
             Envelope = new EnvelopeFilter
             {
@@ -274,14 +275,14 @@ public class ContextQueryTests : IClassFixture<AspireFixture>
         envelope.Tags!["ai.user.authUserId"] = uniqueAuthId;
         await IngestRequest(envelope);
 
-        var idFilter = new RequestWhere
+        var idFilter = new Where
         {
-            Property = new RequestPropertyFilter
+            Property = new PropertyFilter
             {
                 Id = new StringProperty { Compare = uniqueRequestId, CompareAs = StringCompareAsType.Equals }
             }
         };
-        var userFilter = new RequestWhere
+        var userFilter = new Where
         {
             Envelope = new EnvelopeFilter
             {
@@ -323,14 +324,14 @@ public class ContextQueryTests : IClassFixture<AspireFixture>
         envelope.Tags!["ai.session.id"] = uniqueSessionId;
         await IngestRequest(envelope);
 
-        var idFilter = new RequestWhere
+        var idFilter = new Where
         {
-            Property = new RequestPropertyFilter
+            Property = new PropertyFilter
             {
                 Id = new StringProperty { Compare = uniqueRequestId, CompareAs = StringCompareAsType.Equals }
             }
         };
-        var sessionFilter = new RequestWhere
+        var sessionFilter = new Where
         {
             Envelope = new EnvelopeFilter
             {
@@ -367,7 +368,7 @@ public class ContextQueryTests : IClassFixture<AspireFixture>
         // Arrange
         var nonExistentOperationId = $"non-existent-op-{Guid.NewGuid():N}";
 
-        var operationFilter = new RequestWhere
+        var operationFilter = new Where
         {
             Envelope = new EnvelopeFilter
             {

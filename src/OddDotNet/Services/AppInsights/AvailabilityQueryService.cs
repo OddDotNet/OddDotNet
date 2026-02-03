@@ -1,9 +1,9 @@
 using Grpc.Core;
-using OddDotNet.Proto.AppInsights.V1;
+using OddDotNet.Proto.AppInsights.V1.Availability;
 
 namespace OddDotNet.Services.AppInsights;
 
-public class AvailabilityQueryService : Proto.AppInsights.V1.AvailabilityQueryService.AvailabilityQueryServiceBase
+public class AvailabilityQueryService : Proto.AppInsights.V1.Availability.AvailabilityQueryService.AvailabilityQueryServiceBase
 {
     private readonly SignalList<FlatAvailability> _signals;
 

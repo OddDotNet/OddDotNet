@@ -1,9 +1,9 @@
 using Grpc.Core;
-using OddDotNet.Proto.AppInsights.V1;
+using OddDotNet.Proto.AppInsights.V1.Metric;
 
 namespace OddDotNet.Services.AppInsights;
 
-public class MetricQueryService : Proto.AppInsights.V1.MetricQueryService.MetricQueryServiceBase
+public class MetricQueryService : Proto.AppInsights.V1.Metric.MetricQueryService.MetricQueryServiceBase
 {
     private readonly SignalList<FlatMetric> _signals;
 

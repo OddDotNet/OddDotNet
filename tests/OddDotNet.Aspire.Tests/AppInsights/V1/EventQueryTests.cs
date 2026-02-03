@@ -1,6 +1,6 @@
 using System.Text;
 using System.Text.Json;
-using OddDotNet.Proto.AppInsights.V1;
+using OddDotNet.Proto.AppInsights.V1.Event;
 using OddDotNet.Proto.Common.V1;
 using OddDotNet.Services.AppInsights;
 
@@ -36,9 +36,9 @@ public class EventQueryTests : IClassFixture<AspireFixture>
         envelope.Data!.BaseData!.Name = uniqueName;
         await IngestEvent(envelope);
 
-        var filter = new EventWhere
+        var filter = new Where
         {
-            Property = new EventPropertyFilter
+            Property = new PropertyFilter
             {
                 Name = new StringProperty { Compare = uniqueName, CompareAs = StringCompareAsType.Equals }
             }
@@ -67,9 +67,9 @@ public class EventQueryTests : IClassFixture<AspireFixture>
         envelope.Data!.BaseData!.Name = uniqueName;
         await IngestEvent(envelope);
 
-        var filter = new EventWhere
+        var filter = new Where
         {
-            Property = new EventPropertyFilter
+            Property = new PropertyFilter
             {
                 Name = new StringProperty { Compare = marker, CompareAs = StringCompareAsType.Contains }
             }
@@ -94,9 +94,9 @@ public class EventQueryTests : IClassFixture<AspireFixture>
         // Arrange - use a non-existent name
         var nonExistentName = $"non-existent-evt-{Guid.NewGuid():N}";
 
-        var filter = new EventWhere
+        var filter = new Where
         {
-            Property = new EventPropertyFilter
+            Property = new PropertyFilter
             {
                 Name = new StringProperty { Compare = nonExistentName, CompareAs = StringCompareAsType.Equals }
             }

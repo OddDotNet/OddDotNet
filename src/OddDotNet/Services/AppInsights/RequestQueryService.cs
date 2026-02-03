@@ -1,9 +1,9 @@
 using Grpc.Core;
-using OddDotNet.Proto.AppInsights.V1;
+using OddDotNet.Proto.AppInsights.V1.Request;
 
 namespace OddDotNet.Services.AppInsights;
 
-public class RequestQueryService : Proto.AppInsights.V1.RequestQueryService.RequestQueryServiceBase
+public class RequestQueryService : Proto.AppInsights.V1.Request.RequestQueryService.RequestQueryServiceBase
 {
     private readonly SignalList<FlatRequest> _signals;
 

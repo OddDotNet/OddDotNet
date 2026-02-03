@@ -28,11 +28,24 @@ OddDotNet also accepts Application Insights telemetry via the `/v2/track` HTTP e
 - **PageView** - Page view telemetry
 - **Availability** - Availability/health check results
 
-**Ingestion endpoint:** `POST /v2/track`
+**Ingestion endpoint:** `POST /v2/track` (also `/v2.1/track`)
 
-Accepts single JSON objects, JSON arrays, or newline-delimited JSON (NDJSON).
+Accepts single JSON objects, JSON arrays, newline-delimited JSON (NDJSON), and gzip-compressed payloads.
 
-**Query services:** Each telemetry type has a corresponding gRPC query service (e.g., `RequestQueryService`, `DependencyQueryService`) that supports filtering by:
+**REST Query Endpoints:**
+```
+GET /appinsights              # Summary with counts of all telemetry types
+GET /appinsights/requests     # All request telemetry
+GET /appinsights/dependencies # All dependency telemetry
+GET /appinsights/exceptions   # All exception telemetry
+GET /appinsights/traces       # All trace/log telemetry
+GET /appinsights/events       # All custom event telemetry
+GET /appinsights/metrics      # All metric telemetry
+GET /appinsights/pageviews    # All page view telemetry
+GET /appinsights/availability # All availability telemetry
+```
+
+**gRPC Query Services:** Each telemetry type also has a corresponding gRPC query service (e.g., `RequestQueryService`, `DependencyQueryService`) that supports filtering by:
 - Telemetry-specific properties (id, name, success, responseCode, etc.)
 - Common context fields (operation, cloud, user, session, device, location)
 - Custom properties and measurements
