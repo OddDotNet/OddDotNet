@@ -1,0 +1,37 @@
+using OddDotNet.Filters;
+using OddDotNet.Filters.AppInsights;
+
+namespace OddDotNet.Proto.AppInsights.V1.PageView;
+
+public sealed partial class Where : IWhere<FlatPageView>
+{
+    public bool Matches(FlatPageView signal) => ValueCase switch
+    {
+        ValueOneofCase.None => false,
+        ValueOneofCase.Property => Property.Matches(signal.PageView),
+        ValueOneofCase.Or => Or.Matches(signal),
+        ValueOneofCase.Envelope => Envelope.Matches(signal.Envelope),
+        _ => false
+    };
+}
+
+public sealed partial class PropertyFilter
+{
+    public bool Matches(V1.PageViewTelemetry signal) => ValueCase switch
+    {
+        ValueOneofCase.None => false,
+        ValueOneofCase.Id => StringFilter.Matches(signal.Id, Id),
+        ValueOneofCase.Name => StringFilter.Matches(signal.Name, Name),
+        ValueOneofCase.Url => StringFilter.Matches(signal.Url, Url),
+        ValueOneofCase.Duration => StringFilter.Matches(signal.Duration, Duration),
+        ValueOneofCase.ReferrerUri => StringFilter.Matches(signal.ReferrerUri, ReferrerUri),
+        ValueOneofCase.Properties => PropertyMapFilter.Matches(signal.Properties, Properties),
+        ValueOneofCase.Measurements => MeasurementMapFilter.Matches(signal.Measurements, Measurements),
+        _ => false
+    };
+}
+
+public sealed partial class OrFilter : IWhere<FlatPageView>
+{
+    public bool Matches(FlatPageView signal) => Filters.Any(filter => filter.Matches(signal));
+}

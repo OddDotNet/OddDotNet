@@ -91,6 +91,25 @@ public class SignalList<TSignal> : ISignalList where TSignal : class, ISignal
             Signals.Clear();
         }
     }
+
+    public int Count
+    {
+        get
+        {
+            lock (Lock)
+            {
+                return Signals.Count;
+            }
+        }
+    }
+
+    public IReadOnlyList<TSignal> GetAll()
+    {
+        lock (Lock)
+        {
+            return Signals.Select(e => e.Signal).ToList();
+        }
+    }
     
     public void Prune()
     {
@@ -117,9 +136,11 @@ public class SignalList<TSignal> : ISignalList where TSignal : class, ISignal
          _ => 0
     };
     
+    private const int DefaultQueryTimeoutMs = 30000; // 30 second default timeout
+    
     private static CancellationTokenSource GetQueryTimeout(int duration) =>
         duration <= 0
-         ? new CancellationTokenSource(int.MaxValue)
+         ? new CancellationTokenSource(DefaultQueryTimeoutMs)
          : new CancellationTokenSource(TimeSpan.FromMilliseconds(duration));
 
     private static bool ShouldInclude(IReadOnlyCollection<IWhere<TSignal>> filters, TSignal signal) =>
