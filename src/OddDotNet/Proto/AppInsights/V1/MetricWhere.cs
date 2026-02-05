@@ -27,7 +27,7 @@ public sealed partial class PropertyFilter
         ValueOneofCase.Min => signal.HasMin && DoubleFilter.Matches(signal.Min, Min),
         ValueOneofCase.Max => signal.HasMax && DoubleFilter.Matches(signal.Max, Max),
         ValueOneofCase.StdDev => signal.HasStdDev && DoubleFilter.Matches(signal.StdDev, StdDev),
-        ValueOneofCase.Properties => PropertyMapFilterHelper.Matches(signal.Properties, Properties),
+        ValueOneofCase.Properties => PropertyMapPropertyHelper.Matches(signal.Properties, Properties),
         _ => false
     };
 }

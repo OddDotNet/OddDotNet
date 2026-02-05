@@ -21,8 +21,8 @@ public sealed partial class PropertyFilter
     {
         ValueOneofCase.None => false,
         ValueOneofCase.Name => StringFilter.Matches(signal.Name, Name),
-        ValueOneofCase.Properties => PropertyMapFilterHelper.Matches(signal.Properties, Properties),
-        ValueOneofCase.Measurements => MeasurementMapFilterHelper.Matches(signal.Measurements, Measurements),
+        ValueOneofCase.Properties => PropertyMapPropertyHelper.Matches(signal.Properties, Properties),
+        ValueOneofCase.Measurements => MeasurementMapPropertyHelper.Matches(signal.Measurements, Measurements),
         _ => false
     };
 }

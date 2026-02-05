@@ -27,8 +27,8 @@ public sealed partial class PropertyFilter
         ValueOneofCase.Success => BoolFilter.Matches(signal.Success, Success),
         ValueOneofCase.Url => StringFilter.Matches(signal.Url, Url),
         ValueOneofCase.Source => StringFilter.Matches(signal.Source, Source),
-        ValueOneofCase.Properties => PropertyMapFilterHelper.Matches(signal.Properties, Properties),
-        ValueOneofCase.Measurements => MeasurementMapFilterHelper.Matches(signal.Measurements, Measurements),
+        ValueOneofCase.Properties => PropertyMapPropertyHelper.Matches(signal.Properties, Properties),
+        ValueOneofCase.Measurements => MeasurementMapPropertyHelper.Matches(signal.Measurements, Measurements),
         _ => false
     };
 }

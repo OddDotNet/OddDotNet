@@ -24,8 +24,8 @@ public sealed partial class PropertyFilter
         ValueOneofCase.ProblemId => StringFilter.Matches(signal.ProblemId, ProblemId),
         ValueOneofCase.SeverityLevel => SeverityLevelFilter.Matches(signal.SeverityLevel, SeverityLevel),
         ValueOneofCase.ExceptionDetails => signal.Exceptions.Any(ex => ExceptionDetails.Matches(ex)),
-        ValueOneofCase.Properties => PropertyMapFilterHelper.Matches(signal.Properties, Properties),
-        ValueOneofCase.Measurements => MeasurementMapFilterHelper.Matches(signal.Measurements, Measurements),
+        ValueOneofCase.Properties => PropertyMapPropertyHelper.Matches(signal.Properties, Properties),
+        ValueOneofCase.Measurements => MeasurementMapPropertyHelper.Matches(signal.Measurements, Measurements),
         _ => false
     };
 }

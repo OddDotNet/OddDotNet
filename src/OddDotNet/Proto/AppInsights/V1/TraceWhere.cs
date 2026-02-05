@@ -22,7 +22,7 @@ public sealed partial class PropertyFilter
         ValueOneofCase.None => false,
         ValueOneofCase.Message => StringFilter.Matches(signal.Message, Message),
         ValueOneofCase.SeverityLevel => SeverityLevelFilter.Matches(signal.SeverityLevel, SeverityLevel),
-        ValueOneofCase.Properties => PropertyMapFilterHelper.Matches(signal.Properties, Properties),
+        ValueOneofCase.Properties => PropertyMapPropertyHelper.Matches(signal.Properties, Properties),
         _ => false
     };
 }

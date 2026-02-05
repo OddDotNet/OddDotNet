@@ -3,13 +3,13 @@ using Google.Protobuf.Collections;
 
 namespace OddDotNet.Filters.AppInsights;
 
-public static class PropertyMapFilterHelper
+public static class PropertyMapPropertyHelper
 {
-    public static bool Matches(MapField<string, string> properties, PropertyMapFilter filter)
+    public static bool Matches(MapField<string, string> properties, PropertyMapProperty filter)
     {
         if (!properties.TryGetValue(filter.Key, out var value))
             return false;
-        
+
         return StringFilter.Matches(value, filter.Value);
     }
 }
