@@ -28,8 +28,8 @@ public sealed partial class PropertyFilter
         ValueOneofCase.Data => StringFilter.Matches(signal.Data, Data),
         ValueOneofCase.Target => StringFilter.Matches(signal.Target, Target),
         ValueOneofCase.Type => StringFilter.Matches(signal.Type, Type),
-        ValueOneofCase.Properties => PropertyMapPropertyHelper.Matches(signal.Properties, Properties),
-        ValueOneofCase.Measurements => MeasurementMapPropertyHelper.Matches(signal.Measurements, Measurements),
+        ValueOneofCase.Properties => PropertyMapFilter.Matches(signal.Properties, Properties),
+        ValueOneofCase.Measurements => MeasurementMapFilter.Matches(signal.Measurements, Measurements),
         _ => false
     };
 }

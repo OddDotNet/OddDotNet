@@ -3,7 +3,7 @@ using Google.Protobuf.Collections;
 
 namespace OddDotNet.Filters.AppInsights;
 
-public static class MeasurementMapPropertyHelper
+public static class MeasurementMapFilter
 {
     public static bool Matches(MapField<string, double> measurements, MeasurementMapProperty filter)
     {

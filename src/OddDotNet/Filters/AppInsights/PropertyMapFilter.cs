@@ -3,7 +3,7 @@ using Google.Protobuf.Collections;
 
 namespace OddDotNet.Filters.AppInsights;
 
-public static class PropertyMapPropertyHelper
+public static class PropertyMapFilter
 {
     public static bool Matches(MapField<string, string> properties, PropertyMapProperty filter)
     {
