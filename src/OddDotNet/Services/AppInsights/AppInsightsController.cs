@@ -266,4 +266,21 @@ public class AppInsightsController : ControllerBase
     /// </summary>
     [HttpGet("/appinsights/availability")]
     public IActionResult GetAvailability() => Ok(_availabilities.GetAll());
+
+    /// <summary>
+    /// Reset all App Insights telemetry
+    /// </summary>
+    [HttpDelete("/appinsights/reset")]
+    public IActionResult Reset()
+    {
+        _requests.Reset();
+        _dependencies.Reset();
+        _exceptions.Reset();
+        _traces.Reset();
+        _events.Reset();
+        _metrics.Reset();
+        _pageViews.Reset();
+        _availabilities.Reset();
+        return Ok();
+    }
 }
