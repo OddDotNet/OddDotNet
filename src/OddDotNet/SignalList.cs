@@ -98,7 +98,8 @@ public class SignalList<TSignal> : ISignalList where TSignal : class, ISignal
         {
             lock (Lock)
             {
-                return Signals.Count;
+                DateTimeOffset currentTime = _timeProvider.GetUtcNow();
+                return Signals.Count(e => e.ExpireAt >= currentTime);
             }
         }
     }
@@ -107,7 +108,8 @@ public class SignalList<TSignal> : ISignalList where TSignal : class, ISignal
     {
         lock (Lock)
         {
-            return Signals.Select(e => e.Signal).ToList();
+            DateTimeOffset currentTime = _timeProvider.GetUtcNow();
+            return Signals.Where(e => e.ExpireAt >= currentTime).Select(e => e.Signal).ToList();
         }
     }
     
