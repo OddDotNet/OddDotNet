@@ -3,14 +3,14 @@
 OddDotNet stands for Observability Driven Development (ODD) in .NET.
 
 ## Description
-OddDotNet is a test harness for ODD. It includes an OTLP receiver that supports grpc (with http/protobuf and http/json on the roadmap).
+OddDotNet is a test harness for ODD. It includes an OTLP receiver that supports gRPC, OTLP/HTTP with binary protobuf (`application/x-protobuf`), and OTLP/HTTP with JSON-encoded protobuf (`application/json`). HTTP endpoints: `POST /v1/traces`, `POST /v1/metrics`, `POST /v1/logs`. Gzip and deflate request bodies are accepted.
 
 This project is in active development. Please continue to check back often. Spans/Traces, Metrics, and LogRecords are all supported. Profiles are being actively developed.
 
 ## Supported Telemetry Formats
 
 ### OpenTelemetry (OTLP)
-OddDotNet accepts OpenTelemetry telemetry via gRPC:
+OddDotNet accepts OpenTelemetry telemetry via gRPC and OTLP/HTTP (`/v1/traces`, `/v1/metrics`, `/v1/logs`, both `application/x-protobuf` and `application/json`, with optional gzip/deflate):
 - **Traces/Spans** - Full span querying with filtering
 - **Metrics** - Metric data point querying
 - **Logs** - Log record querying
