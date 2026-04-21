@@ -4,6 +4,7 @@ using OddDotNet.Proto.Metrics.V1;
 using OddDotNet.Proto.Trace.V1;
 using OddDotNet.Services;
 using OddDotNet.Services.AppInsights;
+using OddDotNet.Services.Query;
 using LogQueryService = OddDotNet.Services.LogQueryService;
 using MetricQueryService = OddDotNet.Services.MetricQueryService;
 using SpanQueryService = OddDotNet.Services.SpanQueryService;
@@ -62,6 +63,9 @@ builder.Services.AddSingleton<ChannelManager<AiFlatPageView>>();
 builder.Services.AddSingleton<ChannelManager<AiFlatAvailability>>();
 builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddHostedService<CacheCleanupBackgroundService>();
+
+// Unified /query/v1/* REST surface
+builder.Services.AddQuerySurface();
 
 builder.Services.Configure<OddSettings>(options =>
 {
